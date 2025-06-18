@@ -80,12 +80,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Escanear com Trivy
-        uses: aquasecurity/trivy-action@v0.16.1
+        uses: aquasecurity/trivy-action@master
         with:
-          scan-type: fs
-          scan-ref: .
+          scan-type: 'fs'
+          scan-ref: '.'
           format: table
           severity: CRITICAL,HIGH
+          trivy-config: trivy.yaml
 
   deploy:
     needs: 
