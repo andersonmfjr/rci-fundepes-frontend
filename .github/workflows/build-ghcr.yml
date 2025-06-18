@@ -45,16 +45,25 @@ jobs:
         run: |
           if [ "${{ github.ref_name }}" = "main" ]; then
             docker compose -f docker-compose-prod.yml config
-          elif [ "${{ github.ref_name }}" = "homolog" ]
+          elif [ "${{ github.ref_name }}" = "homolog" ]; then
             docker compose -f docker-compose-hmg.yml config
-          elif [ "${{ github.ref_name }}" = "develop" ]
+          elif [ "${{ github.ref_name }}" = "develop" ]; then
             docker compose -f docker-compose-dev.yml config
           fi
 
       - name: Build da imagem
         run: |
           docker build -f docker/Dockerfile -t ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }} .
- 
+
+      - name: Push da imagem
+        run: |
+          docker push ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }}
+          
+  versioning:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Criar ou incrementar tag
         uses: anothrnick/github-tag-action@v1
         env:
@@ -63,6 +72,20 @@ jobs:
           WITH_V: true               # gera tag com prefixo 'v' (ex: v1.0.0)
           RELEASE_BRANCHES: main
 
-      - name: Push da imagem
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy via Webhook
         run: |
-          docker push ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }}
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "Deploy em Produção adicionar curl" 
+          elif [ "${{ github.ref_name }}" = "homolog" ]; then
+            echo "Deploy em Homologação adicionar curl"
+          elif [ "${{ github.ref_name }}" = "develop" ]; then
+            echo "Deploy em Desenvolvimento adicionar curl"
+          fi
+
+
+
