@@ -1,0 +1,5 @@
+services:
+  frontend:
+    image: ghcr.io/SEU_USUARIO/rci-ufal-frontend:develop
+    ports:
+      - "10002:8080"

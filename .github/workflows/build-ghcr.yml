@@ -1,0 +1,50 @@
+name: Build e Push para GHCR
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - homolog
+  
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Definir tag da imagem
+        id: tag
+        run: |
+          if [ "${{ github.ref_name }}" = "master" ]; then
+            echo "TAG=latest" >> $GITHUB_OUTPUT
+          else
+            echo "TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Login no GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build da imagem
+        run: |
+          docker build -f docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rci-ufal-frontend:${{ steps.tag.outputs.TAG }} .
+ 
+      - name: Criar ou incrementar tag
+        uses: anothrnick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch        # opções: major | minor | patch | none
+          WITH_V: true               # gera tag com prefixo 'v' (ex: v1.0.0)
+          RELEASE_BRANCHES: master,develop,homolog
+
+      - name: Push da imagem
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/rci-ufal-frontend:${{ steps.tag.outputs.TAG }}
