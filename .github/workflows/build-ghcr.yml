@@ -41,6 +41,16 @@ jobs:
           echo "repo=$REPO" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
+      - name: Validar docker-compose
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            docker compose -f docker-compose-prod.yml config
+          elif [ "${{ github.ref_name }}" = "homolog" ]
+            docker compose -f docker-compose-hmg.yml config
+          elif [ "${{ github.ref_name }}" = "develop" ]
+            docker compose -f docker-compose-dev.yml config
+          fi
+
       - name: Build da imagem
         run: |
           docker build -f docker/Dockerfile -t ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }} .

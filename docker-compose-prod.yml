@@ -1,5 +1,5 @@
 services:
   frontend:
-    image: docker pull ghcr.io/fundepes-ti/rci-ufal-frontend:main
+    image: ghcr.io/fundepes-ti/rci-ufal-frontend:latest
     ports:
       - "10000:8080"
