@@ -17,6 +17,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    outputs:
+      repo_owner: ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }}
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -59,11 +62,6 @@ jobs:
         run: |
           docker push ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }}
           
-  versioning:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Criar ou incrementar tag
         uses: anothrnick/github-tag-action@v1
         env:
@@ -72,8 +70,27 @@ jobs:
           WITH_V: true               # gera tag com prefixo 'v' (ex: v1.0.0)
           RELEASE_BRANCHES: main
 
+  scan:
+    name: Scan com Trivy
+    runs-on: ubuntu-latest
+    needs: build 
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Escanear com Trivy
+        uses: aquasecurity/trivy-action@v0.16.1
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          severity: CRITICAL,HIGH
+
   deploy:
-    needs: build
+    needs: 
+      - build
+      - scan
     runs-on: ubuntu-latest
     
     steps:
