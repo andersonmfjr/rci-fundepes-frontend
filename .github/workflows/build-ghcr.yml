@@ -85,9 +85,11 @@ jobs:
         with:
           scan-type: 'fs'
           scan-ref: '.'
-          format: table
+          #format: table
+          #trivy-config: trivy.yaml
           severity: CRITICAL,HIGH
-          trivy-config: trivy.yaml
+          format: sarif
+          output: trivy-results.sarif
       
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
