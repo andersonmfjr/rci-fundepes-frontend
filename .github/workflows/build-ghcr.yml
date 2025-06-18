@@ -55,4 +55,4 @@ jobs:
 
       - name: Push da imagem
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/rci-ufal-frontend:${{ steps.tag.outputs.TAG }}
+          docker push ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }}
