@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch        # opções: major | minor | patch | none
           WITH_V: true               # gera tag com prefixo 'v' (ex: v1.0.0)
-          RELEASE_BRANCHES: master,develop,homolog
+          RELEASE_BRANCHES: master
 
       - name: Push da imagem
         run: |
