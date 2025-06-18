@@ -33,9 +33,17 @@ jobs:
       - name: Login no GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
+      - name: Definir nome da imagem
+        id: vars
+        run: |
+          REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          TAG=$(if [ "${{ github.ref_name }}" = "master" ]; then echo "latest"; else echo "${{ github.ref_name }}"; fi)
+          echo "repo=$REPO" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Build da imagem
         run: |
-          docker build -f docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rci-ufal-frontend:${{ steps.tag.outputs.TAG }} .
+          docker build -f docker/Dockerfile -t ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }} .
  
       - name: Criar ou incrementar tag
         uses: anothrnick/github-tag-action@v1
