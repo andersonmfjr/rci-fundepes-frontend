@@ -1,0 +1,171 @@
+import { Project } from "@/types";
+
+export const mockProjects: Project[] = [
+  {
+    id: "1",
+    name: "Projeto Infraestrutura 2024",
+    description:
+      "Projeto de expansão da infraestrutura tecnológica para o ano de 2024, incluindo modernização de servidores e implementação de nova rede.",
+    rciPercentage: 15.5,
+    status: "pending",
+    bankStatements: [],
+    createdAt: "2024-01-15T10:30:00Z",
+    updatedAt: "2024-01-20T14:22:00Z",
+    contractLink: "https://example.com/contract-infra-2024.pdf",
+  },
+  {
+    id: "2",
+    name: "Modernização de Sistemas",
+    description:
+      "Atualização dos sistemas legados para novas tecnologias, migração de base de dados e implementação de APIs REST.",
+    rciPercentage: 22.0,
+    status: "validated",
+    bankStatements: [],
+    createdAt: "2024-02-01T09:15:00Z",
+    updatedAt: "2024-02-10T16:45:00Z",
+    contractLink: "https://example.com/contract-modernizacao.pdf",
+  },
+  {
+    id: "3",
+    name: "Sistema de Gestão Documental",
+    description:
+      "Desenvolvimento de plataforma para gestão de documentos corporativos com controle de versão e workflow de aprovação.",
+    rciPercentage: 18.75,
+    status: "validated",
+    bankStatements: [],
+    createdAt: "2024-03-05T14:20:00Z",
+    updatedAt: "2024-03-15T11:30:00Z",
+  },
+  {
+    id: "4",
+    name: "Portal do Cliente",
+    description:
+      "Criação de portal web para clientes com funcionalidades de autoatendimento, consulta de pedidos e suporte online.",
+    rciPercentage: 25.0,
+    status: "completed",
+    bankStatements: [],
+    createdAt: "2024-01-10T08:00:00Z",
+    updatedAt: "2024-04-02T16:00:00Z",
+  },
+  {
+    id: "5",
+    name: "Aplicativo Mobile Vendas",
+    description:
+      "Desenvolvimento de aplicativo móvel para equipe de vendas com sincronização offline e GPS tracking.",
+    rciPercentage: 12.3,
+    status: "draft",
+    bankStatements: [],
+    createdAt: "2024-03-20T13:45:00Z",
+    updatedAt: "2024-03-20T13:45:00Z",
+  },
+  {
+    id: "6",
+    name: "Sistema de Monitoramento de Redes",
+    description:
+      "Implementação de sistema de monitoramento em tempo real para análise de performance de redes e infraestrutura.",
+    rciPercentage: 19.2,
+    status: "pending",
+    bankStatements: [],
+    createdAt: "2024-04-01T11:00:00Z",
+    updatedAt: "2024-04-05T15:30:00Z",
+  },
+  {
+    id: "7",
+    name: "Plataforma de E-learning",
+    description:
+      "Desenvolvimento de plataforma educacional online com recursos interativos, vídeos e sistema de avaliação.",
+    rciPercentage: 24.8,
+    status: "draft",
+    bankStatements: [],
+    createdAt: "2024-04-10T09:20:00Z",
+    updatedAt: "2024-04-10T09:20:00Z",
+  },
+  {
+    id: "8",
+    name: "Sistema de Gestão Financeira",
+    description:
+      "Criação de sistema completo para gestão financeira empresarial com controle de fluxo de caixa e relatórios.",
+    rciPercentage: 21.5,
+    status: "validated",
+    bankStatements: [],
+    createdAt: "2024-04-15T14:45:00Z",
+    updatedAt: "2024-04-20T10:15:00Z",
+  },
+  {
+    id: "9",
+    name: "Portal de Recursos Humanos",
+    description:
+      "Desenvolvimento de portal interno para gestão de RH com funcionalidades de recrutamento, avaliação e treinamento.",
+    rciPercentage: 16.7,
+    status: "completed",
+    bankStatements: [],
+    createdAt: "2024-03-01T12:30:00Z",
+    updatedAt: "2024-05-01T16:45:00Z",
+  },
+  {
+    id: "10",
+    name: "Sistema de Automação Industrial",
+    description:
+      "Implementação de sistema de automação para controle de processos industriais com interface web moderna.",
+    rciPercentage: 28.3,
+    status: "pending",
+    bankStatements: [],
+    createdAt: "2024-05-05T08:15:00Z",
+    updatedAt: "2024-05-10T13:20:00Z",
+  },
+  {
+    id: "11",
+    name: "App de Delivery Corporativo",
+    description:
+      "Aplicativo mobile para delivery interno da empresa com sistema de pedidos e tracking em tempo real.",
+    rciPercentage: 14.9,
+    status: "draft",
+    bankStatements: [],
+    createdAt: "2024-05-12T16:00:00Z",
+    updatedAt: "2024-05-12T16:00:00Z",
+  },
+  {
+    id: "12",
+    name: "Sistema de Business Intelligence",
+    description:
+      "Plataforma de BI para análise de dados empresariais com dashboards interativos e relatórios automatizados.",
+    rciPercentage: 26.4,
+    status: "validated",
+    bankStatements: [],
+    createdAt: "2024-05-15T10:30:00Z",
+    updatedAt: "2024-05-20T14:50:00Z",
+  },
+  {
+    id: "13",
+    name: "Portal de Atendimento ao Cliente",
+    description:
+      "Sistema web para atendimento ao cliente com chat online, tickets de suporte e base de conhecimento.",
+    rciPercentage: 17.8,
+    status: "pending",
+    bankStatements: [],
+    createdAt: "2024-05-22T09:45:00Z",
+    updatedAt: "2024-05-25T11:30:00Z",
+  },
+  {
+    id: "14",
+    name: "Sistema de Gestão de Projetos",
+    description:
+      "Ferramenta completa para gestão de projetos com cronogramas, recursos, equipes e relatórios de progresso.",
+    rciPercentage: 23.1,
+    status: "completed",
+    bankStatements: [],
+    createdAt: "2024-04-20T13:15:00Z",
+    updatedAt: "2024-06-01T17:00:00Z",
+  },
+  {
+    id: "15",
+    name: "Plataforma de Comunicação Interna",
+    description:
+      "Sistema de comunicação corporativa com chat, videoconferência, compartilhamento de arquivos e calendário.",
+    rciPercentage: 20.6,
+    status: "draft",
+    bankStatements: [],
+    createdAt: "2024-06-01T15:20:00Z",
+    updatedAt: "2024-06-01T15:20:00Z",
+  },
+];
