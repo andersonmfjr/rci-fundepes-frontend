@@ -3,7 +3,7 @@ name: Build e Push para GHCR
 on:
   push:
     branches:
-      - master
+      - main
       - develop
       - homolog
   
@@ -24,7 +24,7 @@ jobs:
       - name: Definir tag da imagem
         id: tag
         run: |
-          if [ "${{ github.ref_name }}" = "master" ]; then
+          if [ "${{ github.ref_name }}" = "main" ]; then
             echo "TAG=latest" >> $GITHUB_OUTPUT
           else
             echo "TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
@@ -37,7 +37,7 @@ jobs:
         id: vars
         run: |
           REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          TAG=$(if [ "${{ github.ref_name }}" = "master" ]; then echo "latest"; else echo "${{ github.ref_name }}"; fi)
+          TAG=$(if [ "${{ github.ref_name }}" = "main" ]; then echo "latest"; else echo "${{ github.ref_name }}"; fi)
           echo "repo=$REPO" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
@@ -51,7 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch        # opções: major | minor | patch | none
           WITH_V: true               # gera tag com prefixo 'v' (ex: v1.0.0)
-          RELEASE_BRANCHES: master
+          RELEASE_BRANCHES: main
 
       - name: Push da imagem
         run: |
