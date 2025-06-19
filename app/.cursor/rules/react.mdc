@@ -1,0 +1,242 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules for RCI Manager Frontend
+
+## Project Overview
+
+- React 18 + TypeScript
+- Vite as build tool
+- Shadcn/UI component library with Radix UI primitives
+- Tailwind CSS for styling
+- React Router DOM for routing
+- React Hook Form + Zod for form handling and validation
+- TanStack Query for data fetching
+- Lucide React for icons
+
+## Code Style & Standards
+
+### TypeScript
+
+- Use TypeScript for all new files (.tsx for React components, .ts for utilities)
+- Prefer type inference over explicit typing when obvious
+- Use interfaces for object shapes and types for unions/primitives
+- Follow the existing TypeScript configuration (strict mode disabled)
+- Use path aliases `@/` for src imports
+
+### React Components
+
+- Use functional components with hooks
+- Use React.forwardRef for components that need ref forwarding
+- Prefer arrow functions for inline handlers
+- Use proper TypeScript typing for props (extend HTML element props when needed)
+- Follow the Shadcn/UI pattern for component composition
+
+### Styling
+
+- Use Tailwind CSS classes exclusively for styling
+- Follow the existing design system with CSS variables for colors
+- Use the `cn()` utility function (from @/lib/utils) for conditional classes
+- Prefer Tailwind utility classes over custom CSS
+- Use the existing color palette defined in tailwind.config.ts
+
+### Component Structure
+
+```tsx
+import React from "react";
+import { cn } from "@/lib/utils";
+
+interface ComponentProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: "default" | "secondary";
+  // other props
+}
+
+const Component = React.forwardRef<HTMLDivElement, ComponentProps>(
+  ({ className, variant = "default", ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn("base-classes", variantClasses[variant], className)}
+        {...props}
+      />
+    );
+  }
+);
+Component.displayName = "Component";
+
+export { Component };
+```
+
+### File Organization
+
+- Use kebab-case for file and folder names
+- Place components in appropriate directories:
+  - `src/components/ui/` for reusable UI components (Shadcn/UI)
+  - `src/components/layout/` for layout components
+  - `src/components/[feature]/` for feature-specific components
+  - `src/pages/` for page components
+  - `src/lib/` for utilities and configurations
+  - `src/hooks/` for custom hooks
+  - `src/types/` for type definitions
+
+### Imports
+
+- Use absolute imports with `@/` alias
+- Group imports in this order:
+  1. React and external libraries
+  2. Internal utilities and types
+  3. Components (UI first, then feature components)
+  4. Relative imports
+- Use named imports for Lucide React icons
+- Prefer default imports for React and main libraries
+
+### Forms
+
+- Use React Hook Form with Zod validation
+- Use the form components from Shadcn/UI
+- Follow this pattern:
+
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const formSchema = z.object({
+  field: z.string().min(1, "Field is required"),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+const MyForm = () => {
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      field: "",
+    },
+  });
+
+  const onSubmit = (data: FormData) => {
+    // handle submission
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>{/* form fields */}</form>
+    </Form>
+  );
+};
+```
+
+### Data Fetching
+
+- Use TanStack Query (React Query) for server state management
+- Create service functions in `src/lib/[feature]/service.ts`
+- Use proper error handling and loading states
+- Follow the existing pattern in the projects service
+
+### Naming Conventions
+
+- Use PascalCase for components and types
+- Use camelCase for variables, functions, and props
+- Use SCREAMING_SNAKE_CASE for constants
+- Use kebab-case for files and folders
+- Use descriptive names that clearly indicate purpose
+
+### Error Handling
+
+- Use proper error boundaries for component errors
+- Handle async errors gracefully with try-catch
+- Provide meaningful error messages to users
+- Use the toast system (Sonner) for user notifications
+
+### Performance
+
+- Use React.memo for expensive components when needed
+- Prefer code splitting for large features
+- Optimize images and assets
+- Use proper dependency arrays in useEffect/useMemo/useCallback
+
+### Testing & Quality
+
+- Follow ESLint rules (ignore src/components/ui/\*\* as configured)
+- Use TypeScript strict mode where possible
+- Prefer composition over complex prop drilling
+- Keep components focused and single-responsibility
+
+### UI/UX Guidelines
+
+- Follow the existing design patterns in the app
+- Use consistent spacing with Tailwind classes
+- Ensure responsive design with Tailwind breakpoints
+- Maintain accessibility with proper ARIA attributes
+- Use the existing icon library (Lucide React)
+- Follow the dark mode implementation with next-themes
+
+### Route Patterns
+
+- Use React Router DOM v6 patterns
+- Implement protected routes with the ProtectedRoute component
+- Use proper route params typing
+- Follow the existing page structure in src/pages/
+
+## Code Examples
+
+### Creating a New Page
+
+```tsx
+import { usePageTitle } from "@/hooks/use-page-title";
+
+const MyPage = () => {
+  usePageTitle("Page Title");
+
+  return (
+    <div className="container mx-auto py-6">
+      <h1 className="text-2xl font-bold mb-6">Page Title</h1>
+      {/* page content */}
+    </div>
+  );
+};
+
+export default MyPage;
+```
+
+### Creating a Feature Component
+
+```tsx
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+interface FeatureComponentProps {
+  title: string;
+  onAction: () => void;
+}
+
+const FeatureComponent = ({ title, onAction }: FeatureComponentProps) => {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Button onClick={onAction}>Action</Button>
+      </CardContent>
+    </Card>
+  );
+};
+
+export { FeatureComponent };
+```
+
+## Best Practices
+
+- Always use the existing component library (Shadcn/UI) before creating custom components
+- Follow the established folder structure and naming conventions
+- Use TypeScript types consistently throughout the codebase
+- Implement proper loading states and error handling
+- Keep components small and focused
+- Use semantic HTML elements
+- Maintain consistent code formatting with Prettier/ESLint
+- Document complex logic with comments
+- Use the existing utility functions and patterns
