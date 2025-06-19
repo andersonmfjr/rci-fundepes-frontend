@@ -7,6 +7,7 @@ export const mockProjects: Project[] = [
     description:
       "Projeto de expansão da infraestrutura tecnológica para o ano de 2024, incluindo modernização de servidores e implementação de nova rede.",
     rciPercentage: 15.5,
+    totalValue: 850000.0,
     status: "pending",
     bankStatements: [],
     createdAt: "2024-01-15T10:30:00Z",
@@ -19,6 +20,7 @@ export const mockProjects: Project[] = [
     description:
       "Atualização dos sistemas legados para novas tecnologias, migração de base de dados e implementação de APIs REST.",
     rciPercentage: 22.0,
+    totalValue: 1200000.0,
     status: "validated",
     bankStatements: [],
     createdAt: "2024-02-01T09:15:00Z",
@@ -31,6 +33,7 @@ export const mockProjects: Project[] = [
     description:
       "Desenvolvimento de plataforma para gestão de documentos corporativos com controle de versão e workflow de aprovação.",
     rciPercentage: 18.75,
+    totalValue: 675000.0,
     status: "validated",
     bankStatements: [],
     createdAt: "2024-03-05T14:20:00Z",
@@ -42,6 +45,7 @@ export const mockProjects: Project[] = [
     description:
       "Criação de portal web para clientes com funcionalidades de autoatendimento, consulta de pedidos e suporte online.",
     rciPercentage: 25.0,
+    totalValue: 920000.0,
     status: "completed",
     bankStatements: [],
     createdAt: "2024-01-10T08:00:00Z",
@@ -53,6 +57,7 @@ export const mockProjects: Project[] = [
     description:
       "Desenvolvimento de aplicativo móvel para equipe de vendas com sincronização offline e GPS tracking.",
     rciPercentage: 12.3,
+    totalValue: 450000.0,
     status: "draft",
     bankStatements: [],
     createdAt: "2024-03-20T13:45:00Z",
@@ -64,6 +69,7 @@ export const mockProjects: Project[] = [
     description:
       "Implementação de sistema de monitoramento em tempo real para análise de performance de redes e infraestrutura.",
     rciPercentage: 19.2,
+    totalValue: 780000.0,
     status: "pending",
     bankStatements: [],
     createdAt: "2024-04-01T11:00:00Z",
@@ -75,6 +81,7 @@ export const mockProjects: Project[] = [
     description:
       "Desenvolvimento de plataforma educacional online com recursos interativos, vídeos e sistema de avaliação.",
     rciPercentage: 24.8,
+    totalValue: 1100000.0,
     status: "draft",
     bankStatements: [],
     createdAt: "2024-04-10T09:20:00Z",
@@ -86,6 +93,7 @@ export const mockProjects: Project[] = [
     description:
       "Criação de sistema completo para gestão financeira empresarial com controle de fluxo de caixa e relatórios.",
     rciPercentage: 21.5,
+    totalValue: 950000.0,
     status: "validated",
     bankStatements: [],
     createdAt: "2024-04-15T14:45:00Z",
@@ -97,6 +105,7 @@ export const mockProjects: Project[] = [
     description:
       "Desenvolvimento de portal interno para gestão de RH com funcionalidades de recrutamento, avaliação e treinamento.",
     rciPercentage: 16.7,
+    totalValue: 620000.0,
     status: "completed",
     bankStatements: [],
     createdAt: "2024-03-01T12:30:00Z",
@@ -108,6 +117,7 @@ export const mockProjects: Project[] = [
     description:
       "Implementação de sistema de automação para controle de processos industriais com interface web moderna.",
     rciPercentage: 28.3,
+    totalValue: 1500000.0,
     status: "pending",
     bankStatements: [],
     createdAt: "2024-05-05T08:15:00Z",
@@ -119,6 +129,7 @@ export const mockProjects: Project[] = [
     description:
       "Aplicativo mobile para delivery interno da empresa com sistema de pedidos e tracking em tempo real.",
     rciPercentage: 14.9,
+    totalValue: 380000.0,
     status: "draft",
     bankStatements: [],
     createdAt: "2024-05-12T16:00:00Z",
@@ -130,6 +141,7 @@ export const mockProjects: Project[] = [
     description:
       "Plataforma de BI para análise de dados empresariais com dashboards interativos e relatórios automatizados.",
     rciPercentage: 26.4,
+    totalValue: 1350000.0,
     status: "validated",
     bankStatements: [],
     createdAt: "2024-05-15T10:30:00Z",
@@ -141,6 +153,7 @@ export const mockProjects: Project[] = [
     description:
       "Sistema web para atendimento ao cliente com chat online, tickets de suporte e base de conhecimento.",
     rciPercentage: 17.8,
+    totalValue: 720000.0,
     status: "pending",
     bankStatements: [],
     createdAt: "2024-05-22T09:45:00Z",
@@ -152,6 +165,7 @@ export const mockProjects: Project[] = [
     description:
       "Ferramenta completa para gestão de projetos com cronogramas, recursos, equipes e relatórios de progresso.",
     rciPercentage: 23.1,
+    totalValue: 890000.0,
     status: "completed",
     bankStatements: [],
     createdAt: "2024-04-20T13:15:00Z",
@@ -163,6 +177,7 @@ export const mockProjects: Project[] = [
     description:
       "Sistema de comunicação corporativa com chat, videoconferência, compartilhamento de arquivos e calendário.",
     rciPercentage: 20.6,
+    totalValue: 810000.0,
     status: "draft",
     bankStatements: [],
     createdAt: "2024-06-01T15:20:00Z",

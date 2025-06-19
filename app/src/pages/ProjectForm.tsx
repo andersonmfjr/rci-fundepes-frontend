@@ -20,6 +20,7 @@ const formSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório").max(200, "Nome deve ter no máximo 200 caracteres"),
   description: z.string().min(1, "Descrição é obrigatória").max(1000, "Descrição deve ter no máximo 1000 caracteres"),
   rciPercentage: z.number().min(0, "Percentual deve ser positivo").max(100, "Percentual não pode ser maior que 100"),
+  totalValue: z.number().min(0, "Valor total deve ser positivo"),
   contractLink: z.string().optional(),
 });
 
@@ -39,6 +40,7 @@ const ProjectForm = () => {
       name: "",
       description: "",
       rciPercentage: 0,
+      totalValue: 0,
       contractLink: "",
     },
   });
@@ -52,6 +54,7 @@ const ProjectForm = () => {
             name: project.name,
             description: project.description,
             rciPercentage: project.rciPercentage,
+            totalValue: project.totalValue,
             contractLink: project.contractLink || "",
           });
           // Note: Files can't be restored for security reasons
@@ -77,6 +80,7 @@ const ProjectForm = () => {
         name: values.name,
         description: values.description,
         rciPercentage: values.rciPercentage,
+        totalValue: values.totalValue,
         contractFile,
         contractLink: values.contractLink,
         bankStatements: [], // Empty array as placeholder
@@ -171,27 +175,50 @@ const ProjectForm = () => {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="rciPercentage"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Percentual RCI (%) *</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.1"
-                          min="0"
-                          max="100"
-                          placeholder="0.0"
-                          {...field}
-                          onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="totalValue"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Valor Total (R$) *</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="0.00"
+                            {...field}
+                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="rciPercentage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Percentual RCI (%) *</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max="100"
+                            placeholder="0.0"
+                            {...field}
+                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </CardContent>
             </Card>
 

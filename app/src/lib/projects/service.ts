@@ -29,6 +29,7 @@ export const projectsService = {
       name: data.name,
       description: data.description,
       rciPercentage: data.rciPercentage,
+      totalValue: data.totalValue,
       contractLink: data.contractLink,
       status: "draft",
       bankStatements: data.bankStatements || [],

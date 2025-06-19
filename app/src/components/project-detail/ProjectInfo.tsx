@@ -10,6 +10,13 @@ interface ProjectInfoProps {
 }
 
 const ProjectInfo = ({ project, formatDate }: ProjectInfoProps) => {
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -29,6 +36,22 @@ const ProjectInfo = ({ project, formatDate }: ProjectInfoProps) => {
               <Badge variant="outline" className="text-base">
                 {project.rciPercentage}%
               </Badge>
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Valor Total</label>
+            <div className="mt-1">
+              <span className="text-base font-semibold text-gray-900">
+                {formatCurrency(project.totalValue)}
+              </span>
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700">Valor RCI</label>
+            <div className="mt-1">
+              <span className="text-base font-semibold text-green-600">
+                {formatCurrency(project.totalValue * (project.rciPercentage / 100))}
+              </span>
             </div>
           </div>
           <div>

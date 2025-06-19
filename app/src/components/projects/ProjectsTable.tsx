@@ -4,7 +4,7 @@ import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 import { Project } from '@/types';
 import ProjectTableRow from './ProjectTableRow';
 
-type SortField = 'name' | 'rciPercentage' | 'status' | 'createdAt' | 'updatedAt';
+type SortField = 'name' | 'rciPercentage' | 'totalValue' | 'status' | 'createdAt' | 'updatedAt';
 type SortDirection = 'asc' | 'desc';
 
 interface ProjectsTableProps {
@@ -52,6 +52,15 @@ const ProjectsTable = ({
               >
                 RCI %
                 {getSortIcon('rciPercentage')}
+              </button>
+            </TableHead>
+            <TableHead className="min-w-[120px]">
+              <button
+                onClick={() => onSort('totalValue')}
+                className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
+              >
+                Valor Total
+                {getSortIcon('totalValue')}
               </button>
             </TableHead>
             <TableHead className="min-w-[120px]">

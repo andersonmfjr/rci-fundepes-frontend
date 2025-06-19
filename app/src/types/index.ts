@@ -11,6 +11,7 @@ export interface Project {
   name: string;
   description: string;
   rciPercentage: number;
+  totalValue: number;
   status: ProjectStatus;
   contractFile?: File | null;
   contractLink?: string;
@@ -25,6 +26,7 @@ export interface ProjectFormData {
   name: string;
   description: string;
   rciPercentage: number;
+  totalValue: number;
   contractFile?: File | null;
   contractLink?: string;
   bankStatements: File[];

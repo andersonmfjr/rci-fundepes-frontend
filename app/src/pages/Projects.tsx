@@ -12,7 +12,7 @@ import ProjectsTable from '@/components/projects/ProjectsTable';
 import ProjectsPagination from '@/components/projects/ProjectsPagination';
 import { usePageTitle } from '@/hooks/use-page-title';
 
-type SortField = 'name' | 'rciPercentage' | 'status' | 'createdAt' | 'updatedAt';
+type SortField = 'name' | 'rciPercentage' | 'totalValue' | 'status' | 'createdAt' | 'updatedAt';
 type SortDirection = 'asc' | 'desc';
 
 const Projects = () => {

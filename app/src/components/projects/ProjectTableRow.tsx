@@ -13,6 +13,13 @@ interface ProjectTableRowProps {
 }
 
 const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(value);
+  };
+
   return (
     <TableRow>
       <TableCell className="min-w-[200px]">
@@ -32,6 +39,11 @@ const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
         <Badge variant="outline">
           {project.rciPercentage}%
         </Badge>
+      </TableCell>
+      <TableCell className="min-w-[120px]">
+        <span className="font-medium text-gray-900">
+          {formatCurrency(project.totalValue)}
+        </span>
       </TableCell>
       <TableCell className="min-w-[120px]">
         <ProjectStatusBadge status={project.status} />
