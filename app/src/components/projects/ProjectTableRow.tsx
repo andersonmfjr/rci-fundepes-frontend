@@ -53,7 +53,8 @@ const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
               <Eye className="w-4 h-4" />
             </Link>
           </Button>
-          <Button
+          {/* FIXME: Edit project button */}
+          {/* <Button
             variant="ghost"
             size="sm"
             asChild
@@ -61,7 +62,7 @@ const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
             <Link to={`/projects/${project.id}/edit`}>
               <Edit className="w-4 h-4" />
             </Link>
-          </Button>
+          </Button> */}
         </div>
       </TableCell>
     </TableRow>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -80,7 +79,7 @@ const ProjectForm = () => {
         rciPercentage: values.rciPercentage,
         contractFile,
         contractLink: values.contractLink,
-        bankStatements,
+        bankStatements: [], // Empty array as placeholder
       };
 
       if (isEdit && id) {

@@ -78,14 +78,15 @@ const ProjectActions = ({
 
   return (
     <div className="flex items-center gap-2">
-      <Button
+      {/* FIXME: Edit project button */}
+      {/* <Button
         variant="outline"
         onClick={() => navigate(`/projects/${project.id}/edit`)}
         disabled={project.status === 'completed'}
       >
         <Edit className="w-4 h-4 mr-2" />
         Editar
-      </Button>
+      </Button> */}
       
       {statusActions.map((action, index) => (
         <Button
@@ -99,7 +100,8 @@ const ProjectActions = ({
         </Button>
       ))}
       
-      {project.status === 'draft' && (
+      {/* FIXME: Delete project functionality */}
+      {/* {project.status === 'draft' && (
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="destructive">
@@ -127,7 +129,7 @@ const ProjectActions = ({
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      )}
+      )} */}
     </div>
   );
 };

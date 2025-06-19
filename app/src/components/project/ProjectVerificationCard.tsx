@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle, Circle } from "lucide-react";
 import { Project } from '@/types';
 
 interface ProjectVerificationCardProps {
@@ -17,10 +17,11 @@ const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
       label: 'Contrato anexado',
       isCompleted: Boolean(project.contractFile || project.contractLink)
     },
-    {
+    // FIXME: Bank statements verification for MVP
+    /* {
       label: `Extratos bancários (${project.bankStatements.length})`,
       isCompleted: project.bankStatements.length > 0
-    }
+    } */
   ];
 
   const allCompleted = verificationItems.every(item => item.isCompleted);
@@ -53,30 +54,47 @@ const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Lista de verificação</CardTitle>
+        <CardTitle className="text-lg lg:text-xl">Verificação do Projeto</CardTitle>
+        <CardDescription>
+          Itens de verificação e status de validação
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {verificationItems.map((item, index) => (
-          <div key={index} className="flex items-center gap-3">
-            <CheckCircle 
-              className={`w-5 h-5 ${item.isCompleted ? 'text-green-600' : 'text-gray-300'}`}
-            />
-            <span className={`${item.isCompleted ? 'text-gray-900' : 'text-gray-500'}`}>
-              {item.label}
-            </span>
-          </div>
-        ))}
-        
-        <div className="border-t pt-4 mt-4">
+        <div className="space-y-3">
+          {verificationItems.map((item, index) => (
+            <div key={index} className="flex items-center gap-3">
+              {item.isCompleted ? (
+                <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+              ) : (
+                <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
+              )}
+              <span className={`text-sm ${item.isCompleted ? 'text-gray-900' : 'text-gray-500'}`}>
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="pt-3 border-t">
           <div className="flex items-center gap-3">
-            <CheckCircle 
-              className={`w-5 h-5 ${validationStatus.isCompleted ? validationStatus.color : 'text-gray-300'}`}
-            />
-            <span className={`font-medium ${validationStatus.isCompleted ? validationStatus.color : 'text-gray-500'}`}>
+            {validationStatus.isCompleted ? (
+              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+            ) : (
+              <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
+            )}
+            <span className={`text-sm font-medium ${validationStatus.color}`}>
               {validationStatus.text}
             </span>
           </div>
         </div>
+
+        {allCompleted && project.status === 'draft' && (
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              ✅ Projeto pronto para envio. Todas as verificações foram atendidas.
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

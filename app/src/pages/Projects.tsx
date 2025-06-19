@@ -192,12 +192,13 @@ const Projects = () => {
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Projetos RCI</h1>
             <p className="text-gray-600 mt-1 text-sm lg:text-base">Gerencie seus projetos de reembolso de custos indiretos</p>
           </div>
-          <Button asChild className="w-full sm:w-auto">
+          {/* FIXME: New project button */}
+          {/* <Button asChild className="w-full sm:w-auto">
             <Link to="/projects/new" className="flex items-center justify-center gap-2">
               <Plus className="w-4 h-4" />
               Novo Projeto
             </Link>
-          </Button>
+          </Button> */}
         </div>
 
         <Card>
@@ -226,14 +227,15 @@ const Projects = () => {
                 <p className="text-gray-600 mb-4 lg:mb-6 text-sm lg:text-base px-4">
                   {searchTerm || statusFilter !== 'all'
                     ? 'Tente ajustar os filtros de busca'
-                    : 'Comece criando seu primeiro projeto RCI'
+                    : 'Visualize os projetos existentes'
                   }
                 </p>
-                {!searchTerm && statusFilter === 'all' && (
+                {/* FIXME: Create first project button */}
+                {/* {!searchTerm && statusFilter === 'all' && (
                   <Button asChild className="w-full sm:w-auto">
                     <Link to="/projects/new">Criar Primeiro Projeto</Link>
                   </Button>
-                )}
+                )} */}
               </div>
             ) : (
               <>

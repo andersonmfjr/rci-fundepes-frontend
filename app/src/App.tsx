@@ -38,26 +38,10 @@ const App = () => {
               } 
             />
             <Route 
-              path="/projects/new" 
-              element={
-                <ProtectedRoute>
-                  <ProjectForm />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
               path="/projects/:id" 
               element={
                 <ProtectedRoute>
                   <ProjectDetail />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/projects/:id/edit" 
-              element={
-                <ProtectedRoute>
-                  <ProjectForm />
                 </ProtectedRoute>
               } 
             />

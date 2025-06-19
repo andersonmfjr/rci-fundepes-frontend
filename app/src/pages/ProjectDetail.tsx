@@ -10,7 +10,8 @@ import { toast } from '@/hooks/use-toast';
 import ProjectActions from '@/components/project-detail/ProjectActions';
 import ProjectInfo from '@/components/project-detail/ProjectInfo';
 import ProjectContract from '@/components/project-detail/ProjectContract';
-import ProjectBankStatements from '@/components/project-detail/ProjectBankStatements';
+// FIXME: Bank statements component import for MVP
+// import ProjectBankStatements from '@/components/project-detail/ProjectBankStatements';
 import { usePageTitle } from '@/hooks/use-page-title';
 
 const ProjectDetail = () => {
@@ -74,7 +75,8 @@ const ProjectDetail = () => {
     }
   };
 
-  const handleDeleteProject = async () => {
+  // FIXME: Delete project functionality
+  /* const handleDeleteProject = async () => {
     if (!project) return;
     
     setIsDeleting(true);
@@ -94,6 +96,12 @@ const ProjectDetail = () => {
     } finally {
       setIsDeleting(false);
     }
+  }; */
+
+  // Placeholder function for deleted functionality
+  const handleDeleteProject = () => {
+    // Functionality removed - projects can only be viewed and approved/rejected
+    console.log("Delete functionality has been disabled");
   };
 
   const getStatusLabel = (status: string) => {
@@ -176,7 +184,8 @@ const ProjectDetail = () => {
 
         <ProjectContract project={project} />
 
-        <ProjectBankStatements project={project} />
+        {/* FIXME: Bank statements component for MVP */}
+        {/* <ProjectBankStatements project={project} /> */}
       </div>
     </Layout>
   );

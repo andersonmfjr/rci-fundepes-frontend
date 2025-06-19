@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { File, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -10,11 +10,12 @@ const Sidebar = () => {
       href: '/projects',
       icon: File
     },
-    {
+    // FIXME: New project menu item
+    /* {
       title: 'Novo Projeto',
       href: '/projects/new',
       icon: Plus
-    }
+    } */
   ];
 
   return (
