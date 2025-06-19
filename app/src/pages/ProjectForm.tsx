@@ -5,21 +5,27 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ProjectFormData } from '@/types';
+import { ProjectFormData, Unit } from '@/types';
 import { projectsService } from '@/lib/projects';
+import { generateId, formatCurrency, calculateUnitRciValue } from '@/lib/projects/utils';
 import FileUpload from '@/components/project/FileUpload';
 import Layout from '@/components/layout/Layout';
 import { toast } from '@/hooks/use-toast';
 import { usePageTitle } from '@/hooks/use-page-title';
 
+const unitSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, "Nome da unidade é obrigatório"),
+  rciPercentage: z.number().min(0, "Percentual deve ser positivo").max(100, "Percentual não pode ser maior que 100"),
+});
+
 const formSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório").max(200, "Nome deve ter no máximo 200 caracteres"),
   description: z.string().min(1, "Descrição é obrigatória").max(1000, "Descrição deve ter no máximo 1000 caracteres"),
-  rciPercentage: z.number().min(0, "Percentual deve ser positivo").max(100, "Percentual não pode ser maior que 100"),
   totalValue: z.number().min(0, "Valor total deve ser positivo"),
   contractLink: z.string().optional(),
 });
@@ -33,13 +39,15 @@ const ProjectForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [contractFile, setContractFile] = useState<File | null>(null);
   const [bankStatements, setBankStatements] = useState<File[]>([]);
+  const [units, setUnits] = useState<Unit[]>([
+    { id: generateId(), name: '', rciPercentage: 0 }
+  ]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
-      rciPercentage: 0,
       totalValue: 0,
       contractLink: "",
     },
@@ -53,10 +61,10 @@ const ProjectForm = () => {
           form.reset({
             name: project.name,
             description: project.description,
-            rciPercentage: project.rciPercentage,
             totalValue: project.totalValue,
             contractLink: project.contractLink || "",
           });
+          setUnits(project.units.length > 0 ? project.units : [{ id: generateId(), name: '', rciPercentage: 0 }]);
           // Note: Files can't be restored for security reasons
         }
       } catch (error) {
@@ -76,13 +84,26 @@ const ProjectForm = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
+      // Validate units
+      const validUnits = units.filter(unit => unit.name.trim() !== '' && unit.rciPercentage > 0);
+      
+      if (validUnits.length === 0) {
+        toast({
+          title: "Erro de validação",
+          description: "Adicione pelo menos uma unidade com nome e percentual válidos",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const formData: ProjectFormData = {
         name: values.name,
         description: values.description,
-        rciPercentage: values.rciPercentage,
         totalValue: values.totalValue,
+        units: validUnits,
         contractFile,
         contractLink: values.contractLink,
+        // COMMENTED: Bank statements for MVP
         bankStatements: [], // Empty array as placeholder
       };
 
@@ -110,6 +131,33 @@ const ProjectForm = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const addUnit = () => {
+    setUnits([...units, { id: generateId(), name: '', rciPercentage: 0 }]);
+  };
+
+  const removeUnit = (unitId: string) => {
+    if (units.length > 1) {
+      setUnits(units.filter(unit => unit.id !== unitId));
+    }
+  };
+
+  const updateUnit = (unitId: string, field: keyof Unit, value: string | number) => {
+    setUnits(units.map(unit => 
+      unit.id === unitId 
+        ? { ...unit, [field]: value }
+        : unit
+    ));
+  };
+
+  const getTotalRciPercentage = () => {
+    return units.reduce((total, unit) => total + (unit.rciPercentage || 0), 0);
+  };
+
+  const getTotalRciValue = () => {
+    const totalValue = form.watch('totalValue') || 0;
+    return totalValue * (getTotalRciPercentage() / 100);
   };
 
   return (
@@ -175,49 +223,96 @@ const ProjectForm = () => {
                   )}
                 />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="totalValue"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Valor Total (R$) *</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            placeholder="0.00"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <FormField
+                  control={form.control}
+                  name="totalValue"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Valor Total (R$) *</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          placeholder="0.00"
+                          {...field}
+                          onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
 
-                  <FormField
-                    control={form.control}
-                    name="rciPercentage"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Percentual RCI (%) *</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            step="0.1"
-                            min="0"
-                            max="100"
-                            placeholder="0.0"
-                            {...field}
-                            onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            <Card>
+              <CardHeader>
+                <CardTitle>Unidades RCI</CardTitle>
+                <CardDescription>
+                  Configure as unidades e seus respectivos percentuais de RCI
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {units.map((unit, index) => (
+                  <div key={unit.id} className="flex items-end gap-4 p-4 border rounded-lg">
+                    <div className="flex-1">
+                      <label className="text-sm font-medium text-gray-700">Nome da Unidade</label>
+                      <Input
+                        placeholder="Ex: UFAL"
+                        value={unit.name}
+                        onChange={(e) => updateUnit(unit.id, 'name', e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div className="w-32">
+                      <label className="text-sm font-medium text-gray-700">RCI (%)</label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="100"
+                        placeholder="0.0"
+                        value={unit.rciPercentage || ''}
+                        onChange={(e) => updateUnit(unit.id, 'rciPercentage', parseFloat(e.target.value) || 0)}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div className="w-32">
+                      <span className="text-sm font-medium text-gray-700">Valor RCI</span>
+                      <div className="mt-1 text-sm font-semibold text-green-600">
+                        {formatCurrency(calculateUnitRciValue(form.watch('totalValue') || 0, unit.rciPercentage))}
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removeUnit(unit.id)}
+                      disabled={units.length === 1}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+
+                <div className="flex items-center justify-between">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={addUnit}
+                    className="flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Adicionar Unidade
+                  </Button>
+                  
+                  <div className="text-right">
+                    <div className="text-sm font-medium text-gray-700">Total RCI</div>
+                    <div className="text-lg font-bold text-green-600">
+                      {getTotalRciPercentage().toFixed(1)}% = {formatCurrency(getTotalRciValue())}
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>

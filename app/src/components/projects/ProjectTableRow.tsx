@@ -6,6 +6,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Eye, Edit } from "lucide-react";
 import { Project } from '@/types';
 import ProjectStatusBadge from '@/components/project/ProjectStatus';
+import { calculateTotalRciPercentage, formatCurrency } from '@/lib/projects/utils';
 
 interface ProjectTableRowProps {
   project: Project;
@@ -13,12 +14,7 @@ interface ProjectTableRowProps {
 }
 
 const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    }).format(value);
-  };
+  const totalRciPercentage = calculateTotalRciPercentage(project.units);
 
   return (
     <TableRow>
@@ -37,7 +33,7 @@ const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
       </TableCell>
       <TableCell className="min-w-[80px]">
         <Badge variant="outline">
-          {project.rciPercentage}%
+          {totalRciPercentage.toFixed(1)}%
         </Badge>
       </TableCell>
       <TableCell className="min-w-[120px]">

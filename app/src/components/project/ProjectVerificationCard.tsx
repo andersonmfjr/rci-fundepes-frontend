@@ -11,11 +11,17 @@ const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
   const verificationItems = [
     {
       label: 'Informações básicas preenchidas',
-      isCompleted: Boolean(project.name && project.description && project.rciPercentage > 0)
+      isCompleted: Boolean(project.name && project.description && project.totalValue > 0)
     },
     {
       label: 'Contrato anexado',
       isCompleted: Boolean(project.contractFile || project.contractLink)
+    },
+    {
+      label: `Unidades RCI configuradas (${project.units.length})`,
+      isCompleted: project.units.length > 0 && project.units.every(unit => 
+        unit.name.trim() !== '' && unit.rciPercentage > 0
+      )
     },
     // FIXME: Bank statements verification for MVP
     /* {

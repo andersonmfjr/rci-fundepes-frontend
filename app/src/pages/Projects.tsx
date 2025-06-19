@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Plus, FileX } from "lucide-react";
 import { Project, ProjectStatus } from '@/types';
 import { projectsService } from '@/lib/projects';
+import { calculateTotalRciPercentage } from '@/lib/projects/utils';
 import Layout from '@/components/layout/Layout';
 import { toast } from '@/hooks/use-toast';
 import ProjectsFilters from '@/components/projects/ProjectsFilters';
@@ -103,18 +104,30 @@ const Projects = () => {
       return matchesSearch && matchesStatus;
     })
     .sort((a, b) => {
-      let aValue = a[sortField];
-      let bValue = b[sortField];
+      let aValue: number;
+      let bValue: number;
 
-      if (sortField === 'createdAt' || sortField === 'updatedAt') {
-        aValue = new Date(aValue).getTime();
-        bValue = new Date(bValue).getTime();
-      }
-
-      if (sortField === 'status') {
+      // Special handling for RCI percentage calculation
+      if (sortField === 'rciPercentage') {
+        aValue = calculateTotalRciPercentage(a.units);
+        bValue = calculateTotalRciPercentage(b.units);
+      } else if (sortField === 'createdAt' || sortField === 'updatedAt') {
+        aValue = new Date(a[sortField]).getTime();
+        bValue = new Date(b[sortField]).getTime();
+      } else if (sortField === 'status') {
         const statusOrder = { 'draft': 0, 'pending': 1, 'validated': 2, 'completed': 3 };
-        aValue = statusOrder[aValue as ProjectStatus];
-        bValue = statusOrder[bValue as ProjectStatus];
+        aValue = statusOrder[a.status];
+        bValue = statusOrder[b.status];
+      } else if (sortField === 'totalValue') {
+        aValue = a.totalValue;
+        bValue = b.totalValue;
+      } else if (sortField === 'name') {
+        return sortDirection === 'asc' 
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      } else {
+        aValue = 0;
+        bValue = 0;
       }
 
       if (sortDirection === 'asc') {

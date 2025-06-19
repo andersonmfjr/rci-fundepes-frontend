@@ -1,8 +1,9 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Project } from '@/types';
 import ProjectStatus from '@/components/project/ProjectStatus';
+import { calculateTotalRciPercentage, calculateTotalRciValue, calculateUnitRciValue, formatCurrency } from '@/lib/projects/utils';
 
 interface ProjectInfoProps {
   project: Project;
@@ -10,12 +11,8 @@ interface ProjectInfoProps {
 }
 
 const ProjectInfo = ({ project, formatDate }: ProjectInfoProps) => {
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    }).format(value);
-  };
+  const totalRciPercentage = calculateTotalRciPercentage(project.units);
+  const totalRciValue = calculateTotalRciValue(project);
 
   return (
     <Card>
@@ -31,10 +28,10 @@ const ProjectInfo = ({ project, formatDate }: ProjectInfoProps) => {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Percentual RCI</label>
+            <label className="text-sm font-medium text-gray-700">Percentual RCI Total</label>
             <div className="mt-1">
               <Badge variant="outline" className="text-base">
-                {project.rciPercentage}%
+                {totalRciPercentage.toFixed(1)}%
               </Badge>
             </div>
           </div>
@@ -47,10 +44,10 @@ const ProjectInfo = ({ project, formatDate }: ProjectInfoProps) => {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Valor RCI</label>
+            <label className="text-sm font-medium text-gray-700">Valor RCI Total</label>
             <div className="mt-1">
               <span className="text-base font-semibold text-green-600">
-                {formatCurrency(project.totalValue * (project.rciPercentage / 100))}
+                {formatCurrency(totalRciValue)}
               </span>
             </div>
           </div>
@@ -63,6 +60,27 @@ const ProjectInfo = ({ project, formatDate }: ProjectInfoProps) => {
             <p className="mt-1 text-gray-900">{formatDate(project.updatedAt)}</p>
           </div>
         </div>
+
+        {/* Unidades RCI */}
+        <div>
+          <label className="text-sm font-medium text-gray-700 mb-3 block">Unidades RCI</label>
+          <div className="space-y-3">
+            {project.units.map((unit) => (
+              <div key={unit.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <span className="font-medium text-gray-900">{unit.name}</span>
+                  <Badge variant="secondary">
+                    {unit.rciPercentage}%
+                  </Badge>
+                </div>
+                <span className="font-semibold text-green-600">
+                  {formatCurrency(calculateUnitRciValue(project.totalValue, unit.rciPercentage))}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div>
           <label className="text-sm font-medium text-gray-700">Descrição</label>
           <p className="mt-1 text-gray-900 break-words">{project.description}</p>
