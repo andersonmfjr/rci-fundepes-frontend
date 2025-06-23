@@ -46,13 +46,10 @@ jobs:
         id: vars
         run: |
           REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          #TAG=$(if [ "${{ github.ref_name }}" = "main" ]; then echo "latest"; else echo "${{ github.ref_name }}"; fi
           if [ "${{ github.ref_name }}" = "main" ]; then
             TAG="latest"
-          elif [ "${{ github.ref_name }}" = "homolog" ]; then
-            TAG="hmg"
-          elif [ "${{ github.ref_name }}" = "develop" ]; then
-            TAG="dev"
+          elif [ "${{ github.ref_name }}" = "homolog" ]; || [ "${{ github.ref_name }}" = "develop" ]; then
+            TAG="${{ github.ref_name }}"
           else
             TAG="pull_request"
           fi
@@ -128,6 +125,3 @@ jobs:
           elif [ "${{ github.ref_name }}" = "develop" ]; then
             echo "Deploy em Desenvolvimento adicionar curl"
           fi
-
-
-
