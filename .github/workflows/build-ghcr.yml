@@ -64,6 +64,7 @@ jobs:
           docker push ghcr.io/${{ steps.vars.outputs.repo }}:${{ steps.vars.outputs.tag }}
           
       - name: Criar ou incrementar tag
+        if: github.ref_name == 'main'
         uses: anothrnick/github-tag-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
