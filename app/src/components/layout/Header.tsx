@@ -10,7 +10,9 @@ const Header = () => {
 
   const handleLogout = () => {
     authService.logout();
-    navigate('/login');
+    setTimeout(() => {
+      navigate('/login');
+    }, 500);
   };
 
   return (
