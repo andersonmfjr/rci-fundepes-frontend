@@ -48,7 +48,7 @@ export const useValidation = ({ entityType, onSuccess }: UseValidationProps) => 
       
       toast({
         title: "Erro na validação",
-        description: `Não foi possível ${currentValidation ? 'desvalidar' : 'validar'} o ${entityNames[entityType]}`,
+        description: `Não foi possível ${currentValidation ? 'invalidar' : 'validar'} o ${entityNames[entityType]}`,
         variant: "destructive",
       });
       

@@ -59,7 +59,7 @@ const ValidationButton = ({
         )}
       >
         <X className="w-4 h-4" />
-        {showText && "Desvalidar"}
+        {showText && "Invalidar"}
       </Button>
     );
   }
