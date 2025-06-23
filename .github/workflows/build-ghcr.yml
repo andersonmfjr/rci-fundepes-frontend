@@ -6,6 +6,11 @@ on:
       - main
       - develop
       - homolog
+  pull_request:
+    branches:
+      - main
+      - develop
+      - homolog
   
   workflow_dispatch:
 
@@ -41,7 +46,16 @@ jobs:
         id: vars
         run: |
           REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          TAG=$(if [ "${{ github.ref_name }}" = "main" ]; then echo "latest"; else echo "${{ github.ref_name }}"; fi)
+          #TAG=$(if [ "${{ github.ref_name }}" = "main" ]; then echo "latest"; else echo "${{ github.ref_name }}"; fi
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            TAG="latest"
+          elif [ "${{ github.ref_name }}" = "homolog" ]; then
+            TAG="hmg"
+          elif [ "${{ github.ref_name }}" = "develop" ]; then
+            TAG="dev"
+          else
+            TAG="pull_request"
+          fi
           echo "repo=$REPO" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
