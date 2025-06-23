@@ -6,13 +6,13 @@ import { cn } from '@/lib/utils';
 const Sidebar = () => {
   const menuItems = [
     {
-      title: 'Projetos',
+      title: 'Contratos',
       href: '/projects',
       icon: File
     },
-    // FIXME: New project menu item
+    // FIXME: New contract menu item
     /* {
-      title: 'Novo Projeto',
+      title: 'Novo Contrato',
       href: '/projects/new',
       icon: Plus
     } */
