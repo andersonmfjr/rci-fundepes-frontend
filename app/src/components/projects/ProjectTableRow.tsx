@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Eye, Edit } from "lucide-react";
 import { Project } from '@/types';
-import ProjectStatusBadge from '@/components/project/ProjectStatus';
+
 import { calculateTotalRciPercentage, formatCurrency } from '@/lib/projects/utils';
 
 interface ProjectTableRowProps {
@@ -41,9 +41,7 @@ const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
           {formatCurrency(project.totalValue)}
         </span>
       </TableCell>
-      <TableCell className="min-w-[120px]">
-        <ProjectStatusBadge status={project.status} />
-      </TableCell>
+
       <TableCell className="text-gray-600 min-w-[120px]">
         {formatDate(project.createdAt)}
       </TableCell>

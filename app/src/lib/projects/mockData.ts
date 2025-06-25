@@ -1,11 +1,230 @@
-import { Project } from "@/types";
+import { Project, Contract, Transfer, RciDistribution, ContractAddendum, Bank, Institution, Financier, ContractType, AcademicUnit, UnitType, BankAccount } from "@/types";
+
+// Dados mock para as estruturas do banco de dados
+const mockBanks: Bank[] = [
+  { id: 1, codigo: "001", nome: "Banco do Brasil S.A." },
+  { id: 2, codigo: "104", nome: "Caixa Econômica Federal" },
+  { id: 3, codigo: "237", nome: "Banco Bradesco S.A." }
+];
+
+const mockInstitutions: Institution[] = [
+  { id: 1, nome: "Universidade Federal de Alagoas", sigla: "UFAL", cnpj: "12.345.678/0001-00" },
+  { id: 2, nome: "Universidade Federal de Pernambuco", sigla: "UFPE", cnpj: "98.765.432/0001-00" },
+  { id: 3, nome: "Universidade Federal da Bahia", sigla: "UFBA", cnpj: "11.222.333/0001-00" }
+];
+
+const mockFinanciers: Financier[] = [
+  { id: 1, nome: "FINEP - Financiadora de Estudos e Projetos", tipo: "Órgão Público", cnpj: "33.749.094/0001-09" },
+  { id: 2, nome: "CNPq - Conselho Nacional de Desenvolvimento Científico e Tecnológico", tipo: "Órgão Público", cnpj: "33.654.831/0001-04" },
+  { id: 3, nome: "Empresa XYZ Ltda", tipo: "Empresa Privada", cnpj: "12.345.678/0001-90" }
+];
+
+const mockContractTypes: ContractType[] = [
+  { id: 1, descricao: "TED" },
+  { id: 2, descricao: "Lei da Informática" },
+  { id: 3, descricao: "FINEP" },
+  { id: 4, descricao: "CNPq" }
+];
+
+const mockUnitTypes: UnitType[] = [
+  { id: 1, descricao: "Instituto" },
+  { id: 2, descricao: "Faculdade" },
+  { id: 3, descricao: "Centro" }
+];
+
+const mockAcademicUnits: AcademicUnit[] = [
+  {
+    id: 1,
+    id_instituicao: 1,
+    id_tipo_unidade: 1,
+    nome: "Instituto de Computação",
+    sigla: "IC",
+    instituicao: mockInstitutions[0],
+    tipo_unidade: mockUnitTypes[0]
+  },
+  {
+    id: 2,
+    id_instituicao: 1,
+    id_tipo_unidade: 2,
+    nome: "Faculdade de Letras",
+    sigla: "FALE",
+    instituicao: mockInstitutions[0],
+    tipo_unidade: mockUnitTypes[1]
+  },
+  {
+    id: 3,
+    id_instituicao: 2,
+    id_tipo_unidade: 1,
+    nome: "Centro de Informática",
+    sigla: "CIN",
+    instituicao: mockInstitutions[1],
+    tipo_unidade: mockUnitTypes[2]
+  }
+];
+
+const mockBankAccounts: BankAccount[] = [
+  {
+    id: 1,
+    id_unidade: 1,
+    id_banco: 1,
+    agencia: "1234-5",
+    numero: "123456-7",
+    unidade: mockAcademicUnits[0],
+    banco: mockBanks[0]
+  },
+  {
+    id: 2,
+    id_unidade: 2,
+    id_banco: 2,
+    agencia: "5678-9",
+    numero: "987654-3",
+    unidade: mockAcademicUnits[1],
+    banco: mockBanks[1]
+  },
+  {
+    id: 3,
+    id_unidade: 3,
+    id_banco: 3,
+    agencia: "9999-1",
+    numero: "111111-1",
+    unidade: mockAcademicUnits[2],
+    banco: mockBanks[2]
+  }
+];
+
+// Contratos mock
+const mockContracts: Contract[] = [
+  {
+    id: 1,
+    id_instituicao: 1,
+    id_financiador: 1,
+    id_tipo_contrato: 3,
+    valor_total: 850000.0,
+    vigencia_inicio: "2024-01-01",
+    vigencia_fim: "2025-12-31",
+    validado: true,
+    data_criacao: "2024-01-15T10:30:00Z",
+    data_atualizacao: "2024-01-20T14:22:00Z",
+    instituicao: mockInstitutions[0],
+    financiador: mockFinanciers[0],
+    tipo_contrato: mockContractTypes[2]
+  },
+  {
+    id: 2,
+    id_instituicao: 1,
+    id_financiador: 2,
+    id_tipo_contrato: 4,
+    valor_total: 1200000.0,
+    vigencia_inicio: "2024-02-01",
+    vigencia_fim: "2026-01-31",
+    validado: true,
+    data_criacao: "2024-02-01T09:15:00Z",
+    data_atualizacao: "2024-02-10T16:45:00Z",
+    instituicao: mockInstitutions[0],
+    financiador: mockFinanciers[1],
+    tipo_contrato: mockContractTypes[3]
+  }
+];
+
+// Distribuições RCI mock
+const mockRciDistributions: RciDistribution[] = [
+  {
+    id: 1,
+    id_unidade: 1,
+    id_contrato: 1,
+    percentual: 15.5,
+    valor_base_calculo: 850000.0,
+    validado: true,
+    data_criacao: "2024-01-16T10:00:00Z",
+    unidade: mockAcademicUnits[0],
+    contrato: mockContracts[0]
+  },
+  {
+    id: 2,
+    id_unidade: 2,
+    id_contrato: 1,
+    percentual: 8.2,
+    valor_base_calculo: 850000.0,
+    validado: false,
+    data_criacao: "2024-01-16T10:30:00Z",
+    unidade: mockAcademicUnits[1],
+    contrato: mockContracts[0]
+  },
+  {
+    id: 3,
+    id_unidade: 1,
+    id_contrato: 2,
+    percentual: 22.0,
+    valor_base_calculo: 1200000.0,
+    validado: true,
+    data_criacao: "2024-02-02T14:00:00Z",
+    unidade: mockAcademicUnits[0],
+    contrato: mockContracts[1]
+  }
+];
+
+// Transferências mock
+const mockTransfers: Transfer[] = [
+  {
+    id: 1,
+    id_conta_origem: 1,
+    id_conta_destino: 2,
+    id_contrato: 1,
+    data: "2024-03-15",
+    valor: 131750.0, // 15.5% de 850000
+    observacao: "Primeira transferência RCI - Instituto de Computação",
+    validada: true,
+    data_criacao: "2024-03-15T08:30:00Z",
+    conta_origem: mockBankAccounts[0],
+    conta_destino: mockBankAccounts[1],
+    contrato: mockContracts[0]
+  },
+  {
+    id: 2,
+    id_conta_origem: 1,
+    id_conta_destino: 3,
+    id_contrato: 2,
+    data: "2024-04-10",
+    valor: 264000.0, // 22% de 1200000
+    observacao: "Transferência RCI - CNPq",
+    validada: false,
+    data_criacao: "2024-04-10T16:20:00Z",
+    conta_origem: mockBankAccounts[0],
+    conta_destino: mockBankAccounts[2],
+    contrato: mockContracts[1]
+  }
+];
+
+// Aditivos contratuais mock
+const mockContractAddendums: ContractAddendum[] = [
+  {
+    id: 1,
+    id_contrato: 1,
+    data: "2024-06-15",
+    novo_total: 950000.0,
+    validado: true,
+    descricao: "Aditivo para inclusão de novos equipamentos conforme demanda do projeto",
+    data_criacao: "2024-06-15T10:00:00Z",
+    contrato: mockContracts[0]
+  },
+  {
+    id: 2,
+    id_contrato: 2,
+    data: "2024-07-20",
+    novo_total: 1350000.0,
+    validado: false,
+    descricao: "Aumento de prazo e valor para conclusão das atividades de pesquisa",
+    data_criacao: "2024-07-20T14:30:00Z",
+    contrato: mockContracts[1]
+  }
+];
 
 export const mockProjects: Project[] = [
   {
     id: "1",
-    name: "Projeto Infraestrutura 2024",
+    name: "Contrato FINEP - Infraestrutura Tecnológica 2024",
     description:
-      "Projeto de expansão da infraestrutura tecnológica para o ano de 2024, incluindo modernização de servidores e implementação de nova rede.",
+      "Contrato de financiamento para expansão da infraestrutura tecnológica para o ano de 2024, incluindo modernização de servidores e implementação de nova rede.",
     totalValue: 850000.0,
     units: [
       { id: "u1", name: "UFAL", rciPercentage: 15.5 },
@@ -16,6 +235,11 @@ export const mockProjects: Project[] = [
     createdAt: "2024-01-15T10:30:00Z",
     updatedAt: "2024-01-20T14:22:00Z",
     contractLink: "https://example.com/contract-infra-2024.pdf",
+    // Novos campos baseados na modelagem
+    contract: mockContracts[0],
+    transfers: [mockTransfers[0]],
+    rciDistributions: [mockRciDistributions[0], mockRciDistributions[1]],
+    contractAddendums: [mockContractAddendums[0]]
   },
   {
     id: "2",
@@ -29,6 +253,11 @@ export const mockProjects: Project[] = [
     createdAt: "2024-02-01T09:15:00Z",
     updatedAt: "2024-02-10T16:45:00Z",
     contractLink: "https://example.com/contract-modernizacao.pdf",
+    // Novos campos baseados na modelagem
+    contract: mockContracts[1],
+    transfers: [mockTransfers[1]],
+    rciDistributions: [mockRciDistributions[2]],
+    contractAddendums: [mockContractAddendums[1]]
   },
   {
     id: "3",
@@ -199,12 +428,12 @@ export const mockProjects: Project[] = [
     id: "15",
     name: "Plataforma de Comunicação Interna",
     description:
-      "Sistema de comunicação corporativa com chat, videoconferência, compartilhamento de arquivos e calendário.",
-    totalValue: 810000.0,
-    units: [{ id: "u23", name: "UFAL", rciPercentage: 20.6 }],
+      "Sistema de comunicação corporativa com chat, videoconferência e compartilhamento de documentos.",
+    totalValue: 550000.0,
+    units: [{ id: "u23", name: "UFAL", rciPercentage: 12.3 }],
     status: "draft",
     bankStatements: [],
-    createdAt: "2024-06-01T15:20:00Z",
-    updatedAt: "2024-06-01T15:20:00Z",
-  },
+    createdAt: "2024-05-30T11:20:00Z",
+    updatedAt: "2024-05-30T11:20:00Z",
+  }
 ];

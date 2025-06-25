@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, FileX } from "lucide-react";
-import { Project, ProjectStatus } from '@/types';
+import { Project } from '@/types';
 import { projectsService } from '@/lib/projects';
 import { calculateTotalRciPercentage } from '@/lib/projects/utils';
 import Layout from '@/components/layout/Layout';
@@ -13,183 +13,135 @@ import ProjectsTable from '@/components/projects/ProjectsTable';
 import ProjectsPagination from '@/components/projects/ProjectsPagination';
 import { usePageTitle } from '@/hooks/use-page-title';
 
-type SortField = 'name' | 'rciPercentage' | 'totalValue' | 'status' | 'createdAt' | 'updatedAt';
+type SortField = 'name' | 'rciPercentage' | 'totalValue' | 'createdAt' | 'updatedAt';
 type SortDirection = 'asc' | 'desc';
 
 const Projects = () => {
-  usePageTitle('Projetos');
+  usePageTitle('Contratos');
   const [searchParams, setSearchParams] = useSearchParams();
   const [projects, setProjects] = useState<Project[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Initialize state from URL params
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>(
-    (searchParams.get('status') as ProjectStatus) || 'all'
-  );
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
   const [sortField, setSortField] = useState<SortField>(
     (searchParams.get('sortField') as SortField) || 'updatedAt'
   );
   const [sortDirection, setSortDirection] = useState<SortDirection>(
     (searchParams.get('sortDirection') as SortDirection) || 'desc'
   );
-  const [currentPage, setCurrentPage] = useState(
-    parseInt(searchParams.get('page') || '1')
-  );
-  const [itemsPerPage, setItemsPerPage] = useState(
-    parseInt(searchParams.get('itemsPerPage') || '10')
-  );
 
-  // Update URL params whenever state changes
-  const updateUrlParams = (updates: Record<string, string | number>) => {
-    const newParams = new URLSearchParams(searchParams);
-    
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value === '' || value === 'all' || (key === 'page' && value === 1) || 
-          (key === 'itemsPerPage' && value === 10) ||
-          (key === 'sortField' && value === 'updatedAt') ||
-          (key === 'sortDirection' && value === 'desc')) {
-        newParams.delete(key);
-      } else {
-        newParams.set(key, value.toString());
-      }
-    });
+  const itemsPerPage = 10;
 
-    setSearchParams(newParams, { replace: true });
-  };
-
+  // Load projects
   useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        setLoading(true);
+        const data = await projectsService.getAll();
+        setProjects(data);
+      } catch (error) {
+        console.error('Error loading projects:', error);
+        toast({
+          title: "Erro ao carregar contratos",
+          description: "Não foi possível carregar a lista de contratos",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadProjects();
   }, []);
 
-  const loadProjects = async () => {
-    try {
-      const data = await projectsService.getAll();
-      setProjects(data);
-    } catch (error) {
-      toast({
-        title: "Erro ao carregar projetos",
-        description: "Não foi possível carregar a lista de projetos",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSort = (field: SortField) => {
-    let newDirection: SortDirection;
-    if (sortField === field) {
-      newDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      newDirection = 'asc';
-    }
-    
-    setSortField(field);
-    setSortDirection(newDirection);
-    setCurrentPage(1);
-    
-    updateUrlParams({
-      sortField: field,
-      sortDirection: newDirection,
-      page: 1
-    });
-  };
-
-  const filteredAndSortedProjects = projects
-    .filter(project => {
+  // Filter and sort projects
+  const filteredAndSortedProjects = React.useMemo(() => {
+    const filtered = projects.filter(project => {
       const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    })
-    .sort((a, b) => {
-      let aValue: number;
-      let bValue: number;
+                           project.description.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesSearch;
+    });
 
-      // Special handling for RCI percentage calculation
-      if (sortField === 'rciPercentage') {
+    // Sort projects
+    filtered.sort((a, b) => {
+      let aValue: string | number, bValue: string | number;
+      
+      if (sortField === 'name') {
+        aValue = a.name.toLowerCase();
+        bValue = b.name.toLowerCase();
+      } else if (sortField === 'rciPercentage') {
         aValue = calculateTotalRciPercentage(a.units);
         bValue = calculateTotalRciPercentage(b.units);
-      } else if (sortField === 'createdAt' || sortField === 'updatedAt') {
-        aValue = new Date(a[sortField]).getTime();
-        bValue = new Date(b[sortField]).getTime();
-      } else if (sortField === 'status') {
-        const statusOrder = { 'draft': 0, 'pending': 1, 'validated': 2, 'completed': 3 };
-        aValue = statusOrder[a.status];
-        bValue = statusOrder[b.status];
       } else if (sortField === 'totalValue') {
         aValue = a.totalValue;
         bValue = b.totalValue;
-      } else if (sortField === 'name') {
-        return sortDirection === 'asc' 
-          ? a.name.localeCompare(b.name)
-          : b.name.localeCompare(a.name);
-      } else {
-        aValue = 0;
-        bValue = 0;
+      } else if (sortField === 'createdAt') {
+        aValue = new Date(a.createdAt).getTime();
+        bValue = new Date(b.createdAt).getTime();
+      } else if (sortField === 'updatedAt') {
+        aValue = new Date(a.updatedAt).getTime();
+        bValue = new Date(b.updatedAt).getTime();
       }
 
       if (sortDirection === 'asc') {
-        return aValue > bValue ? 1 : -1;
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
       } else {
-        return aValue < bValue ? 1 : -1;
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
       }
     });
 
-  // Pagination calculations
-  const totalItems = filteredAndSortedProjects.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+    return filtered;
+  }, [projects, searchTerm, sortField, sortDirection]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredAndSortedProjects.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentProjects = filteredAndSortedProjects.slice(startIndex, endIndex);
+  const paginatedProjects = filteredAndSortedProjects.slice(startIndex, startIndex + itemsPerPage);
+
+  // Update URL when filters change
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams();
+    
+    if (searchTerm) newSearchParams.set('search', searchTerm);
+    if (currentPage > 1) newSearchParams.set('page', currentPage.toString());
+    if (sortField !== 'updatedAt') newSearchParams.set('sortField', sortField);
+    if (sortDirection !== 'desc') newSearchParams.set('sortDirection', sortDirection);
+
+    setSearchParams(newSearchParams, { replace: true });
+  }, [searchTerm, currentPage, sortField, sortDirection, setSearchParams]);
+
+  // Event handlers
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('desc');
+    }
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    updateUrlParams({ page });
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
-    setCurrentPage(1);
-    updateUrlParams({ 
-      search: newSearchTerm,
-      page: 1 
-    });
-  };
-
-  const handleStatusFilterChange = (value: string) => {
-    const newStatus = value as ProjectStatus | 'all';
-    setStatusFilter(newStatus);
-    setCurrentPage(1);
-    updateUrlParams({ 
-      status: newStatus,
-      page: 1 
-    });
-  };
-
-  const handleItemsPerPageChange = (value: string) => {
-    const newItemsPerPage = Number(value);
-    setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1);
-    updateUrlParams({ 
-      itemsPerPage: newItemsPerPage,
-      page: 1 
-    });
-  };
-
-  if (isLoading) {
+  if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Carregando projetos...</p>
+        <div className="container mx-auto py-6">
+          <div className="animate-pulse">
+            <div className="bg-gray-200 h-8 w-64 mb-4 rounded"></div>
+            <div className="bg-gray-200 h-96 rounded"></div>
           </div>
         </div>
       </Layout>
@@ -198,84 +150,118 @@ const Projects = () => {
 
   return (
     <Layout>
-      <div className="space-y-4 lg:space-y-6">
+      <div className="container mx-auto py-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Projetos RCI</h1>
-            <p className="text-gray-600 mt-1 text-sm lg:text-base">Gerencie seus projetos de reembolso de custos indiretos</p>
+            <h1 className="text-2xl font-bold text-gray-900">Contratos</h1>
+            <p className="text-gray-600">
+              Gerencie os contratos de ressarcimento de custos indiretos
+            </p>
           </div>
-          {/* FIXME: New project button */}
-          {/* <Button asChild className="w-full sm:w-auto">
-            <Link to="/projects/new" className="flex items-center justify-center gap-2">
-              <Plus className="w-4 h-4" />
-              Novo Projeto
+
+          
+          {/* <Button asChild>
+            <Link to="/projects/new">
+              <Plus className="w-4 h-4 mr-2" />
+              Novo Contrato
             </Link>
           </Button> */}
         </div>
 
-        <Card>
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg lg:text-xl">Lista de Projetos</CardTitle>
-            <CardDescription className="text-sm lg:text-base">
-              {totalItems} projeto(s) encontrado(s)
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ProjectsFilters
-              searchTerm={searchTerm}
-              statusFilter={statusFilter}
-              onSearchChange={handleSearchChange}
-              onStatusFilterChange={handleStatusFilterChange}
-            />
-
-            {currentProjects.length === 0 ? (
-              <div className="text-center py-8 lg:py-12">
-                <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FileX className="w-6 h-6 lg:w-8 lg:h-8 text-gray-400" />
-                </div>
-                <h3 className="text-base lg:text-lg font-medium text-gray-900 mb-2">
-                  {searchTerm || statusFilter !== 'all' ? 'Nenhum projeto encontrado' : 'Nenhum projeto cadastrado'}
-                </h3>
-                <p className="text-gray-600 mb-4 lg:mb-6 text-sm lg:text-base px-4">
-                  {searchTerm || statusFilter !== 'all'
-                    ? 'Tente ajustar os filtros de busca'
-                    : 'Visualize os projetos existentes'
-                  }
-                </p>
-                {/* FIXME: Create first project button */}
-                {/* {!searchTerm && statusFilter === 'all' && (
-                  <Button asChild className="w-full sm:w-auto">
-                    <Link to="/projects/new">Criar Primeiro Projeto</Link>
-                  </Button>
-                )} */}
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Total de Contratos
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{filteredAndSortedProjects.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Contratos Validados
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {filteredAndSortedProjects.filter(p => p.contract?.validado).length}
               </div>
-            ) : (
-              <>
-                <div className="overflow-x-auto">
-                  <ProjectsTable
-                    projects={currentProjects}
-                    sortField={sortField}
-                    sortDirection={sortDirection}
-                    onSort={handleSort}
-                    formatDate={formatDate}
-                  />
-                </div>
+              <div className="text-sm text-gray-500 mt-1">
+                {filteredAndSortedProjects.length > 0 
+                  ? `${((filteredAndSortedProjects.filter(p => p.contract?.validado).length / filteredAndSortedProjects.length) * 100).toFixed(1)}%`
+                  : '0%'
+                }
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-gray-600">
+                Valor Total
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                }).format(
+                  filteredAndSortedProjects.reduce((sum, p) => sum + p.totalValue, 0)
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-                <ProjectsPagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  totalItems={totalItems}
-                  startIndex={startIndex}
-                  endIndex={endIndex}
-                  itemsPerPage={itemsPerPage}
-                  onPageChange={handlePageChange}
-                  onItemsPerPageChange={handleItemsPerPageChange}
-                />
-              </>
-            )}
-          </CardContent>
-        </Card>
+        {/* Filters */}
+        <ProjectsFilters
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+        />
+
+        {/* Table */}
+        {paginatedProjects.length > 0 ? (
+          <Card>
+            <CardContent className="p-0">
+              <ProjectsTable
+                projects={paginatedProjects}
+                sortField={sortField}
+                sortDirection={sortDirection}
+                onSort={handleSort}
+                formatDate={formatDate}
+              />
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <FileX className="w-12 h-12 text-gray-400 mb-4" />
+              <CardTitle className="text-xl mb-2 text-center">
+                {searchTerm ? 'Nenhum contrato encontrado' : 'Nenhum contrato cadastrado'}
+              </CardTitle>
+              <CardDescription className="text-center max-w-md">
+                {searchTerm
+                  ? 'Tente ajustar os filtros de busca para encontrar os contratos que você está procurando.'
+                  : 'Comece criando seu primeiro contrato de ressarcimento de custos indiretos.'
+                }
+              </CardDescription>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <ProjectsPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </Layout>
   );
