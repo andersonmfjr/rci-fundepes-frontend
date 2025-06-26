@@ -42,7 +42,7 @@ const ProjectDetail = () => {
   };
 
   // Update page title when contract loads
-  usePageTitle(project ? `${project.name}` : 'Detalhes do Contrato');
+  usePageTitle(project ? `${project.nome}` : 'Detalhes do Contrato');
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
@@ -93,7 +93,7 @@ const ProjectDetail = () => {
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-0">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 break-words">{project.name}</h1>
+            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 break-words">{project.nome}</h1>
             <p className="text-gray-600 mt-1 text-sm lg:text-base">Detalhes do contrato RCI</p>
           </div>
         </div>

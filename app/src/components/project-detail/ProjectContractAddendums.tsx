@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ValidationButton } from "@/components/ui/validation-button";
-import { CheckCircle, Clock, FileText, TrendingUp, TrendingDown } from "lucide-react";
+import { FileText, TrendingUp, TrendingDown } from "lucide-react";
 import { Project, ContractAddendum } from '@/types';
 import { formatCurrency } from '@/lib/projects/utils';
 import { useValidation } from '@/hooks/use-validation';
@@ -12,7 +11,7 @@ interface ProjectContractAddendumsProps {
 }
 
 const ProjectContractAddendums = ({ project }: ProjectContractAddendumsProps) => {
-  const addendums = project.contractAddendums || [];
+  const addendums = project.aditivos_contratuais || [];
   const [addendumValidations, setAddendumValidations] = useState<Record<number, boolean>>(
     addendums.reduce((acc, addendum) => ({
       ...acc,
@@ -88,7 +87,7 @@ const ProjectContractAddendums = ({ project }: ProjectContractAddendumsProps) =>
   );
 
   // Calcular valores iniciais e totais
-  const valorOriginal = project.contract?.valor_total || project.totalValue;
+  const valorOriginal = project.contrato?.valor_total || project.valor_total;
   const valorAtual = sortedAddendums.length > 0 
     ? sortedAddendums[sortedAddendums.length - 1].novo_total 
     : valorOriginal;

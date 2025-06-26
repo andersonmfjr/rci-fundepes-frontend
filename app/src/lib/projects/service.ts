@@ -11,7 +11,8 @@ export const projectsService = {
     await new Promise((resolve) => setTimeout(resolve, 500));
     return [...projects].sort(
       (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        new Date(b.data_atualizacao || "").getTime() -
+        new Date(a.data_atualizacao || "").getTime()
     );
   },
 
@@ -26,15 +27,14 @@ export const projectsService = {
 
     const newProject: Project = {
       id: generateId(),
-      name: data.name,
-      description: data.description,
-      totalValue: data.totalValue,
-      units: data.units,
-      contractLink: data.contractLink,
+      nome: data.nome,
+      descricao: data.descricao,
+      valor_total: data.valor_total,
+      unidades: data.unidades,
+      link_contrato: data.link_contrato,
       status: "draft",
-      bankStatements: data.bankStatements || [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      data_criacao: new Date().toISOString(),
+      data_atualizacao: new Date().toISOString(),
     };
 
     projects.push(newProject);
@@ -54,7 +54,7 @@ export const projectsService = {
     const updatedProject = {
       ...projects[index],
       ...data,
-      updatedAt: new Date().toISOString(),
+      data_atualizacao: new Date().toISOString(),
     };
 
     projects[index] = updatedProject;
@@ -71,7 +71,7 @@ export const projectsService = {
     const updatedProject = {
       ...projects[index],
       status,
-      updatedAt: new Date().toISOString(),
+      data_atualizacao: new Date().toISOString(),
     };
 
     projects[index] = updatedProject;
