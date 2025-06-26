@@ -1,73 +1,152 @@
-# Welcome to your Lovable project
+# RCI Manager Frontend
 
-## Project info
+Sistema de gestão de contratos de Ressarcimento de Custos Indiretos (RCI) para instituições de ensino e pesquisa.
 
-**URL**: https://lovable.dev/projects/153dccb5-5c0b-4318-a821-fc105b0f02c1
+![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.4.1-646CFF?logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4.11-06B6D4?logo=tailwindcss&logoColor=white)
 
-## How can I edit this code?
+## 📋 Sobre o Projeto
 
-There are several ways of editing your application.
+O RCI Manager é uma aplicação web moderna para gestão de contratos de Ressarcimento de Custos Indiretos, desenvolvida para facilitar o controle e acompanhamento de:
 
-**Use Lovable**
+- **Contratos de Pesquisa**: Gestão completa de contratos com financiadores
+- **Distribuição RCI**: Controle da distribuição de recursos entre unidades acadêmicas
+- **Transferências Bancárias**: Acompanhamento de transferências de RCI
+- **Aditivos Contratuais**: Histórico de alterações e aditivos nos contratos
+- **Hierarquia Institucional**: Estrutura hierárquica de unidades acadêmicas
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/153dccb5-5c0b-4318-a821-fc105b0f02c1) and start prompting.
+## 🚀 Tecnologias Utilizadas
 
-Changes made via Lovable will be committed automatically to this repo.
+### Core
 
-**Use your preferred IDE**
+- **React 18.3.1** - Biblioteca principal para interface
+- **TypeScript 5.5.3** - Tipagem estática
+- **Vite 5.4.1** - Build tool e dev server
+- **React Router DOM 6.26.2** - Roteamento
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### UI/UX
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Tailwind CSS 3.4.11** - Framework CSS utilitário
+- **Shadcn/UI** - Componentes de interface baseados em Radix UI
+- **Lucide React** - Biblioteca de ícones
+- **Next Themes** - Suporte a tema escuro/claro
 
-Follow these steps:
+### Formulários e Validação
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **React Hook Form 7.53.0** - Gerenciamento de formulários
+- **Zod 3.23.8** - Validação de esquemas
+- **@hookform/resolvers** - Integração RHF + Zod
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Estado e Dados
 
-# Step 3: Install the necessary dependencies.
-npm i
+- **TanStack Query 5.56.2** - Gerenciamento de estado do servidor
+- **React Dropzone** - Upload de arquivos
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Desenvolvimento
+
+- **ESLint** - Linting de código
+- **PostCSS** - Processamento CSS
+- **Autoprefixer** - Prefixos CSS automáticos
+
+## 📁 Estrutura do Projeto
+
+```
+app/
+├── src/
+│   ├── components/          # Componentes reutilizáveis
+│   │   ├── ui/             # Componentes base (Shadcn/UI)
+│   │   ├── auth/           # Componentes de autenticação
+│   │   ├── layout/         # Componentes de layout
+│   │   ├── project/        # Componentes de projeto
+│   │   ├── project-detail/ # Componentes de detalhes
+│   │   └── projects/       # Componentes de listagem
+│   ├── hooks/              # Custom hooks
+│   ├── lib/                # Utilitários e configurações
+│   │   └── projects/       # Lógica específica de projetos
+│   ├── pages/              # Páginas da aplicação
+│   ├── types/              # Definições de tipos TypeScript
+│   └── utils/              # Funções utilitárias
+├── public/                 # Arquivos estáticos
+└── docker/                 # Configurações Docker
 ```
 
-**Edit a file directly in GitHub**
+## 🛠️ Configuração do Ambiente
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Pré-requisitos
 
-**Use GitHub Codespaces**
+- Node.js 18+
+- npm ou yarn
+- Git
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Instalação
 
-## What technologies are used for this project?
+1. **Clone o repositório**
 
-This project is built with:
+   ```bash
+   git clone <repository-url>
+   cd rci-ufal-frontend
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+2. **Instale as dependências**
 
-## How can I deploy this project?
+   ```bash
+   cd app
+   npm install
+   ```
 
-Simply open [Lovable](https://lovable.dev/projects/153dccb5-5c0b-4318-a821-fc105b0f02c1) and click on Share -> Publish.
+3. **Execute o ambiente de desenvolvimento**
 
-## Can I connect a custom domain to my Lovable project?
+   ```bash
+   npm run dev
+   ```
 
-Yes, you can!
+4. **Acesse a aplicação**
+   ```
+   http://localhost:8080
+   ```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 📜 Scripts Disponíveis
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+```bash
+# Desenvolvimento
+npm run dev          # Inicia servidor de desenvolvimento
+
+# Build
+npm run build        # Build para produção
+npm run build:dev    # Build para desenvolvimento
+npm run preview      # Preview do build
+
+# Qualidade de Código
+npm run lint         # Executa ESLint
+npm run lint:fix     # Corrige problemas automaticamente
+```
+
+## 🏗️ Arquitetura
+
+### Modelagem de Dados
+
+O sistema utiliza uma estrutura hierárquica de dados baseada na nova modelagem:
+
+- **Unidades Acadêmicas**: Estrutura hierárquica (instituições → faculdades → institutos)
+- **Contratos**: Vinculados diretamente às unidades acadêmicas
+- **Financiadores**: Categorizados por tipo (público/privado)
+- **Transferências**: Conectadas às distribuições RCI específicas
+
+### Componentes Principais
+
+- **Layout**: Header, Sidebar, Layout principal
+- **Projects**: Listagem e filtros de contratos
+- **ProjectDetail**: Visualização detalhada com abas
+- **Forms**: Formulários com validação robusta
+- **UI Components**: Biblioteca de componentes reutilizáveis
+
+## 🎨 Design System
+
+O projeto utiliza um design system consistente baseado em:
+
+- **Cores**: Paleta de cores CSS variables
+- **Tipografia**: Sistema tipográfico responsivo
+- **Espaçamento**: Grid system do Tailwind
+- **Componentes**: Shadcn/UI com customizações
