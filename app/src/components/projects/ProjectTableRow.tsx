@@ -14,7 +14,7 @@ interface ProjectTableRowProps {
 }
 
 const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
-  const totalRciPercentage = calculateTotalRciPercentage(project.units);
+  const totalRciPercentage = calculateTotalRciPercentage(project.unidades);
 
   return (
     <TableRow>
@@ -24,10 +24,10 @@ const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
             to={`/projects/${project.id}`}
             className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
           >
-            {project.name}
+            {project.nome}
           </Link>
           <p className="text-sm text-gray-500 truncate max-w-xs lg:max-w-sm xl:max-w-md line-clamp-1">
-            {project.description}
+            {project.descricao}
           </p>
         </div>
       </TableCell>
@@ -38,15 +38,15 @@ const ProjectTableRow = ({ project, formatDate }: ProjectTableRowProps) => {
       </TableCell>
       <TableCell className="min-w-[120px]">
         <span className="font-medium text-gray-900">
-          {formatCurrency(project.totalValue)}
+          {formatCurrency(project.valor_total)}
         </span>
       </TableCell>
 
       <TableCell className="text-gray-600 min-w-[120px]">
-        {formatDate(project.createdAt)}
+        {formatDate(project.data_criacao || '')}
       </TableCell>
       <TableCell className="text-gray-600 min-w-[120px]">
-        {formatDate(project.updatedAt)}
+        {formatDate(project.data_atualizacao || '')}
       </TableCell>
       <TableCell className="text-right min-w-[100px]">
         <div className="flex items-center justify-end gap-1 lg:gap-2">

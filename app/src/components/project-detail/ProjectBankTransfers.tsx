@@ -12,7 +12,7 @@ interface ProjectBankTransfersProps {
 }
 
 const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
-  const transfers = project.transfers || [];
+  const transfers = project.transferencias || [];
   const [transferValidations, setTransferValidations] = useState<Record<number, boolean>>(
     transfers.reduce((acc, transfer) => ({
       ...acc,

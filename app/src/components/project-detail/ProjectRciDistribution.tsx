@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ValidationButton } from "@/components/ui/validation-button";
-import { CheckCircle, Clock, Building2, Percent } from "lucide-react";
-import { Project, RciDistribution } from '@/types';
-import { formatCurrency } from '@/lib/projects/utils';
+import { Clock, Building2, Percent } from "lucide-react";
+import { Project } from '@/types';
+import { formatCurrency, getRootUnit, buildUnitPathString } from '@/lib/projects/utils';
+import { mockAcademicUnits } from '@/lib/projects/mockData';
 import { useValidation } from '@/hooks/use-validation';
 
 interface ProjectRciDistributionProps {
@@ -12,7 +12,7 @@ interface ProjectRciDistributionProps {
 }
 
 const ProjectRciDistribution = ({ project }: ProjectRciDistributionProps) => {
-  const distributions = project.rciDistributions || [];
+  const distributions = project.distribuicoes_rci || [];
   const [distributionValidations, setDistributionValidations] = useState<Record<number, boolean>>(
     distributions.reduce((acc, distribution) => ({
       ...acc,
@@ -167,10 +167,16 @@ const ProjectRciDistribution = ({ project }: ProjectRciDistributionProps) => {
                   </div>
                 </div>
 
-                {/* Informações da instituição */}
+                {/* Informações da unidade e hierarquia */}
                 <div className="mt-3 pt-3 border-t border-gray-100">
                   <div className="text-xs text-gray-500">
-                    <span className="font-medium">Instituição:</span> {distribution.unidade.instituicao.sigla} - {distribution.unidade.instituicao.nome}
+                    <span className="font-medium">Instituição:</span> {(() => {
+                      const rootUnit = getRootUnit(distribution.unidade, mockAcademicUnits);
+                      return `${rootUnit.sigla} - ${rootUnit.nome}`;
+                    })()}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    <span className="font-medium">Hierarquia:</span> {buildUnitPathString(distribution.unidade, mockAcademicUnits)}
                   </div>
                   <div className="text-xs text-gray-500">
                     <span className="font-medium">Tipo de Unidade:</span> {distribution.unidade.tipo_unidade.descricao}

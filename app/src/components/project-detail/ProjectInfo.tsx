@@ -3,7 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Project } from '@/types';
-import { calculateTotalRciPercentage, calculateTotalRciValue, formatCurrency } from '@/lib/projects/utils';
+import { calculateTotalRciPercentage, calculateTotalRciValue, formatCurrency, buildUnitPathString } from '@/lib/projects/utils';
+import { mockAcademicUnits } from '@/lib/projects/mockData';
 import { useValidation } from '@/hooks/use-validation';
 import { Calendar, DollarSign, Building, User, FileText, CheckCircle, Clock } from "lucide-react";
 
@@ -14,10 +15,10 @@ interface ProjectInfoProps {
 }
 
 const ProjectInfo = ({ project, formatDate, onProjectUpdate }: ProjectInfoProps) => {
-  const [contractValidation, setContractValidation] = useState(project.contract?.validado || false);
-  const totalRciPercentage = calculateTotalRciPercentage(project.units);
+  const [contractValidation, setContractValidation] = useState(project.contrato?.validado || false);
+  const totalRciPercentage = calculateTotalRciPercentage(project.unidades);
   const totalRciValue = calculateTotalRciValue(project);
-  const contract = project.contract;
+  const contract = project.contrato;
 
   const { validateEntity: validateContract, isValidating: isValidatingContract } = useValidation({
     entityType: 'contract',
@@ -97,7 +98,7 @@ const ProjectInfo = ({ project, formatDate, onProjectUpdate }: ProjectInfoProps)
               <span className="text-sm font-medium text-blue-700">Valor Total</span>
             </div>
             <div className="text-2xl font-bold text-blue-800">
-              {formatCurrency(project.totalValue)}
+              {formatCurrency(project.valor_total)}
             </div>
           </div>
 
@@ -161,13 +162,16 @@ const ProjectInfo = ({ project, formatDate, onProjectUpdate }: ProjectInfoProps)
 
                 <div>
                   <label className="text-xs font-medium text-gray-600 mb-1 block">
-                    INSTITUIÇÃO
+                    UNIDADE ACADÊMICA
                   </label>
                   <div className="flex items-center gap-2">
                     <Building className="w-4 h-4 text-gray-500" />
                     <div>
-                      <div className="text-sm font-medium">{contract.instituicao.sigla}</div>
-                      <div className="text-xs text-gray-500">{contract.instituicao.nome}</div>
+                      <div className="text-sm font-medium">{contract.unidade_academica.sigla}</div>
+                      <div className="text-xs text-gray-500">{contract.unidade_academica.nome}</div>
+                      <div className="text-xs text-blue-600 mt-1">
+                        {buildUnitPathString(contract.unidade_academica, mockAcademicUnits)}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -217,7 +221,7 @@ const ProjectInfo = ({ project, formatDate, onProjectUpdate }: ProjectInfoProps)
         {/* Descrição */}
         <div>
           <label className="text-sm font-medium text-gray-700">Descrição</label>
-          <p className="mt-1 text-gray-900 break-words">{project.description}</p>
+          <p className="mt-1 text-gray-900 break-words">{project.descricao}</p>
         </div>
       </CardContent>
     </Card>

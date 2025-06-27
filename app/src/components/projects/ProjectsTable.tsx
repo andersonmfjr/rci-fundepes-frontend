@@ -4,7 +4,7 @@ import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 import { Project } from '@/types';
 import ProjectTableRow from './ProjectTableRow';
 
-type SortField = 'name' | 'rciPercentage' | 'totalValue' | 'createdAt' | 'updatedAt';
+type SortField = 'nome' | 'percentual_rci' | 'valor_total' | 'data_criacao' | 'data_atualizacao';
 type SortDirection = 'asc' | 'desc';
 
 interface ProjectsTableProps {
@@ -38,48 +38,48 @@ const ProjectsTable = ({
           <TableRow>
             <TableHead className="min-w-[200px]">
               <button
-                onClick={() => onSort('name')}
+                onClick={() => onSort('nome')}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Nome
-                {getSortIcon('name')}
+                {getSortIcon('nome')}
               </button>
             </TableHead>
             <TableHead className="min-w-[80px]">
               <button
-                onClick={() => onSort('rciPercentage')}
+                onClick={() => onSort('percentual_rci')}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 RCI %
-                {getSortIcon('rciPercentage')}
+                {getSortIcon('percentual_rci')}
               </button>
             </TableHead>
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort('totalValue')}
+                onClick={() => onSort('valor_total')}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Valor Total
-                {getSortIcon('totalValue')}
+                {getSortIcon('valor_total')}
               </button>
             </TableHead>
 
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort('createdAt')}
+                onClick={() => onSort('data_criacao')}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Criado em
-                {getSortIcon('createdAt')}
+                {getSortIcon('data_criacao')}
               </button>
             </TableHead>
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort('updatedAt')}
+                onClick={() => onSort('data_atualizacao')}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Atualizado em
-                {getSortIcon('updatedAt')}
+                {getSortIcon('data_atualizacao')}
               </button>
             </TableHead>
             <TableHead className="text-right min-w-[100px] whitespace-nowrap">Ações</TableHead>

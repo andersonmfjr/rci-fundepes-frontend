@@ -19,15 +19,15 @@ import { usePageTitle } from '@/hooks/use-page-title';
 
 const unitSchema = z.object({
   id: z.string(),
-  name: z.string().min(1, "Nome da unidade é obrigatório"),
-  rciPercentage: z.number().min(0, "Percentual deve ser positivo").max(100, "Percentual não pode ser maior que 100"),
+  nome: z.string().min(1, "Nome da unidade é obrigatório"),
+  percentual_rci: z.number().min(0, "Percentual deve ser positivo").max(100, "Percentual não pode ser maior que 100"),
 });
 
 const formSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório").max(200, "Nome deve ter no máximo 200 caracteres"),
-  description: z.string().min(1, "Descrição é obrigatória").max(1000, "Descrição deve ter no máximo 1000 caracteres"),
-  totalValue: z.number().min(0, "Valor total deve ser positivo"),
-  contractLink: z.string().optional(),
+  nome: z.string().min(1, "Nome é obrigatório").max(200, "Nome deve ter no máximo 200 caracteres"),
+  descricao: z.string().min(1, "Descrição é obrigatória").max(1000, "Descrição deve ter no máximo 1000 caracteres"),
+  valor_total: z.number().min(0, "Valor deve ser positivo"),
+  link_contrato: z.string().url("Link inválido").optional().or(z.literal("")),
 });
 
 const ProjectForm = () => {
@@ -40,16 +40,16 @@ const ProjectForm = () => {
   const [contractFile, setContractFile] = useState<File | null>(null);
   const [bankStatements, setBankStatements] = useState<File[]>([]);
   const [units, setUnits] = useState<Unit[]>([
-    { id: generateId(), name: '', rciPercentage: 0 }
+    { id: generateId(), nome: '', percentual_rci: 0 }
   ]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      totalValue: 0,
-      contractLink: "",
+      nome: "",
+      descricao: "",
+      valor_total: 0,
+      link_contrato: "",
     },
   });
 
@@ -59,12 +59,12 @@ const ProjectForm = () => {
         const project = await projectsService.getById(projectId);
         if (project) {
           form.reset({
-            name: project.name,
-            description: project.description,
-            totalValue: project.totalValue,
-            contractLink: project.contractLink || "",
+            nome: project.nome,
+            descricao: project.descricao,
+            valor_total: project.valor_total,
+            link_contrato: project.link_contrato || "",
           });
-          setUnits(project.units.length > 0 ? project.units : [{ id: generateId(), name: '', rciPercentage: 0 }]);
+          setUnits(project.unidades.length > 0 ? project.unidades : [{ id: generateId(), nome: '', percentual_rci: 0 }]);
           // Note: Files can't be restored for security reasons
         }
       } catch (error) {
@@ -85,7 +85,7 @@ const ProjectForm = () => {
     setIsLoading(true);
     try {
       // Validate units
-      const validUnits = units.filter(unit => unit.name.trim() !== '' && unit.rciPercentage > 0);
+      const validUnits = units.filter(unit => unit.nome.trim() !== '' && unit.percentual_rci > 0);
       
       if (validUnits.length === 0) {
         toast({
@@ -97,14 +97,11 @@ const ProjectForm = () => {
       }
 
       const formData: ProjectFormData = {
-        name: values.name,
-        description: values.description,
-        totalValue: values.totalValue,
-        units: validUnits,
-        contractFile,
-        contractLink: values.contractLink,
-        // COMMENTED: Bank statements for MVP
-        bankStatements: [], // Empty array as placeholder
+        nome: values.nome,
+        descricao: values.descricao,
+        valor_total: values.valor_total,
+        unidades: validUnits,
+        link_contrato: values.link_contrato,
       };
 
       if (isEdit && id) {
@@ -134,7 +131,7 @@ const ProjectForm = () => {
   };
 
   const addUnit = () => {
-    setUnits([...units, { id: generateId(), name: '', rciPercentage: 0 }]);
+    setUnits([...units, { id: generateId(), nome: '', percentual_rci: 0 }]);
   };
 
   const removeUnit = (unitId: string) => {
@@ -152,11 +149,11 @@ const ProjectForm = () => {
   };
 
   const getTotalRciPercentage = () => {
-    return units.reduce((total, unit) => total + (unit.rciPercentage || 0), 0);
+    return units.reduce((total, unit) => total + (unit.percentual_rci || 0), 0);
   };
 
   const getTotalRciValue = () => {
-    const totalValue = form.watch('totalValue') || 0;
+    const totalValue = form.watch('valor_total') || 0;
     return totalValue * (getTotalRciPercentage() / 100);
   };
 
@@ -193,7 +190,7 @@ const ProjectForm = () => {
               <CardContent className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="nome"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Nome do Projeto *</FormLabel>
@@ -207,7 +204,7 @@ const ProjectForm = () => {
 
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="descricao"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Descrição *</FormLabel>
@@ -225,7 +222,7 @@ const ProjectForm = () => {
 
                 <FormField
                   control={form.control}
-                  name="totalValue"
+                  name="valor_total"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Valor Total (R$) *</FormLabel>
@@ -260,8 +257,8 @@ const ProjectForm = () => {
                       <label className="text-sm font-medium text-gray-700">Nome da Unidade</label>
                       <Input
                         placeholder="Ex: UFAL"
-                        value={unit.name}
-                        onChange={(e) => updateUnit(unit.id, 'name', e.target.value)}
+                        value={unit.nome}
+                        onChange={(e) => updateUnit(unit.id, 'nome', e.target.value)}
                         className="mt-1"
                       />
                     </div>
@@ -273,15 +270,15 @@ const ProjectForm = () => {
                         min="0"
                         max="100"
                         placeholder="0.0"
-                        value={unit.rciPercentage || ''}
-                        onChange={(e) => updateUnit(unit.id, 'rciPercentage', parseFloat(e.target.value) || 0)}
+                        value={unit.percentual_rci || ''}
+                        onChange={(e) => updateUnit(unit.id, 'percentual_rci', parseFloat(e.target.value) || 0)}
                         className="mt-1"
                       />
                     </div>
                     <div className="w-32">
                       <span className="text-sm font-medium text-gray-700">Valor RCI</span>
                       <div className="mt-1 text-sm font-semibold text-green-600">
-                        {formatCurrency(calculateUnitRciValue(form.watch('totalValue') || 0, unit.rciPercentage))}
+                        {formatCurrency(calculateUnitRciValue(form.watch('valor_total') || 0, unit.percentual_rci))}
                       </div>
                     </div>
                     <Button
@@ -337,7 +334,7 @@ const ProjectForm = () => {
 
                 <FormField
                   control={form.control}
-                  name="contractLink"
+                  name="link_contrato"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Link do Contrato</FormLabel>

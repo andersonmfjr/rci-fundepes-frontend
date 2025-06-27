@@ -1,14 +1,14 @@
 export interface User {
   id: string;
-  name: string;
+  nome: string;
   email: string;
   token: string;
-  refreshToken: string;
+  refresh_token: string;
 }
 
 export type ProjectStatus = "draft" | "pending" | "validated" | "completed";
 
-// Tipos baseados na modelagem do banco de dados
+// Tipos baseados na nova modelagem do banco de dados
 
 export interface Bank {
   id: number;
@@ -16,18 +16,18 @@ export interface Bank {
   nome: string;
 }
 
-export interface Institution {
+export interface FinancierType {
   id: number;
-  nome: string;
-  sigla: string;
-  cnpj?: string;
+  descricao: string;
 }
 
 export interface Financier {
   id: number;
+  id_tipo_financiador: number;
   nome: string;
   tipo?: string;
   cnpj?: string;
+  tipo_financiador: FinancierType;
 }
 
 export interface ContractType {
@@ -42,12 +42,14 @@ export interface UnitType {
 
 export interface AcademicUnit {
   id: number;
-  id_instituicao: number;
+  id_unidade_pai?: number;
   id_tipo_unidade: number;
   nome: string;
   sigla: string;
-  instituicao: Institution;
+  cnpj?: string;
+  unidade_pai?: AcademicUnit;
   tipo_unidade: UnitType;
+  unidades_filhas?: AcademicUnit[];
 }
 
 export interface BankAccount {
@@ -62,25 +64,24 @@ export interface BankAccount {
 
 export interface Contract {
   id: number;
-  id_instituicao: number;
+  id_unidade_academica: number;
   id_financiador: number;
   id_tipo_contrato: number;
   valor_total: number;
   vigencia_inicio: string;
   vigencia_fim: string;
   validado: boolean;
+  nome: string;
+  descricao: string;
   data_criacao: string;
   data_atualizacao: string;
-  instituicao: Institution;
+  unidade_academica: AcademicUnit;
   financiador: Financier;
   tipo_contrato: ContractType;
-  // Campos adicionais para compatibilidade com a interface atual
-  name?: string; // Pode ser derivado de uma combinação de campos
-  description?: string; // Descrição adicional se necessário
   // Relacionamentos
-  transfers?: Transfer[];
-  rciDistributions?: RciDistribution[];
-  contractAddendums?: ContractAddendum[];
+  transferencias?: Transfer[];
+  distribuicoes_rci?: RciDistribution[];
+  aditivos_contratuais?: ContractAddendum[];
   // Campos legados para compatibilidade
   contractFile?: File | null;
   contractLink?: string;
@@ -105,7 +106,7 @@ export interface Transfer {
   id: number;
   id_conta_origem: number;
   id_conta_destino: number;
-  id_contrato: number;
+  id_distribuicao_rci: number;
   data: string;
   valor: number;
   observacao?: string;
@@ -113,7 +114,7 @@ export interface Transfer {
   data_criacao: string;
   conta_origem: BankAccount;
   conta_destino: BankAccount;
-  contrato: Contract;
+  distribuicao_rci: RciDistribution;
 }
 
 export interface ContractAddendum {
@@ -130,38 +131,68 @@ export interface ContractAddendum {
 // Tipos legados mantidos para compatibilidade (agora baseados em Contract)
 export interface Unit {
   id: string;
-  name: string;
-  rciPercentage: number;
+  nome: string;
+  percentual_rci: number;
 }
 
-// Project agora é um alias para Contract com campos adicionais para compatibilidade
-export interface Project extends Partial<Omit<Contract, 'id'>> {
+// Alias para Contrato
+export interface Project extends Partial<Omit<Contract, "id">> {
   id: string; // Convertido de number para string para compatibilidade
-  name?: string; // Nome do contrato
-  description?: string; // Descrição do contrato
-  totalValue: number; // Alias para valor_total
-  units: Unit[]; // Unidades derivadas de rciDistributions
+  nome?: string; // Nome do contrato
+  descricao?: string; // Descrição do contrato
+  valor_total: number; // Alias para valor_total
+  unidades: Unit[]; // Unidades derivadas de rciDistributions
   status: ProjectStatus; // Mantido para compatibilidade com interface atual
-  contractFile?: File | null;
-  contractLink?: string;
-  bankStatements?: File[];
-  createdAt?: string;
-  updatedAt?: string;
-  contract?: Contract; // Referência ao contrato completo
+  link_contrato?: string; // Link para o contrato
+  data_criacao?: string; // Mapeado de data_criacao
+  data_atualizacao?: string; // Mapeado de data_atualizacao
+  contrato?: Contract; // Referência ao contrato completo
 }
 
 export interface ProjectFormData {
-  name: string;
-  description: string;
-  totalValue: number; // Valor total em reais
-  units: Unit[]; // Unidades com seus respectivos percentuais RCI
-  contractFile?: File | null;
-  contractLink?: string;
-  bankStatements: File[];
+  nome: string;
+  descricao: string;
+  valor_total: number; // Valor total em reais
+  unidades: Unit[]; // Unidades com seus respectivos percentuais RCI
+  link_contrato?: string;
 }
 
 export interface ApiResponse<T> {
   data: T;
   message: string;
   success: boolean;
+}
+
+// Tipos auxiliares para trabalhar com a estrutura hierárquica
+export interface UnitHierarchy {
+  unidade: AcademicUnit;
+  nivel: number;
+  caminho: number[];
+  caminho_completo: string;
+  filhos: UnitHierarchy[];
+}
+
+// Interface para representar a estrutura de dados sem a entidade Institution (removida)
+export interface InstitutionLegacy {
+  id: number;
+  nome: string;
+  sigla: string;
+  cnpj?: string;
+}
+
+// Mapeamento para manter compatibilidade com dados legados
+export interface ContractLegacy {
+  id: number;
+  id_instituicao: number;
+  id_financiador: number;
+  id_tipo_contrato: number;
+  valor_total: number;
+  vigencia_inicio: string;
+  vigencia_fim: string;
+  validado: boolean;
+  data_criacao: string;
+  data_atualizacao: string;
+  instituicao: InstitutionLegacy;
+  financiador: Financier;
+  tipo_contrato: ContractType;
 }

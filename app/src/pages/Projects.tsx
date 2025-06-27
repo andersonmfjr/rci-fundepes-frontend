@@ -13,7 +13,7 @@ import ProjectsTable from '@/components/projects/ProjectsTable';
 import ProjectsPagination from '@/components/projects/ProjectsPagination';
 import { usePageTitle } from '@/hooks/use-page-title';
 
-type SortField = 'name' | 'rciPercentage' | 'totalValue' | 'createdAt' | 'updatedAt';
+type SortField = 'nome' | 'percentual_rci' | 'valor_total' | 'data_criacao' | 'data_atualizacao';
 type SortDirection = 'asc' | 'desc';
 
 const Projects = () => {
@@ -24,7 +24,7 @@ const Projects = () => {
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
   const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get('page') || '1'));
   const [sortField, setSortField] = useState<SortField>(
-    (searchParams.get('sortField') as SortField) || 'updatedAt'
+    (searchParams.get('sortField') as SortField) || 'data_atualizacao'
   );
   const [sortDirection, setSortDirection] = useState<SortDirection>(
     (searchParams.get('sortDirection') as SortDirection) || 'desc'
@@ -57,8 +57,8 @@ const Projects = () => {
   // Filter and sort projects
   const filteredAndSortedProjects = React.useMemo(() => {
     const filtered = projects.filter(project => {
-      const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           project.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = (project.nome || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           (project.descricao || '').toLowerCase().includes(searchTerm.toLowerCase());
       return matchesSearch;
     });
 
@@ -66,21 +66,21 @@ const Projects = () => {
     filtered.sort((a, b) => {
       let aValue: string | number, bValue: string | number;
       
-      if (sortField === 'name') {
-        aValue = a.name.toLowerCase();
-        bValue = b.name.toLowerCase();
-      } else if (sortField === 'rciPercentage') {
-        aValue = calculateTotalRciPercentage(a.units);
-        bValue = calculateTotalRciPercentage(b.units);
-      } else if (sortField === 'totalValue') {
-        aValue = a.totalValue;
-        bValue = b.totalValue;
-      } else if (sortField === 'createdAt') {
-        aValue = new Date(a.createdAt).getTime();
-        bValue = new Date(b.createdAt).getTime();
-      } else if (sortField === 'updatedAt') {
-        aValue = new Date(a.updatedAt).getTime();
-        bValue = new Date(b.updatedAt).getTime();
+      if (sortField === 'nome') {
+        aValue = (a.nome || '').toLowerCase();
+        bValue = (b.nome || '').toLowerCase();
+      } else if (sortField === 'percentual_rci') {
+        aValue = calculateTotalRciPercentage(a.unidades);
+        bValue = calculateTotalRciPercentage(b.unidades);
+      } else if (sortField === 'valor_total') {
+        aValue = a.valor_total;
+        bValue = b.valor_total;
+      } else if (sortField === 'data_criacao') {
+        aValue = new Date(a.data_criacao || '').getTime();
+        bValue = new Date(b.data_criacao || '').getTime();
+      } else if (sortField === 'data_atualizacao') {
+        aValue = new Date(a.data_atualizacao || '').getTime();
+        bValue = new Date(b.data_atualizacao || '').getTime();
       }
 
       if (sortDirection === 'asc') {
@@ -104,7 +104,7 @@ const Projects = () => {
     
     if (searchTerm) newSearchParams.set('search', searchTerm);
     if (currentPage > 1) newSearchParams.set('page', currentPage.toString());
-    if (sortField !== 'updatedAt') newSearchParams.set('sortField', sortField);
+    if (sortField !== 'data_atualizacao') newSearchParams.set('sortField', sortField);
     if (sortDirection !== 'desc') newSearchParams.set('sortDirection', sortDirection);
 
     setSearchParams(newSearchParams, { replace: true });
@@ -189,11 +189,11 @@ const Projects = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {filteredAndSortedProjects.filter(p => p.contract?.validado).length}
+                {filteredAndSortedProjects.filter(p => p.contrato?.validado).length}
               </div>
               <div className="text-sm text-gray-500 mt-1">
                 {filteredAndSortedProjects.length > 0 
-                  ? `${((filteredAndSortedProjects.filter(p => p.contract?.validado).length / filteredAndSortedProjects.length) * 100).toFixed(1)}%`
+                  ? `${((filteredAndSortedProjects.filter(p => p.contrato?.validado).length / filteredAndSortedProjects.length) * 100).toFixed(1)}%`
                   : '0%'
                 }
               </div>
@@ -202,17 +202,15 @@ const Projects = () => {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                Valor Total
+                Valor Total dos Contratos
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {new Intl.NumberFormat('pt-BR', {
+                {filteredAndSortedProjects.reduce((total, p) => total + p.valor_total, 0).toLocaleString('pt-BR', {
                   style: 'currency',
-                  currency: 'BRL',
-                }).format(
-                  filteredAndSortedProjects.reduce((sum, p) => sum + p.totalValue, 0)
-                )}
+                  currency: 'BRL'
+                })}
               </div>
             </CardContent>
           </Card>
@@ -225,42 +223,37 @@ const Projects = () => {
         />
 
         {/* Table */}
-        {paginatedProjects.length > 0 ? (
+        {paginatedProjects.length === 0 ? (
           <Card>
-            <CardContent className="p-0">
-              <ProjectsTable
-                projects={paginatedProjects}
-                sortField={sortField}
-                sortDirection={sortDirection}
-                onSort={handleSort}
-                formatDate={formatDate}
-              />
+            <CardContent className="text-center py-8">
+              <FileX className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Nenhum contrato encontrado
+              </h3>
+              <p className="text-gray-600">
+                {searchTerm 
+                  ? "Tente ajustar os filtros ou termos de busca"
+                  : "Comece criando um novo contrato"
+                }
+              </p>
             </CardContent>
           </Card>
         ) : (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center py-12">
-              <FileX className="w-12 h-12 text-gray-400 mb-4" />
-              <CardTitle className="text-xl mb-2 text-center">
-                {searchTerm ? 'Nenhum contrato encontrado' : 'Nenhum contrato cadastrado'}
-              </CardTitle>
-              <CardDescription className="text-center max-w-md">
-                {searchTerm
-                  ? 'Tente ajustar os filtros de busca para encontrar os contratos que você está procurando.'
-                  : 'Comece criando seu primeiro contrato de ressarcimento de custos indiretos.'
-                }
-              </CardDescription>
-            </CardContent>
-          </Card>
-        )}
+          <>
+            <ProjectsTable
+              projects={paginatedProjects}
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onSort={handleSort}
+              formatDate={formatDate}
+            />
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <ProjectsPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+            <ProjectsPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
       </div>
     </Layout>
