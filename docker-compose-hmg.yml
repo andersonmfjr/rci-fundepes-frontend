@@ -2,4 +2,4 @@ services:
   frontend:
     image: ghcr.io/fundepes-ti/rci-ufal-frontend:homolog
     ports:
-      - "10001:8080"
+      - "10004:8080"
