@@ -28,7 +28,7 @@ COPY docker/nginx/nginx-template.conf ./nginx.conf.template
 EXPOSE 8080
 
 # Copia script de entrypoint
-COPY docker/entrypoint.sh ./entrypoint.sh
+COPY --chown=101 entrypoint.sh ./entrypoint.sh
 
 RUN chmod +x ./entrypoint.sh
 
