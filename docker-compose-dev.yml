@@ -15,4 +15,4 @@ services:
     ports:
       - "10005:8080"
     environment: *frontend-environment
-    secrets: *frontend-secrets
+    secrets: *frontend-secret
