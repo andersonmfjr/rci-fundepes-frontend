@@ -10,13 +10,14 @@ COPY app/ .
 RUN npm run build
 
 # Etapa 2: Servir com nginx
+FROM nginxinc/nginx-unprivileged:stable-alpine
+
+# Instala dependencias
 USER root
 
 RUN apk add --no-cache gettext
 
 USER 101
-
-FROM nginxinc/nginx-unprivileged:stable-alpine
 
 # Copia arquivos estáticos do build para o nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
