@@ -124,4 +124,6 @@ jobs:
             echo "Deploy em Homologação adicionar curl"
           elif [ "${{ github.ref_name }}" = "develop" ]; then
             echo "Deploy em Desenvolvimento adicionar curl"
+            echo "Chamando webhook de redeploy..."
+            curl -i -X POST ${{ secrets.PORTAINER_WEBHOOK_URL }}
           fi

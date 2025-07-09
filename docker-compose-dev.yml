@@ -1,5 +1,18 @@
+x-frontend-environment: &frontend-environment
+  WEBHOOK_HOST_FILE: /run/secrets/webhook_host
+  WEBHOOK_PORT_FILE: /run/secrets/webhook_port
+
+x-frontend-secret: &frontend-secret
+  - source: rci-ufal-frontend-dev-webhook_host-v1
+    target: webhook_host
+  - source: rci-ufal-frontend-dev-webhook_port-v1
+    target: webhook_port
+
+
 services:
   frontend:
     image: ghcr.io/fundepes-ti/rci-ufal-frontend:develop
     ports:
       - "10005:8080"
+    environment: *frontend-environment
+    secrets: *frontend-secrets
