@@ -1,5 +1,4 @@
 import {
-  Project,
   Contract,
   Transfer,
   RciDistribution,
@@ -320,7 +319,7 @@ const mockInstitutionsLegacy: InstitutionLegacy[] = [
   },
 ];
 
-export const mockProjects: Project[] = [
+export const mockContracts: Contract[] = [
   {
     id: "1",
     nome: "Contrato FINEP - Infraestrutura Tecnológica 2024",

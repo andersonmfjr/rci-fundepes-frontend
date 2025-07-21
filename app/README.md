@@ -59,12 +59,12 @@ app/
 │   │   ├── ui/             # Componentes base (Shadcn/UI)
 │   │   ├── auth/           # Componentes de autenticação
 │   │   ├── layout/         # Componentes de layout
-│   │   ├── project/        # Componentes de projeto
-│   │   ├── project-detail/ # Componentes de detalhes
-│   │   └── projects/       # Componentes de listagem
+│   │   ├── contract/        # Componentes de projeto
+│   │   ├── contract-detail/ # Componentes de detalhes
+│   │   └── contracts/       # Componentes de listagem
 │   ├── hooks/              # Custom hooks
 │   ├── lib/                # Utilitários e configurações
-│   │   └── projects/       # Lógica específica de projetos
+│   │   └── contracts/       # Lógica específica de projetos
 │   ├── pages/              # Páginas da aplicação
 │   ├── types/              # Definições de tipos TypeScript
 │   └── utils/              # Funções utilitárias
@@ -137,8 +137,8 @@ O sistema utiliza uma estrutura hierárquica de dados baseada na nova modelagem:
 ### Componentes Principais
 
 - **Layout**: Header, Sidebar, Layout principal
-- **Projects**: Listagem e filtros de contratos
-- **ProjectDetail**: Visualização detalhada com abas
+- **Contracts**: Listagem e filtros de contratos
+- **ContractDetail**: Visualização detalhada com abas
 - **Forms**: Formulários com validação robusta
 - **UI Components**: Biblioteca de componentes reutilizáveis
 

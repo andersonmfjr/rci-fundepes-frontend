@@ -1,19 +1,19 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { File, Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import { File, Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
   const menuItems = [
     {
-      title: 'Contratos',
-      href: '/projects',
-      icon: File
+      title: "Contratos",
+      href: "/contracts",
+      icon: File,
     },
     // FIXME: New contract menu item
     /* {
       title: 'Novo Contrato',
-      href: '/projects/new',
+      href: '/contracts/new',
       icon: Plus
     } */
   ];

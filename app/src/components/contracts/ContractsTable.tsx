@@ -1,34 +1,47 @@
-import React from 'react';
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import React from "react";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
-import { Project } from '@/types';
-import ProjectTableRow from './ProjectTableRow';
+import { Contract } from "@/types";
+import ContractTableRow from "./ContractTableRow";
 
-type SortField = 'nome' | 'percentual_rci' | 'valor_total' | 'data_criacao' | 'data_atualizacao';
-type SortDirection = 'asc' | 'desc';
+type SortField =
+  | "nome"
+  | "percentual_rci"
+  | "valor_total"
+  | "data_criacao"
+  | "data_atualizacao";
+type SortDirection = "asc" | "desc";
 
-interface ProjectsTableProps {
-  projects: Project[];
+interface ContractsTableProps {
+  contracts: Contract[];
   sortField: SortField;
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;
   formatDate: (dateString: string) => string;
 }
 
-const ProjectsTable = ({ 
-  projects, 
-  sortField, 
-  sortDirection, 
-  onSort, 
-  formatDate 
-}: ProjectsTableProps) => {
+const ContractsTable = ({
+  contracts,
+  sortField,
+  sortDirection,
+  onSort,
+  formatDate,
+}: ContractsTableProps) => {
   const getSortIcon = (field: SortField) => {
     if (sortField !== field) {
       return <ArrowUpDown className="w-4 h-4 ml-1 text-gray-400" />;
     }
-    return sortDirection === 'asc' 
-      ? <ChevronUp className="w-4 h-4 ml-1 text-blue-600" />
-      : <ChevronDown className="w-4 h-4 ml-1 text-blue-600" />;
+    return sortDirection === "asc" ? (
+      <ChevronUp className="w-4 h-4 ml-1 text-blue-600" />
+    ) : (
+      <ChevronDown className="w-4 h-4 ml-1 text-blue-600" />
+    );
   };
 
   return (
@@ -38,59 +51,60 @@ const ProjectsTable = ({
           <TableRow>
             <TableHead className="min-w-[200px]">
               <button
-                onClick={() => onSort('nome')}
+                onClick={() => onSort("nome")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Nome
-                {getSortIcon('nome')}
+                {getSortIcon("nome")}
               </button>
             </TableHead>
             <TableHead className="min-w-[80px]">
               <button
-                onClick={() => onSort('percentual_rci')}
+                onClick={() => onSort("percentual_rci")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
-                RCI %
-                {getSortIcon('percentual_rci')}
+                RCI %{getSortIcon("percentual_rci")}
               </button>
             </TableHead>
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort('valor_total')}
+                onClick={() => onSort("valor_total")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Valor Total
-                {getSortIcon('valor_total')}
+                {getSortIcon("valor_total")}
               </button>
             </TableHead>
 
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort('data_criacao')}
+                onClick={() => onSort("data_criacao")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Criado em
-                {getSortIcon('data_criacao')}
+                {getSortIcon("data_criacao")}
               </button>
             </TableHead>
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort('data_atualizacao')}
+                onClick={() => onSort("data_atualizacao")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Atualizado em
-                {getSortIcon('data_atualizacao')}
+                {getSortIcon("data_atualizacao")}
               </button>
             </TableHead>
-            <TableHead className="text-right min-w-[100px] whitespace-nowrap">Ações</TableHead>
+            <TableHead className="text-right min-w-[100px] whitespace-nowrap">
+              Ações
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {projects.map((project) => (
-            <ProjectTableRow 
-              key={project.id} 
-              project={project} 
-              formatDate={formatDate} 
+          {contracts.map((contract) => (
+            <ContractTableRow
+              key={contract.id}
+              contract={contract}
+              formatDate={formatDate}
             />
           ))}
         </TableBody>
@@ -99,4 +113,4 @@ const ProjectsTable = ({
   );
 };
 
-export default ProjectsTable;
+export default ContractsTable;

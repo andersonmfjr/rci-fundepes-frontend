@@ -1,6 +1,6 @@
-export { projectsService } from "./service";
+export { contractsService } from "./service";
 export {
-  mockProjects,
+  mockContracts,
   mockBanks,
   mockFinancierTypes,
   mockFinanciers,

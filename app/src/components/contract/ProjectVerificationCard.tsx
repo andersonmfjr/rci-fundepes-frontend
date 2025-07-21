@@ -1,56 +1,71 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { CheckCircle, Circle } from "lucide-react";
-import { Project } from '@/types';
+import { Contract } from "@/types";
 
-interface ProjectVerificationCardProps {
-  project: Project;
+interface ContractVerificationCardProps {
+  contract: Contract;
 }
 
-const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
+const ContractVerificationCard = ({
+  contract,
+}: ContractVerificationCardProps) => {
   const verificationItems = [
     {
-      label: 'Informações básicas preenchidas',
-      isCompleted: Boolean(project.name && project.description && project.totalValue > 0)
+      label: "Informações básicas preenchidas",
+      isCompleted: Boolean(
+        contract.name && contract.description && contract.totalValue > 0
+      ),
     },
     {
-      label: 'Contrato anexado',
-      isCompleted: Boolean(project.contractFile || project.contractLink)
+      label: "Contrato anexado",
+      isCompleted: Boolean(contract.contractFile || contract.contractLink),
     },
     {
-      label: `Unidades RCI configuradas (${project.units.length})`,
-      isCompleted: project.units.length > 0 && project.units.every(unit => 
-        unit.name.trim() !== '' && unit.rciPercentage > 0
-      )
+      label: `Unidades RCI configuradas (${contract.units.length})`,
+      isCompleted:
+        contract.units.length > 0 &&
+        contract.units.every(
+          (unit) => unit.name.trim() !== "" && unit.rciPercentage > 0
+        ),
     },
     // FIXME: Bank statements verification for MVP
     /* {
-      label: `Extratos bancários (${project.bankStatements.length})`,
-      isCompleted: project.bankStatements.length > 0
+      label: `Extratos bancários (${contract.bankStatements.length})`,
+      isCompleted: contract.bankStatements.length > 0
     } */
   ];
 
-  const allCompleted = verificationItems.every(item => item.isCompleted);
+  const allCompleted = verificationItems.every((item) => item.isCompleted);
 
   // Status da validação baseado no status do projeto
   const getValidationStatus = () => {
-    if (project.status === 'pending') {
+    if (contract.status === "pending") {
       return {
-        text: 'Projeto em validação',
+        text: "Projeto em validação",
         isCompleted: true,
-        color: 'text-blue-600'
+        color: "text-blue-600",
       };
-    } else if (project.status === 'validated' || project.status === 'completed') {
+    } else if (
+      contract.status === "validated" ||
+      contract.status === "completed"
+    ) {
       return {
-        text: 'Projeto validado',
+        text: "Projeto validado",
         isCompleted: true,
-        color: 'text-green-600'
+        color: "text-green-600",
       };
     } else {
       return {
-        text: 'Projeto em validação',
+        text: "Projeto em validação",
         isCompleted: false,
-        color: 'text-gray-500'
+        color: "text-gray-500",
       };
     }
   };
@@ -60,7 +75,9 @@ const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg lg:text-xl">Verificação do Projeto</CardTitle>
+        <CardTitle className="text-lg lg:text-xl">
+          Verificação do Projeto
+        </CardTitle>
         <CardDescription>
           Itens de verificação e status de validação
         </CardDescription>
@@ -74,7 +91,11 @@ const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
               ) : (
                 <Circle className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
-              <span className={`text-sm ${item.isCompleted ? 'text-gray-900' : 'text-gray-500'}`}>
+              <span
+                className={`text-sm ${
+                  item.isCompleted ? "text-gray-900" : "text-gray-500"
+                }`}
+              >
                 {item.label}
               </span>
             </div>
@@ -94,10 +115,11 @@ const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
           </div>
         </div>
 
-        {allCompleted && project.status === 'draft' && (
+        {allCompleted && contract.status === "draft" && (
           <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
-              ✅ Projeto pronto para envio. Todas as verificações foram atendidas.
+              ✅ Projeto pronto para envio. Todas as verificações foram
+              atendidas.
             </p>
           </div>
         )}
@@ -106,4 +128,4 @@ const ProjectVerificationCard = ({ project }: ProjectVerificationCardProps) => {
   );
 };
 
-export default ProjectVerificationCard;
+export default ContractVerificationCard;

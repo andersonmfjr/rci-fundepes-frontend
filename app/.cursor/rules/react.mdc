@@ -1,11 +1,12 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 # Cursor Rules for RCI Manager Frontend
 
-## Project Overview
+## Contract Overview
 
 - React 18 + TypeScript
 - Vite as build tool
@@ -134,7 +135,7 @@ const MyForm = () => {
 - Use TanStack Query (React Query) for server state management
 - Create service functions in `src/lib/[feature]/service.ts`
 - Use proper error handling and loading states
-- Follow the existing pattern in the projects service
+- Follow the existing pattern in the contracts service
 
 ### Naming Conventions
 

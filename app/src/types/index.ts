@@ -6,7 +6,7 @@ export interface User {
   refresh_token: string;
 }
 
-export type ProjectStatus = "draft" | "pending" | "validated" | "completed";
+export type ContractStatus = "draft" | "pending" | "validated" | "completed";
 
 // Tipos baseados na nova modelagem do banco de dados
 
@@ -86,8 +86,10 @@ export interface Contract {
   contractFile?: File | null;
   contractLink?: string;
   bankStatements?: File[];
-  createdAt?: string; // Mapeado de data_criacao
-  updatedAt?: string; // Mapeado de data_atualizacao
+
+  unidades: Unit[]; // Unidades derivadas de rciDistributions
+  status: ContractStatus; // Mantido para compatibilidade com interface atual
+  link_contrato?: string; // Link para o contrato
 }
 
 export interface RciDistribution {
@@ -135,21 +137,7 @@ export interface Unit {
   percentual_rci: number;
 }
 
-// Alias para Contrato
-export interface Project extends Partial<Omit<Contract, "id">> {
-  id: string; // Convertido de number para string para compatibilidade
-  nome?: string; // Nome do contrato
-  descricao?: string; // Descrição do contrato
-  valor_total: number; // Alias para valor_total
-  unidades: Unit[]; // Unidades derivadas de rciDistributions
-  status: ProjectStatus; // Mantido para compatibilidade com interface atual
-  link_contrato?: string; // Link para o contrato
-  data_criacao?: string; // Mapeado de data_criacao
-  data_atualizacao?: string; // Mapeado de data_atualizacao
-  contrato?: Contract; // Referência ao contrato completo
-}
-
-export interface ProjectFormData {
+export interface ContractFormData {
   nome: string;
   descricao: string;
   valor_total: number; // Valor total em reais

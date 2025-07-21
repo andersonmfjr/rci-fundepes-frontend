@@ -1,5 +1,5 @@
-import { mockProjects } from "./mockData";
-import { Project, Unit, AcademicUnit, UnitHierarchy } from "@/types";
+import { mockContracts } from "./mockData";
+import { Contract, Unit, AcademicUnit, UnitHierarchy } from "@/types";
 
 export const generateId = (): string => {
   return Math.random().toString(36).substr(2, 9);
@@ -11,9 +11,9 @@ export const calculateTotalRciPercentage = (unidades: Unit[] = []): number => {
 };
 
 // Calcula o valor RCI total de um projeto
-export const calculateTotalRciValue = (project: Project): number => {
-  const totalPercentage = calculateTotalRciPercentage(project.unidades);
-  return project.valor_total * (totalPercentage / 100);
+export const calculateTotalRciValue = (contract: Contract): number => {
+  const totalPercentage = calculateTotalRciPercentage(contract.unidades);
+  return contract.valor_total * (totalPercentage / 100);
 };
 
 // Calcula o valor RCI para uma unidade específica
