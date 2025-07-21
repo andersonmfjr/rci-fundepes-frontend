@@ -1,17 +1,26 @@
 import { mockContracts } from "./mockData";
-import { Contract, Unit, AcademicUnit, UnitHierarchy } from "@/types";
+import { ContractListItem, Unit, AcademicUnit } from "@/types";
+
+// Local type definition for unit hierarchy
+interface UnitHierarchy {
+  unidade: AcademicUnit;
+  nivel: number;
+  caminho: number[];
+  caminho_completo: string;
+  filhos: UnitHierarchy[];
+}
 
 export const generateId = (): string => {
   return Math.random().toString(36).substr(2, 9);
 };
 
-// Calcula o percentual RCI total de um projeto (soma dos percentuais de todas as unidades)
+// Calcula o percentual RCI total de um contrato (soma dos percentuais de todas as unidades)
 export const calculateTotalRciPercentage = (unidades: Unit[] = []): number => {
   return unidades.reduce((total, unidade) => total + unidade.percentual_rci, 0);
 };
 
-// Calcula o valor RCI total de um projeto
-export const calculateTotalRciValue = (contract: Contract): number => {
+// Calcula o valor RCI total de um contrato
+export const calculateTotalRciValue = (contract: ContractListItem): number => {
   const totalPercentage = calculateTotalRciPercentage(contract.unidades);
   return contract.valor_total * (totalPercentage / 100);
 };

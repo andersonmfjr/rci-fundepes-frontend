@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
-import { Contract } from "@/types";
+import type { ContractListItem } from "@/types";
 import ContractTableRow from "./ContractTableRow";
 
 type SortField =
@@ -19,7 +19,7 @@ type SortField =
 type SortDirection = "asc" | "desc";
 
 interface ContractsTableProps {
-  contracts: Contract[];
+  contracts: ContractListItem[];
   sortField: SortField;
   sortDirection: SortDirection;
   onSort: (field: SortField) => void;

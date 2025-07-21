@@ -15,12 +15,11 @@ import {
   Building,
   CreditCard,
 } from "lucide-react";
-import { Contract, Transfer, BankAccount } from "@/types";
+import type { ContractDetail, Transfer, BankAccount } from "@/types";
 import { formatCurrency } from "@/lib/contracts/utils";
-import { useValidation } from "@/hooks/use-validation";
 
 interface ContractBankTransfersProps {
-  contract: Contract;
+  contract: ContractDetail;
 }
 
 const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
@@ -37,30 +36,8 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
     )
   );
 
-  const {
-    validateEntity: validateTransfer,
-    isValidating: isValidatingTransfer,
-  } = useValidation({
-    entityType: "transfer",
-  });
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("pt-BR");
-  };
-
-  const handleValidateTransfer = async (
-    transferId: number,
-    currentValidation: boolean
-  ) => {
-    try {
-      await validateTransfer(transferId, currentValidation);
-      setTransferValidations((prev) => ({
-        ...prev,
-        [transferId]: !currentValidation,
-      }));
-    } catch (error) {
-      console.error("Erro ao validar transferência:", error);
-    }
   };
 
   const renderBankAccount = (account: BankAccount, label: string) => (
@@ -119,7 +96,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
           Transferências Bancárias
         </CardTitle>
         <CardDescription>
-          Histórico de transferências de RCI relacionadas ao projeto
+          Histórico de transferências de RCI relacionadas ao contrato
         </CardDescription>
 
         {/* Resumo das transferências */}
@@ -154,14 +131,6 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
                 <div className="text-right">
                   <ValidationButton
                     isValidated={transferValidations[transfer.id] || false}
-                    isLoading={isValidatingTransfer}
-                    onClick={() =>
-                      handleValidateTransfer(
-                        transfer.id,
-                        transferValidations[transfer.id] || false
-                      )
-                    }
-                    size="sm"
                     className="h-6 px-2 text-xs mb-2"
                   />
                   <div className="text-lg font-bold text-gray-900">

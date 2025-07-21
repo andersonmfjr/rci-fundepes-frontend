@@ -8,12 +8,11 @@ import {
 } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { FileText, TrendingUp, TrendingDown } from "lucide-react";
-import { Contract, ContractAddendum } from "@/types";
+import type { ContractDetail, ContractAddendum } from "@/types";
 import { formatCurrency } from "@/lib/contracts/utils";
-import { useValidation } from "@/hooks/use-validation";
 
 interface ContractAddendumsProps {
-  contract: Contract;
+  contract: ContractDetail;
 }
 
 const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
@@ -30,30 +29,8 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
     )
   );
 
-  const {
-    validateEntity: validateAddendum,
-    isValidating: isValidatingAddendum,
-  } = useValidation({
-    entityType: "addendum",
-  });
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("pt-BR");
-  };
-
-  const handleValidateAddendum = async (
-    addendumId: number,
-    currentValidation: boolean
-  ) => {
-    try {
-      await validateAddendum(addendumId, currentValidation);
-      setAddendumValidations((prev) => ({
-        ...prev,
-        [addendumId]: !currentValidation,
-      }));
-    } catch (error) {
-      console.error("Erro ao validar aditivo:", error);
-    }
   };
 
   const getValueChangeIndicator = (
@@ -107,7 +84,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
   );
 
   // Calcular valores iniciais e totais
-  const valorOriginal = contract.contrato?.valor_total || contract.valor_total;
+  const valorOriginal = contract.valor_total;
   const valorAtual =
     sortedAddendums.length > 0
       ? sortedAddendums[sortedAddendums.length - 1].novo_total
@@ -212,14 +189,6 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
                   <div className="text-right">
                     <ValidationButton
                       isValidated={addendumValidations[addendum.id] || false}
-                      isLoading={isValidatingAddendum}
-                      onClick={() =>
-                        handleValidateAddendum(
-                          addendum.id,
-                          addendumValidations[addendum.id] || false
-                        )
-                      }
-                      size="sm"
                       className="h-6 px-2 text-xs mb-2"
                     />
                     <div className="text-lg font-bold text-gray-900">

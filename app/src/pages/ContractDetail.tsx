@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { Contract } from "@/types";
+import type { ContractDetail } from "@/types";
 import { contractsService } from "@/lib/contracts";
 
 import Layout from "@/components/layout/Layout";
@@ -17,7 +17,7 @@ import { usePageTitle } from "@/hooks/use-page-title";
 const ContractDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [contract, setContract] = useState<Contract | null>(null);
+  const [contract, setContract] = useState<ContractDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

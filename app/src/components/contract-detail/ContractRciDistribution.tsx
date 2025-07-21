@@ -8,17 +8,16 @@ import {
 } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Clock, Building2, Percent } from "lucide-react";
-import { Contract } from "@/types";
+import type { ContractDetail } from "@/types";
 import {
   formatCurrency,
   getRootUnit,
   buildUnitPathString,
 } from "@/lib/contracts/utils";
 import { mockAcademicUnits } from "@/lib/contracts/mockData";
-import { useValidation } from "@/hooks/use-validation";
 
 interface ContractRciDistributionProps {
-  contract: Contract;
+  contract: ContractDetail;
 }
 
 const ContractRciDistribution = ({
@@ -37,30 +36,8 @@ const ContractRciDistribution = ({
     )
   );
 
-  const {
-    validateEntity: validateDistribution,
-    isValidating: isValidatingDistribution,
-  } = useValidation({
-    entityType: "rci-distribution",
-  });
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("pt-BR");
-  };
-
-  const handleValidateDistribution = async (
-    distributionId: number,
-    currentValidation: boolean
-  ) => {
-    try {
-      await validateDistribution(distributionId, currentValidation);
-      setDistributionValidations((prev) => ({
-        ...prev,
-        [distributionId]: !currentValidation,
-      }));
-    } catch (error) {
-      console.error("Erro ao validar distribuição RCI:", error);
-    }
   };
 
   if (distributions.length === 0) {
@@ -72,8 +49,8 @@ const ContractRciDistribution = ({
             Distribuição RCI
           </CardTitle>
           <CardDescription>
-            Distribuição do Ressarcimento de Custos Indiretos do contrato entre
-            unidades acadêmicas
+            Distribuição do Ressarcimento de Custos Indiretos entre unidades
+            acadêmicas
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -154,20 +131,14 @@ const ContractRciDistribution = ({
                       </p>
                     </div>
                   </div>
-                  <ValidationButton
-                    isValidated={
-                      distributionValidations[distribution.id] || false
-                    }
-                    isLoading={isValidatingDistribution}
-                    onClick={() =>
-                      handleValidateDistribution(
-                        distribution.id,
+                  <div className="text-right">
+                    <ValidationButton
+                      isValidated={
                         distributionValidations[distribution.id] || false
-                      )
-                    }
-                    size="sm"
-                    className="h-6 px-2 text-xs"
-                  />
+                      }
+                      className="h-6 px-2 text-xs"
+                    />
+                  </div>
                 </div>
 
                 {/* Informações da distribuição */}

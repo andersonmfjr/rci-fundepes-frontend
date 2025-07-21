@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Eye, Edit } from "lucide-react";
-import { Contract } from "@/types";
+import type { ContractListItem } from "@/types";
 
 import {
   calculateTotalRciPercentage,
@@ -12,7 +12,7 @@ import {
 } from "@/lib/contracts/utils";
 
 interface ContractTableRowProps {
-  contract: Contract;
+  contract: ContractListItem;
   formatDate: (dateString: string) => string;
 }
 

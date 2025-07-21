@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Plus, FileX } from "lucide-react";
-import { Contract } from "@/types";
+import { ContractListItem } from "@/types";
 import { contractsService } from "@/lib/contracts";
 import { calculateTotalRciPercentage } from "@/lib/contracts/utils";
 import Layout from "@/components/layout/Layout";
@@ -30,7 +30,7 @@ type SortDirection = "asc" | "desc";
 const Contracts = () => {
   usePageTitle("Contratos");
   const [searchParams, setSearchParams] = useSearchParams();
-  const [contracts, setContracts] = useState<Contract[]>([]);
+  const [contracts, setContracts] = useState<ContractListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search") || ""
@@ -52,8 +52,8 @@ const Contracts = () => {
     const loadContracts = async () => {
       try {
         setLoading(true);
-        const data = await contractsService.getAll();
-        setContracts(data);
+        const response = await contractsService.getAll();
+        setContracts(response.results);
       } catch (error) {
         console.error("Error loading contracts:", error);
         toast({
@@ -218,15 +218,16 @@ const Contracts = () => {
             <CardContent>
               <div className="text-2xl font-bold">
                 {
-                  filteredAndSortedContracts.filter((p) => p.contrato?.validado)
-                    .length
+                  filteredAndSortedContracts.filter(
+                    (p) => p.status === "validated"
+                  ).length
                 }
               </div>
               <div className="text-sm text-gray-500 mt-1">
                 {filteredAndSortedContracts.length > 0
                   ? `${(
                       (filteredAndSortedContracts.filter(
-                        (p) => p.contrato?.validado
+                        (p) => p.status === "validated"
                       ).length /
                         filteredAndSortedContracts.length) *
                       100
