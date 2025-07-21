@@ -59,7 +59,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="w-5 h-5" />
-            Aditivos Contratuais
+            Aditivos contratuais
           </CardTitle>
           <CardDescription>
             Histórico de aditivos e alterações no valor do contrato
@@ -97,7 +97,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <FileText className="w-5 h-5" />
-            Aditivos Contratuais
+            Aditivos contratuais
           </CardTitle>
         </div>
         <CardDescription>
@@ -167,7 +167,11 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
             return (
               <div
                 key={addendum.id}
-                className="border border-gray-200 rounded-lg p-4"
+                className={`border rounded-lg p-4 ${
+                  addendumValidations[addendum.id] || false
+                    ? "border-gray-200"
+                    : "border-4 border-red-400"
+                }`}
               >
                 {/* Cabeçalho do aditivo */}
                 <div className="flex items-center justify-between mb-3">

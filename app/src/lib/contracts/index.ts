@@ -1,4 +1,5 @@
 export { contractsService } from "./service";
+
 export {
   mockContracts,
   mockBanks,
@@ -8,22 +9,9 @@ export {
   mockUnitTypes,
   mockAcademicUnits,
   mockBankAccounts,
-  mockContracts,
   mockRciDistributions,
   mockTransfers,
   mockContractAddendums,
-  mockInstitutionsLegacy,
 } from "./mockData";
-export {
-  generateId,
-  buildUnitHierarchy,
-  getAllChildUnits,
-  getUnitPath,
-  getRootUnit,
-  unitToInstitutionLegacy,
-  getUnitsByType,
-  getInstitutions,
-  getDirectChildUnits,
-  isDescendantOf,
-  buildUnitPathString,
-} from "./utils";
+
+export { getUnitPath, getRootUnit, buildUnitPathString } from "./utils";

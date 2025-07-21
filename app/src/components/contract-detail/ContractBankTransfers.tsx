@@ -119,7 +119,11 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
           {transfers.map((transfer) => (
             <div
               key={transfer.id}
-              className="border border-gray-200 rounded-lg p-4"
+              className={`border rounded-lg p-4 ${
+                transferValidations[transfer.id] || false
+                  ? "border-gray-200"
+                  : "border-4 border-red-400"
+              }`}
             >
               {/* Cabeçalho da transferência */}
               <div className="flex items-center justify-between mb-3">

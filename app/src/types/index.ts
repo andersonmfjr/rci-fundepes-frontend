@@ -147,4 +147,5 @@ export interface ContractDetail {
   transferencias: Transfer[];
   distribuicoes_rci: RciDistribution[];
   aditivos_contratuais: ContractAddendum[];
+  alertas: Alert[];
 }

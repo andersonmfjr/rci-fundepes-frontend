@@ -198,6 +198,56 @@ const mockRciDistributions: RciDistribution[] = [
     data_criacao: "2024-02-02T14:00:00Z",
     unidade: mockAcademicUnits[3], // IC
   },
+  {
+    id: 4,
+    id_unidade: 4, // IC
+    id_contrato: 3,
+    percentual: 12.5,
+    valor_base_calculo: 675000.0,
+    validado: true,
+    data_criacao: "2024-03-05T14:20:00Z",
+    unidade: mockAcademicUnits[3], // IC
+  },
+  {
+    id: 5,
+    id_unidade: 6, // CIN
+    id_contrato: 3,
+    percentual: 6.25,
+    valor_base_calculo: 675000.0,
+    validado: true,
+    data_criacao: "2024-03-05T14:25:00Z",
+    unidade: mockAcademicUnits[5], // CIN
+  },
+  {
+    id: 6,
+    id_unidade: 4, // IC
+    id_contrato: 4,
+    percentual: 25.0,
+    valor_base_calculo: 920000.0,
+    validado: true,
+    data_criacao: "2024-01-10T08:00:00Z",
+    unidade: mockAcademicUnits[3], // IC
+  },
+  {
+    id: 7,
+    id_unidade: 4, // IC
+    id_contrato: 5,
+    percentual: 8.5,
+    valor_base_calculo: 450000.0,
+    validado: false,
+    data_criacao: "2024-03-20T13:45:00Z",
+    unidade: mockAcademicUnits[3], // IC
+  },
+  {
+    id: 8,
+    id_unidade: 6, // CIN
+    id_contrato: 5,
+    percentual: 3.8,
+    valor_base_calculo: 450000.0,
+    validado: false,
+    data_criacao: "2024-03-20T13:50:00Z",
+    unidade: mockAcademicUnits[5], // CIN
+  },
 ];
 
 // Transferências mock (conectadas com distribuições RCI em vez de contratos)
@@ -396,6 +446,24 @@ export const mockContractsDetail: ContractDetail[] = [
     transferencias: [mockTransfers[0]],
     distribuicoes_rci: [mockRciDistributions[0], mockRciDistributions[1]],
     aditivos_contratuais: [mockContractAddendums[0]],
+    alertas: [
+      {
+        tipo: {
+          titulo: "Prazo vencendo",
+          descricao: "Prazo de vigência próximo ao vencimento",
+        },
+        mensagem:
+          "O contrato vence em 30 dias. É necessário renovar ou finalizar as atividades pendentes.",
+      },
+      {
+        tipo: {
+          titulo: "RCI Incompleto",
+          descricao: "Distribuição RCI não finalizada",
+        },
+        mensagem:
+          "A distribuição RCI para a Faculdade de Letras ainda não foi validada.",
+      },
+    ],
   },
   {
     id: 2,
@@ -417,6 +485,16 @@ export const mockContractsDetail: ContractDetail[] = [
     transferencias: [mockTransfers[1]],
     distribuicoes_rci: [mockRciDistributions[2]],
     aditivos_contratuais: [mockContractAddendums[1]],
+    alertas: [
+      {
+        tipo: {
+          titulo: "Transferência pendente",
+          descricao: "Transferência bancária aguardando validação",
+        },
+        mensagem:
+          "Transferência de R$ 264.000,00 para o Centro de Informática está pendente de validação.",
+      },
+    ],
   },
   {
     id: 3,
@@ -438,6 +516,7 @@ export const mockContractsDetail: ContractDetail[] = [
     transferencias: [],
     distribuicoes_rci: [mockRciDistributions[3], mockRciDistributions[4]],
     aditivos_contratuais: [],
+    alertas: [],
   },
   {
     id: 4,
@@ -459,6 +538,7 @@ export const mockContractsDetail: ContractDetail[] = [
     transferencias: [],
     distribuicoes_rci: [mockRciDistributions[5]],
     aditivos_contratuais: [],
+    alertas: [],
   },
   {
     id: 5,
@@ -480,6 +560,16 @@ export const mockContractsDetail: ContractDetail[] = [
     transferencias: [],
     distribuicoes_rci: [mockRciDistributions[6], mockRciDistributions[7]],
     aditivos_contratuais: [],
+    alertas: [
+      {
+        tipo: {
+          titulo: "Contrato em Rascunho",
+          descricao: "Contrato ainda não validado",
+        },
+        mensagem:
+          "Este contrato ainda está em rascunho e precisa ser validado antes de prosseguir.",
+      },
+    ],
   },
 ];
 
