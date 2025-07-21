@@ -11,6 +11,7 @@ import {
   AcademicUnit,
   UnitType,
   BankAccount,
+  Alert,
 } from "@/types";
 
 // Dados mock para as estruturas do banco de dados
@@ -268,6 +269,24 @@ export const mockContracts: ContractListItem[] = [
     status: "pending",
     data_criacao: "2024-01-15T10:30:00Z",
     data_atualizacao: "2024-01-20T14:22:00Z",
+    alertas: [
+      {
+        tipo: {
+          titulo: "Prazo vencendo",
+          descricao: "Prazo de vigência próximo ao vencimento",
+        },
+        mensagem:
+          "O contrato vence em 30 dias. É necessário renovar ou finalizar as atividades pendentes.",
+      },
+      {
+        tipo: {
+          titulo: "RCI Incompleto",
+          descricao: "Distribuição RCI não finalizada",
+        },
+        mensagem:
+          "A distribuição RCI para a Faculdade de Letras ainda não foi validada.",
+      },
+    ],
   },
   {
     id: "2",
@@ -281,6 +300,16 @@ export const mockContracts: ContractListItem[] = [
     status: "validated",
     data_criacao: "2024-02-01T09:15:00Z",
     data_atualizacao: "2024-02-10T16:45:00Z",
+    alertas: [
+      {
+        tipo: {
+          titulo: "Transferência pendente",
+          descricao: "Transferência bancária aguardando validação",
+        },
+        mensagem:
+          "Transferência de R$ 264.000,00 para o Centro de Informática está pendente de validação.",
+      },
+    ],
   },
   {
     id: "3",
@@ -295,6 +324,7 @@ export const mockContracts: ContractListItem[] = [
     status: "validated",
     data_criacao: "2024-03-05T14:20:00Z",
     data_atualizacao: "2024-03-15T11:30:00Z",
+    alertas: [],
   },
   {
     id: "4",
@@ -308,6 +338,7 @@ export const mockContracts: ContractListItem[] = [
     status: "completed",
     data_criacao: "2024-01-10T08:00:00Z",
     data_atualizacao: "2024-04-02T16:00:00Z",
+    alertas: [],
   },
   {
     id: "5",
@@ -322,6 +353,24 @@ export const mockContracts: ContractListItem[] = [
     status: "draft",
     data_criacao: "2024-03-20T13:45:00Z",
     data_atualizacao: "2024-03-20T13:45:00Z",
+    alertas: [
+      {
+        tipo: {
+          titulo: "Contrato em Rascunho",
+          descricao: "Contrato ainda não foi submetido para validação",
+        },
+        mensagem:
+          "Este contrato está em modo rascunho há mais de 30 dias. Recomenda-se finalizar e submeter para validação.",
+      },
+      {
+        tipo: {
+          titulo: "Documentação Incompleta",
+          descricao: "Documentos obrigatórios não anexados",
+        },
+        mensagem:
+          "Faltam documentos obrigatórios: termo de compromisso e cronograma de execução.",
+      },
+    ],
   },
 ];
 

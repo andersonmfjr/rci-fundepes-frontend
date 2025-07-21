@@ -1,5 +1,4 @@
-import { mockContracts } from "./mockData";
-import { ContractListItem, Unit, AcademicUnit } from "@/types";
+import { ContractListItem, ContractUnit, AcademicUnit } from "@/types";
 
 // Local type definition for unit hierarchy
 interface UnitHierarchy {
@@ -15,7 +14,9 @@ export const generateId = (): string => {
 };
 
 // Calcula o percentual RCI total de um contrato (soma dos percentuais de todas as unidades)
-export const calculateTotalRciPercentage = (unidades: Unit[] = []): number => {
+export const calculateTotalRciPercentage = (
+  unidades: ContractUnit[] = []
+): number => {
   return unidades.reduce((total, unidade) => total + unidade.percentual_rci, 0);
 };
 

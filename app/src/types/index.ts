@@ -8,6 +8,14 @@ export interface User {
 
 export type ContractStatus = "draft" | "pending" | "validated" | "completed";
 
+export interface Alert {
+  tipo: {
+    titulo: string;
+    descricao: string;
+  };
+  mensagem: string;
+}
+
 export interface ContractUnit {
   id: string;
   nome: string;
@@ -23,6 +31,7 @@ export interface ContractListItem {
   data_atualizacao: string;
   unidades: ContractUnit[];
   status: ContractStatus;
+  alertas: Alert[];
 }
 
 export interface ContractListResponse {

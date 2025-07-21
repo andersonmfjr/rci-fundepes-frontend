@@ -3,35 +3,17 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import type { ContractDetail } from "@/types";
-import {
-  calculateTotalRciPercentage,
-  calculateTotalRciValue,
-  formatCurrency,
-  buildUnitPathString,
-} from "@/lib/contracts/utils";
+import { formatCurrency, buildUnitPathString } from "@/lib/contracts/utils";
 import { mockAcademicUnits } from "@/lib/contracts/mockData";
 
-import {
-  Calendar,
-  DollarSign,
-  Building,
-  User,
-  FileText,
-  CheckCircle,
-  Clock,
-} from "lucide-react";
+import { Calendar, DollarSign, Building, User, FileText } from "lucide-react";
 
 interface ContractInfoProps {
   contract: ContractDetail;
   formatDate: (dateString: string) => string;
-  onContractUpdate?: (updatedContract: ContractDetail) => void;
 }
 
-const ContractInfo = ({
-  contract,
-  formatDate,
-  onContractUpdate,
-}: ContractInfoProps) => {
+const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
   const [contractValidation] = useState(contract.validado || false);
 
   const totalRciPercentage = contract.distribuicoes_rci.reduce(
