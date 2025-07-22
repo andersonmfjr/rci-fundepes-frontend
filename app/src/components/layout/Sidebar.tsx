@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { File, Plus } from "lucide-react";
+import { File, Plus, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
@@ -9,6 +9,11 @@ const Sidebar = () => {
       title: "Contratos",
       href: "/contracts",
       icon: File,
+    },
+    {
+      title: "BI",
+      href: "/bi",
+      icon: BarChart3,
     },
     // FIXME: New contract menu item
     /* {

@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Contracts from "./pages/Contracts";
 import ContractDetail from "./pages/ContractDetail";
+import BiOverview from "./pages/BiOverview";
+import BiDetails from "./pages/BiDetails";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { authService } from "./lib/auth";
 import NotFound from "./pages/NotFound";
@@ -45,6 +47,22 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <ContractDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bi"
+              element={
+                <ProtectedRoute>
+                  <BiOverview />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bi/:id"
+              element={
+                <ProtectedRoute>
+                  <BiDetails />
                 </ProtectedRoute>
               }
             />
