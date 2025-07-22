@@ -1,46 +1,44 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ValidationButton } from "@/components/ui/validation-button";
-import { ArrowRight, CheckCircle, Clock, Building, CreditCard } from "lucide-react";
-import { Project, Transfer, BankAccount } from '@/types';
-import { formatCurrency } from '@/lib/projects/utils';
-import { useValidation } from '@/hooks/use-validation';
+import {
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  Building,
+  CreditCard,
+} from "lucide-react";
+import type { ContractDetail, Transfer, BankAccount } from "@/types";
+import { formatCurrency } from "@/lib/contracts/utils";
 
-interface ProjectBankTransfersProps {
-  project: Project;
+interface ContractBankTransfersProps {
+  contract: ContractDetail;
 }
 
-const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
-  const transfers = project.transferencias || [];
-  const [transferValidations, setTransferValidations] = useState<Record<number, boolean>>(
-    transfers.reduce((acc, transfer) => ({
-      ...acc,
-      [transfer.id]: transfer.validada
-    }), {})
+const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
+  const transfers = contract.transferencias || [];
+  const [transferValidations, setTransferValidations] = useState<
+    Record<number, boolean>
+  >(
+    transfers.reduce(
+      (acc, transfer) => ({
+        ...acc,
+        [transfer.id]: transfer.validada,
+      }),
+      {}
+    )
   );
 
-  const { validateEntity: validateTransfer, isValidating: isValidatingTransfer } = useValidation({
-    entityType: 'transfer'
-  });
-
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR');
+    return new Date(dateString).toLocaleDateString("pt-BR");
   };
-
-  const handleValidateTransfer = async (transferId: number, currentValidation: boolean) => {
-    try {
-      await validateTransfer(transferId, currentValidation);
-      setTransferValidations(prev => ({
-        ...prev,
-        [transferId]: !currentValidation
-      }));
-    } catch (error) {
-      console.error('Erro ao validar transferência:', error);
-    }
-  };
-
-
 
   const renderBankAccount = (account: BankAccount, label: string) => (
     <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
@@ -85,7 +83,10 @@ const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
   }
 
   // Calcular totais
-  const totalTransferencias = transfers.reduce((sum, transfer) => sum + transfer.valor, 0);
+  const totalTransferencias = transfers.reduce(
+    (sum, transfer) => sum + transfer.valor,
+    0
+  );
 
   return (
     <Card>
@@ -95,9 +96,9 @@ const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
           Transferências Bancárias
         </CardTitle>
         <CardDescription>
-          Histórico de transferências de RCI relacionadas ao projeto
+          Histórico de transferências de RCI relacionadas ao contrato
         </CardDescription>
-        
+
         {/* Resumo das transferências */}
         <div className="flex flex-wrap gap-4 pt-2">
           <div className="text-sm">
@@ -106,15 +107,24 @@ const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
           </div>
           <div className="text-sm">
             <span className="text-gray-600">Valor Total: </span>
-            <span className="font-semibold">{formatCurrency(totalTransferencias)}</span>
+            <span className="font-semibold">
+              {formatCurrency(totalTransferencias)}
+            </span>
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <div className="space-y-4">
           {transfers.map((transfer) => (
-            <div key={transfer.id} className="border border-gray-200 rounded-lg p-4">
+            <div
+              key={transfer.id}
+              className={`border rounded-lg p-4 ${
+                transferValidations[transfer.id] || false
+                  ? "border-gray-200"
+                  : "border-4 border-red-400"
+              }`}
+            >
               {/* Cabeçalho da transferência */}
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
@@ -125,9 +135,6 @@ const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
                 <div className="text-right">
                   <ValidationButton
                     isValidated={transferValidations[transfer.id] || false}
-                    isLoading={isValidatingTransfer}
-                    onClick={() => handleValidateTransfer(transfer.id, transferValidations[transfer.id] || false)}
-                    size="sm"
                     className="h-6 px-2 text-xs mb-2"
                   />
                   <div className="text-lg font-bold text-gray-900">
@@ -147,11 +154,11 @@ const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
                   </label>
                   {renderBankAccount(transfer.conta_origem, "Origem")}
                 </div>
-                
+
                 <div className="flex justify-center items-center">
                   <ArrowRight className="w-6 h-6 text-gray-400" />
                 </div>
-                
+
                 <div>
                   <label className="text-xs font-medium text-gray-600 mb-1 block">
                     CONTA DESTINO
@@ -177,4 +184,4 @@ const ProjectBankTransfers = ({ project }: ProjectBankTransfersProps) => {
   );
 };
 
-export default ProjectBankTransfers; 
+export default ContractBankTransfers;

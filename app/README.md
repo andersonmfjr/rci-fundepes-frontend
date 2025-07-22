@@ -7,7 +7,7 @@ Sistema de gestão de contratos de Ressarcimento de Custos Indiretos (RCI) para 
 ![Vite](https://img.shields.io/badge/Vite-5.4.1-646CFF?logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4.11-06B6D4?logo=tailwindcss&logoColor=white)
 
-## 📋 Sobre o Projeto
+## 📋 Sobre o Contrato
 
 O RCI Manager é uma aplicação web moderna para gestão de contratos de Ressarcimento de Custos Indiretos, desenvolvida para facilitar o controle e acompanhamento de:
 
@@ -50,7 +50,7 @@ O RCI Manager é uma aplicação web moderna para gestão de contratos de Ressar
 - **PostCSS** - Processamento CSS
 - **Autoprefixer** - Prefixos CSS automáticos
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura do Contrato
 
 ```
 app/
@@ -59,12 +59,12 @@ app/
 │   │   ├── ui/             # Componentes base (Shadcn/UI)
 │   │   ├── auth/           # Componentes de autenticação
 │   │   ├── layout/         # Componentes de layout
-│   │   ├── project/        # Componentes de projeto
-│   │   ├── project-detail/ # Componentes de detalhes
-│   │   └── projects/       # Componentes de listagem
+│   │   ├── contract/        # Componentes de contrato
+│   │   ├── contract-detail/ # Componentes de detalhes
+│   │   └── contracts/       # Componentes de listagem
 │   ├── hooks/              # Custom hooks
 │   ├── lib/                # Utilitários e configurações
-│   │   └── projects/       # Lógica específica de projetos
+│   │   └── contracts/       # Lógica específica de contratos
 │   ├── pages/              # Páginas da aplicação
 │   ├── types/              # Definições de tipos TypeScript
 │   └── utils/              # Funções utilitárias
@@ -137,14 +137,14 @@ O sistema utiliza uma estrutura hierárquica de dados baseada na nova modelagem:
 ### Componentes Principais
 
 - **Layout**: Header, Sidebar, Layout principal
-- **Projects**: Listagem e filtros de contratos
-- **ProjectDetail**: Visualização detalhada com abas
+- **Contracts**: Listagem e filtros de contratos
+- **ContractDetail**: Visualização detalhada com abas
 - **Forms**: Formulários com validação robusta
 - **UI Components**: Biblioteca de componentes reutilizáveis
 
 ## 🎨 Design System
 
-O projeto utiliza um design system consistente baseado em:
+O contrato utiliza um design system consistente baseado em:
 
 - **Cores**: Paleta de cores CSS variables
 - **Tipografia**: Sistema tipográfico responsivo

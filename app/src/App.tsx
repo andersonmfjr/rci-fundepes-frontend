@@ -4,9 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
-import Projects from "./pages/Projects";
-import ProjectForm from "./pages/ProjectForm";
-import ProjectDetail from "./pages/ProjectDetail";
+import Contracts from "./pages/Contracts";
+import ContractDetail from "./pages/ContractDetail";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { authService } from "./lib/auth";
 import NotFound from "./pages/NotFound";
@@ -23,32 +22,33 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route 
-              path="/login" 
+            <Route
+              path="/login"
               element={
-                isAuthenticated ? <Navigate to="/projects" replace /> : <Login />
-              } 
+                isAuthenticated ? (
+                  <Navigate to="/contracts" replace />
+                ) : (
+                  <Login />
+                )
+              }
             />
-            <Route 
-              path="/projects" 
-              element={
-                <ProtectedRoute>
-                  <Projects />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/projects/:id" 
+            <Route
+              path="/contracts"
               element={
                 <ProtectedRoute>
-                  <ProjectDetail />
+                  <Contracts />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/" 
-              element={<Navigate to="/projects" replace />} 
+            <Route
+              path="/contracts/:id"
+              element={
+                <ProtectedRoute>
+                  <ContractDetail />
+                </ProtectedRoute>
+              }
             />
+            <Route path="/" element={<Navigate to="/contracts" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

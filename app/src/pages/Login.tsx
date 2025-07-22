@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { authService } from '@/lib/auth';
-import { toast } from '@/hooks/use-toast';
-import { usePageTitle } from '@/hooks/use-page-title';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { authService } from "@/lib/auth";
+import { toast } from "@/hooks/use-toast";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 const Login = () => {
-  usePageTitle('Login');
-  const [email, setEmail] = useState('admin@rci.com');
-  const [password, setPassword] = useState('admin123');
+  usePageTitle("Login");
+  const [email, setEmail] = useState("admin@rci.com");
+  const [password, setPassword] = useState("admin123");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -25,12 +31,13 @@ const Login = () => {
         title: "Login realizado com sucesso",
         description: "Bem-vindo ao sistema RCI BI",
       });
-      navigate('/projects');
+      navigate("/contracts");
     } catch (error) {
       toast({
         title: "Erro no login",
-        description: error instanceof Error ? error.message : "Erro desconhecido",
-        variant: "destructive"
+        description:
+          error instanceof Error ? error.message : "Erro desconhecido",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -54,11 +61,11 @@ const Login = () => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">E-mail</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="seu@email.com"
+                placeholder="email@exemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -75,16 +82,14 @@ const Login = () => {
                 required
               />
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Entrando..." : "Entrar"}
             </Button>
           </form>
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-800 font-medium mb-2">Credenciais de teste:</p>
+            <p className="text-sm text-blue-800 font-medium mb-2">
+              Credenciais de teste:
+            </p>
             <p className="text-xs text-blue-600">Email: admin@rci.com</p>
             <p className="text-xs text-blue-600">Senha: admin123</p>
           </div>

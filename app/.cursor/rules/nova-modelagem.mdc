@@ -1,8 +1,9 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
+
 -- =====================================================
 -- SCRIPT DE CRIAÇÃO DAS TABELAS - DASHBOARD RCI (NOVA MODELAGEM)
 -- Sistema de Ressarcimento de Custos Indiretos
@@ -19,26 +20,26 @@ alwaysApply: false
 
 -- Tabela: tipos_usuarios
 CREATE TABLE tipos_usuarios (
-    id SERIAL PRIMARY KEY,
-    descricao VARCHAR(100) NOT NULL UNIQUE
+id SERIAL PRIMARY KEY,
+descricao VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Tabela: tipos_unidades
 CREATE TABLE tipos_unidades (
-    id SERIAL PRIMARY KEY,
-    descricao VARCHAR(100) NOT NULL UNIQUE
+id SERIAL PRIMARY KEY,
+descricao VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Tabela: tipos_contratos
 CREATE TABLE tipos_contratos (
-    id SERIAL PRIMARY KEY,
-    descricao VARCHAR(100) NOT NULL UNIQUE
+id SERIAL PRIMARY KEY,
+descricao VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Tabela: tipos_financiadores (NOVA)
 CREATE TABLE tipos_financiadores (
-    id SERIAL PRIMARY KEY,
-    descricao VARCHAR(100) NOT NULL UNIQUE
+id SERIAL PRIMARY KEY,
+descricao VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- =====================================================
@@ -47,149 +48,149 @@ CREATE TABLE tipos_financiadores (
 
 -- Tabela: bancos
 CREATE TABLE bancos (
-    id SERIAL PRIMARY KEY,
-    codigo VARCHAR(10) NOT NULL UNIQUE,
-    nome VARCHAR(200) NOT NULL
+id SERIAL PRIMARY KEY,
+codigo VARCHAR(10) NOT NULL UNIQUE,
+nome VARCHAR(200) NOT NULL
 );
 
 -- Tabela: financiadores (ALTERADA - adicionado id_tipo_financiador)
 CREATE TABLE financiadores (
-    id SERIAL PRIMARY KEY,
-    id_tipo_financiador INTEGER NOT NULL,
-    nome VARCHAR(200) NOT NULL,
-    tipo VARCHAR(100),
-    cnpj VARCHAR(18) UNIQUE,
-    CONSTRAINT fk_financiadores_tipo 
-        FOREIGN KEY (id_tipo_financiador) REFERENCES tipos_financiadores(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE
+id SERIAL PRIMARY KEY,
+id_tipo_financiador INTEGER NOT NULL,
+nome VARCHAR(200) NOT NULL,
+tipo VARCHAR(100),
+cnpj VARCHAR(18) UNIQUE,
+CONSTRAINT fk_financiadores_tipo
+FOREIGN KEY (id_tipo_financiador) REFERENCES tipos_financiadores(id)
+ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Tabela: unidades_academicas (ALTERADA - estrutura hierárquica, sem id_instituicao)
 CREATE TABLE unidades_academicas (
-    id SERIAL PRIMARY KEY,
-    id_unidade_pai INTEGER,
-    id_tipo_unidade INTEGER NOT NULL,
-    nome VARCHAR(200) NOT NULL,
-    sigla VARCHAR(20),
-    cnpj VARCHAR(18) UNIQUE,
-    CONSTRAINT fk_unidades_pai 
-        FOREIGN KEY (id_unidade_pai) REFERENCES unidades_academicas(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_unidades_tipo 
-        FOREIGN KEY (id_tipo_unidade) REFERENCES tipos_unidades(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE
+id SERIAL PRIMARY KEY,
+id_unidade_pai INTEGER,
+id_tipo_unidade INTEGER NOT NULL,
+nome VARCHAR(200) NOT NULL,
+sigla VARCHAR(20),
+cnpj VARCHAR(18) UNIQUE,
+CONSTRAINT fk_unidades_pai
+FOREIGN KEY (id_unidade_pai) REFERENCES unidades_academicas(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_unidades_tipo
+FOREIGN KEY (id_tipo_unidade) REFERENCES tipos_unidades(id)
+ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Tabela: usuarios
 CREATE TABLE usuarios (
-    id SERIAL PRIMARY KEY,
-    id_unidade INTEGER NOT NULL,
-    nome VARCHAR(200) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    CONSTRAINT fk_usuarios_unidade 
-        FOREIGN KEY (id_unidade) REFERENCES unidades_academicas(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE
+id SERIAL PRIMARY KEY,
+id_unidade INTEGER NOT NULL,
+nome VARCHAR(200) NOT NULL,
+email VARCHAR(150) UNIQUE NOT NULL,
+CONSTRAINT fk_usuarios_unidade
+FOREIGN KEY (id_unidade) REFERENCES unidades_academicas(id)
+ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Tabela: contas_bancarias
 CREATE TABLE contas_bancarias (
-    id SERIAL PRIMARY KEY,
-    id_unidade INTEGER NOT NULL,
-    id_banco INTEGER NOT NULL,
-    agencia VARCHAR(10) NOT NULL,
-    numero VARCHAR(20) NOT NULL,
-    CONSTRAINT fk_contas_unidade 
-        FOREIGN KEY (id_unidade) REFERENCES unidades_academicas(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_contas_banco 
-        FOREIGN KEY (id_banco) REFERENCES bancos(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT uk_conta_bancaria 
-        UNIQUE (id_banco, agencia, numero)
+id SERIAL PRIMARY KEY,
+id_unidade INTEGER NOT NULL,
+id_banco INTEGER NOT NULL,
+agencia VARCHAR(10) NOT NULL,
+numero VARCHAR(20) NOT NULL,
+CONSTRAINT fk_contas_unidade
+FOREIGN KEY (id_unidade) REFERENCES unidades_academicas(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_contas_banco
+FOREIGN KEY (id_banco) REFERENCES bancos(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT uk_conta_bancaria
+UNIQUE (id_banco, agencia, numero)
 );
 
 -- Tabela: contratos (ALTERADA - conecta com unidades_academicas em vez de instituicoes)
 CREATE TABLE contratos (
-    id SERIAL PRIMARY KEY,
-    id_unidade_academica INTEGER NOT NULL,
-    id_financiador INTEGER NOT NULL,
-    id_tipo_contrato INTEGER NOT NULL,
-    valor_total DECIMAL(15,2) NOT NULL CHECK (valor_total >= 0),
-    vigencia_inicio DATE NOT NULL,
-    vigencia_fim DATE NOT NULL,
-    validado BOOLEAN DEFAULT FALSE,
-    nome VARCHAR(255) NOT NULL,
-    descricao VARCHAR(255) NOT NULL,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_contratos_unidade 
-        FOREIGN KEY (id_unidade_academica) REFERENCES unidades_academicas(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_contratos_financiador 
-        FOREIGN KEY (id_financiador) REFERENCES financiadores(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_contratos_tipo 
-        FOREIGN KEY (id_tipo_contrato) REFERENCES tipos_contratos(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT ck_vigencia 
-        CHECK (vigencia_fim >= vigencia_inicio)
+id SERIAL PRIMARY KEY,
+id_unidade_academica INTEGER NOT NULL,
+id_financiador INTEGER NOT NULL,
+id_tipo_contrato INTEGER NOT NULL,
+valor_total DECIMAL(15,2) NOT NULL CHECK (valor_total >= 0),
+vigencia_inicio DATE NOT NULL,
+vigencia_fim DATE NOT NULL,
+validado BOOLEAN DEFAULT FALSE,
+nome VARCHAR(255) NOT NULL,
+descricao VARCHAR(255) NOT NULL,
+data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT fk_contratos_unidade
+FOREIGN KEY (id_unidade_academica) REFERENCES unidades_academicas(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_contratos_financiador
+FOREIGN KEY (id_financiador) REFERENCES financiadores(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_contratos_tipo
+FOREIGN KEY (id_tipo_contrato) REFERENCES tipos_contratos(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT ck_vigencia
+CHECK (vigencia_fim >= vigencia_inicio)
 );
 
 -- Tabela: distribuicao_rci
 CREATE TABLE distribuicao_rci (
-    id SERIAL PRIMARY KEY,
-    id_unidade INTEGER NOT NULL,
-    id_contrato INTEGER NOT NULL,
-    percentual DECIMAL(5,2) NOT NULL CHECK (percentual >= 0 AND percentual <= 100),
-    valor_base_calculo DECIMAL(15,2) NOT NULL CHECK (valor_base_calculo >= 0),
-    validado BOOLEAN DEFAULT FALSE,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_distribuicao_unidade 
-        FOREIGN KEY (id_unidade) REFERENCES unidades_academicas(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_distribuicao_contrato 
-        FOREIGN KEY (id_contrato) REFERENCES contratos(id)
-        ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT uk_distribuicao_contrato_unidade 
-        UNIQUE (id_contrato, id_unidade)
+id SERIAL PRIMARY KEY,
+id_unidade INTEGER NOT NULL,
+id_contrato INTEGER NOT NULL,
+percentual DECIMAL(5,2) NOT NULL CHECK (percentual >= 0 AND percentual <= 100),
+valor_base_calculo DECIMAL(15,2) NOT NULL CHECK (valor_base_calculo >= 0),
+validado BOOLEAN DEFAULT FALSE,
+data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT fk_distribuicao_unidade
+FOREIGN KEY (id_unidade) REFERENCES unidades_academicas(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_distribuicao_contrato
+FOREIGN KEY (id_contrato) REFERENCES contratos(id)
+ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT uk_distribuicao_contrato_unidade
+UNIQUE (id_contrato, id_unidade)
 );
 
 -- Tabela: transferencias (ALTERADA - conecta com distribuicao_rci em vez de contratos)
 CREATE TABLE transferencias (
-    id SERIAL PRIMARY KEY,
-    id_conta_origem INTEGER NOT NULL,
-    id_conta_destino INTEGER NOT NULL,
-    id_distribuicao_rci INTEGER NOT NULL,
-    data DATE NOT NULL,
-    valor DECIMAL(15,2) NOT NULL CHECK (valor > 0),
-    observacao TEXT,
-    validada BOOLEAN DEFAULT FALSE,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_transferencias_origem 
-        FOREIGN KEY (id_conta_origem) REFERENCES contas_bancarias(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_transferencias_destino 
-        FOREIGN KEY (id_conta_destino) REFERENCES contas_bancarias(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT fk_transferencias_distribuicao 
-        FOREIGN KEY (id_distribuicao_rci) REFERENCES distribuicao_rci(id)
-        ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT ck_contas_diferentes 
-        CHECK (id_conta_origem != id_conta_destino)
+id SERIAL PRIMARY KEY,
+id_conta_origem INTEGER NOT NULL,
+id_conta_destino INTEGER NOT NULL,
+id_distribuicao_rci INTEGER NOT NULL,
+data DATE NOT NULL,
+valor DECIMAL(15,2) NOT NULL CHECK (valor > 0),
+observacao TEXT,
+validada BOOLEAN DEFAULT FALSE,
+data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT fk_transferencias_origem
+FOREIGN KEY (id_conta_origem) REFERENCES contas_bancarias(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_transferencias_destino
+FOREIGN KEY (id_conta_destino) REFERENCES contas_bancarias(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT fk_transferencias_distribuicao
+FOREIGN KEY (id_distribuicao_rci) REFERENCES distribuicao_rci(id)
+ON DELETE RESTRICT ON UPDATE CASCADE,
+CONSTRAINT ck_contas_diferentes
+CHECK (id_conta_origem != id_conta_destino)
 );
 
 -- Tabela: aditivos_contratos
 CREATE TABLE aditivos_contratos (
-    id SERIAL PRIMARY KEY,
-    id_contrato INTEGER NOT NULL,
-    data DATE NOT NULL,
-    novo_total DECIMAL(15,2) NOT NULL CHECK (novo_total >= 0),
-    validado BOOLEAN DEFAULT FALSE,
-    descricao TEXT,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_aditivos_contrato 
-        FOREIGN KEY (id_contrato) REFERENCES contratos(id)
-        ON DELETE CASCADE ON UPDATE CASCADE
+id SERIAL PRIMARY KEY,
+id_contrato INTEGER NOT NULL,
+data DATE NOT NULL,
+novo_total DECIMAL(15,2) NOT NULL CHECK (novo_total >= 0),
+validado BOOLEAN DEFAULT FALSE,
+descricao TEXT,
+data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT fk_aditivos_contrato
+FOREIGN KEY (id_contrato) REFERENCES contratos(id)
+ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- =====================================================
@@ -229,10 +230,12 @@ CREATE INDEX idx_aditivos_data ON aditivos_contratos(data);
 CREATE OR REPLACE FUNCTION update_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.data_atualizacao = CURRENT_TIMESTAMP;
-    RETURN NEW;
+NEW.data_atualizacao = CURRENT_TIMESTAMP;
+RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+
+$$
+LANGUAGE plpgsql;
 
 -- Trigger para tabela contratos
 CREATE TRIGGER trg_contratos_timestamp
@@ -250,11 +253,11 @@ COMMENT ON TABLE tipos_unidades IS 'Tipos de unidades acadêmicas (Faculdade, In
 COMMENT ON TABLE tipos_contratos IS 'Tipos de contratos (TED, Lei Informática, FINEP, CNPq, etc.)';
 COMMENT ON TABLE tipos_financiadores IS 'Tipos de financiadores (Público, Privado)';
 COMMENT ON TABLE bancos IS 'Cadastro de bancos para contas bancárias';
-COMMENT ON TABLE financiadores IS 'Órgãos e empresas financiadoras dos projetos';
+COMMENT ON TABLE financiadores IS 'Órgãos e empresas financiadoras dos contratos';
 COMMENT ON TABLE unidades_academicas IS 'Unidades acadêmicas com estrutura hierárquica (UFAL, IFAL, Faculdades, Institutos, etc.)';
 COMMENT ON TABLE usuarios IS 'Usuários do sistema de dashboard';
-COMMENT ON TABLE contas_bancarias IS 'Contas bancárias das unidades e projetos';
-COMMENT ON TABLE contratos IS 'Contratos de projetos de pesquisa';
+COMMENT ON TABLE contas_bancarias IS 'Contas bancárias das unidades e contratos';
+COMMENT ON TABLE contratos IS 'Contratos de contratos de pesquisa';
 COMMENT ON TABLE distribuicao_rci IS 'Distribuição do RCI entre unidades por contrato';
 COMMENT ON TABLE transferencias IS 'Registro de transferências bancárias de RCI';
 COMMENT ON TABLE aditivos_contratos IS 'Aditivos e alterações nos contratos';
@@ -275,14 +278,14 @@ COMMENT ON COLUMN aditivos_contratos.novo_total IS 'Novo valor total após o adi
 -- =====================================================
 
 -- Tipos básicos de usuários
-INSERT INTO tipos_usuarios (descricao) VALUES 
+INSERT INTO tipos_usuarios (descricao) VALUES
     ('Administrador'),
     ('Gestor Reitoria'),
     ('Gestor Unidade Acadêmica'),
     ('Consulta');
 
 -- Tipos básicos de unidades
-INSERT INTO tipos_unidades (descricao) VALUES 
+INSERT INTO tipos_unidades (descricao) VALUES
     ('Instituição'),
     ('Faculdade'),
     ('Instituto'),
@@ -291,7 +294,7 @@ INSERT INTO tipos_unidades (descricao) VALUES
     ('Reitoria');
 
 -- Tipos básicos de contratos
-INSERT INTO tipos_contratos (descricao) VALUES 
+INSERT INTO tipos_contratos (descricao) VALUES
     ('TED'),
     ('Lei da Informática'),
     ('FINEP'),
@@ -301,12 +304,12 @@ INSERT INTO tipos_contratos (descricao) VALUES
     ('Contrato Empresarial');
 
 -- Tipos de financiadores
-INSERT INTO tipos_financiadores (descricao) VALUES 
+INSERT INTO tipos_financiadores (descricao) VALUES
     ('Público'),
     ('Privado');
 
 -- Bancos principais
-INSERT INTO bancos (codigo, nome) VALUES 
+INSERT INTO bancos (codigo, nome) VALUES
     ('001', 'Banco do Brasil S.A.'),
     ('104', 'Caixa Econômica Federal'),
     ('237', 'Banco Bradesco S.A.'),
@@ -319,9 +322,9 @@ INSERT INTO bancos (codigo, nome) VALUES
 
 -- View: Resumo de contratos por situação
 CREATE VIEW vw_contratos_situacao AS
-SELECT 
+SELECT
     tc.descricao as tipo_contrato,
-    CASE 
+    CASE
         WHEN c.vigencia_fim < CURRENT_DATE THEN 'Finalizado'
         WHEN c.vigencia_inicio > CURRENT_DATE THEN 'Não Iniciado'
         ELSE 'Ativo'
@@ -330,8 +333,8 @@ SELECT
     SUM(c.valor_total) as valor_total
 FROM contratos c
 JOIN tipos_contratos tc ON c.id_tipo_contrato = tc.id
-GROUP BY tc.descricao, 
-    CASE 
+GROUP BY tc.descricao,
+    CASE
         WHEN c.vigencia_fim < CURRENT_DATE THEN 'Finalizado'
         WHEN c.vigencia_inicio > CURRENT_DATE THEN 'Não Iniciado'
         ELSE 'Ativo'
@@ -339,7 +342,7 @@ GROUP BY tc.descricao,
 
 -- View: RCI por unidade acadêmica (ALTERADA)
 CREATE VIEW vw_rci_por_unidade AS
-SELECT 
+SELECT
     ua.sigla,
     ua.nome as unidade,
     ua_pai.nome as unidade_pai,
@@ -357,7 +360,7 @@ ORDER BY valor_rci_previsto DESC;
 CREATE VIEW vw_hierarquia_unidades AS
 WITH RECURSIVE hierarquia AS (
     -- Unidades raiz (sem pai)
-    SELECT 
+    SELECT
         id,
         nome,
         sigla,
@@ -365,13 +368,13 @@ WITH RECURSIVE hierarquia AS (
         0 as nivel,
         ARRAY[id] as caminho,
         nome::text as caminho_completo
-    FROM unidades_academicas 
+    FROM unidades_academicas
     WHERE id_unidade_pai IS NULL
-    
+
     UNION ALL
-    
+
     -- Unidades filhas
-    SELECT 
+    SELECT
         ua.id,
         ua.nome,
         ua.sigla,
@@ -398,3 +401,4 @@ COMMIT;
 
 -- Mensagem de conclusão
 SELECT 'Nova modelagem do Dashboard RCI criada com sucesso!' as status;
+$$

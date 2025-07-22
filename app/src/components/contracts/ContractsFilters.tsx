@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
-interface ProjectsFiltersProps {
+interface ContractsFiltersProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
 }
 
-const ProjectsFilters = ({
+const ContractsFilters = ({
   searchTerm,
-  onSearchChange
-}: ProjectsFiltersProps) => {
+  onSearchChange,
+}: ContractsFiltersProps) => {
   return (
     <div className="flex flex-col sm:flex-row gap-4">
       <div className="relative flex-1">
@@ -26,4 +26,4 @@ const ProjectsFilters = ({
   );
 };
 
-export default ProjectsFilters;
+export default ContractsFilters;

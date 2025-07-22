@@ -1,18 +1,25 @@
+import React from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-import React from 'react';
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-
-interface ProjectsPaginationProps {
+interface ContractsPaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
-const ProjectsPagination = ({
+const ContractsPagination = ({
   currentPage,
   totalPages,
-  onPageChange
-}: ProjectsPaginationProps) => {
+  onPageChange,
+}: ContractsPaginationProps) => {
   const renderPaginationItems = () => {
     const items = [];
     const maxVisiblePages = 5;
@@ -26,7 +33,10 @@ const ProjectsPagination = ({
     if (startPage > 1) {
       items.push(
         <PaginationItem key={1}>
-          <PaginationLink onClick={() => onPageChange(1)} isActive={currentPage === 1}>
+          <PaginationLink
+            onClick={() => onPageChange(1)}
+            isActive={currentPage === 1}
+          >
             1
           </PaginationLink>
         </PaginationItem>
@@ -43,7 +53,10 @@ const ProjectsPagination = ({
     for (let i = startPage; i <= endPage; i++) {
       items.push(
         <PaginationItem key={i}>
-          <PaginationLink onClick={() => onPageChange(i)} isActive={currentPage === i}>
+          <PaginationLink
+            onClick={() => onPageChange(i)}
+            isActive={currentPage === i}
+          >
             {i}
           </PaginationLink>
         </PaginationItem>
@@ -60,7 +73,10 @@ const ProjectsPagination = ({
       }
       items.push(
         <PaginationItem key={totalPages}>
-          <PaginationLink onClick={() => onPageChange(totalPages)} isActive={currentPage === totalPages}>
+          <PaginationLink
+            onClick={() => onPageChange(totalPages)}
+            isActive={currentPage === totalPages}
+          >
             {totalPages}
           </PaginationLink>
         </PaginationItem>
@@ -75,18 +91,28 @@ const ProjectsPagination = ({
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious 
+            <PaginationPrevious
               onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-              className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+              className={
+                currentPage === 1
+                  ? "pointer-events-none opacity-50"
+                  : "cursor-pointer"
+              }
             >
               Anterior
             </PaginationPrevious>
           </PaginationItem>
           {renderPaginationItems()}
           <PaginationItem>
-            <PaginationNext 
-              onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-              className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            <PaginationNext
+              onClick={() =>
+                onPageChange(Math.min(totalPages, currentPage + 1))
+              }
+              className={
+                currentPage === totalPages
+                  ? "pointer-events-none opacity-50"
+                  : "cursor-pointer"
+              }
             >
               Próxima
             </PaginationNext>
@@ -97,4 +123,4 @@ const ProjectsPagination = ({
   );
 };
 
-export default ProjectsPagination;
+export default ContractsPagination;
