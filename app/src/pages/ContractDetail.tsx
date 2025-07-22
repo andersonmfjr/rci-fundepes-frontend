@@ -13,6 +13,7 @@ import ContractBankTransfers from "@/components/contract-detail/ContractBankTran
 import ContractRciDistribution from "@/components/contract-detail/ContractRciDistribution";
 import ContractAddendums from "@/components/contract-detail/ContractAddendums";
 import { usePageTitle } from "@/hooks/use-page-title";
+import { ContractDetailPageSkeleton } from "@/components/skeletons";
 
 const ContractDetail = () => {
   const navigate = useNavigate();
@@ -51,12 +52,7 @@ const ContractDetail = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Carregando contrato...</p>
-          </div>
-        </div>
+        <ContractDetailPageSkeleton />
       </Layout>
     );
   }
@@ -102,11 +98,7 @@ const ContractDetail = () => {
           </div>
         </div>
 
-        <ContractInfo
-          contract={contract}
-          formatDate={formatDate}
-          onContractUpdate={setContract}
-        />
+        <ContractInfo contract={contract} formatDate={formatDate} />
 
         <ContractAddendums contract={contract} />
 
