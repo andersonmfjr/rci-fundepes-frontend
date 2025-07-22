@@ -186,13 +186,6 @@ const Contracts = () => {
               Gerencie os contratos de ressarcimento de custos indiretos
             </p>
           </div>
-
-          {/* <Button asChild>
-            <Link to="/contracts/new">
-              <Plus className="w-4 h-4 mr-2" />
-              Novo Contrato
-            </Link>
-          </Button> */}
         </div>
 
         {/* Stats */}
@@ -200,7 +193,7 @@ const Contracts = () => {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                Total de Contratos
+                Total de contratos
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -212,7 +205,7 @@ const Contracts = () => {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                Contratos Validados
+                Contratos validados
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -239,7 +232,7 @@ const Contracts = () => {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                Valor Total dos Contratos
+                Valor total dos contratos
               </CardTitle>
             </CardHeader>
             <CardContent>
