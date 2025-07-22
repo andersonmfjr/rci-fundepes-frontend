@@ -82,16 +82,16 @@ const mockAcademicUnits: AcademicUnit[] = [
   {
     id: 2,
     id_tipo_unidade: 1,
-    nome: "Universidade Federal de Pernambuco",
-    sigla: "UFPE",
+    nome: "Instituto Federal de Alagoas",
+    sigla: "IFAL",
     cnpj: "98.765.432/0001-00",
     tipo_unidade: mockUnitTypes[0],
   },
   {
     id: 3,
     id_tipo_unidade: 1,
-    nome: "Universidade Federal da Bahia",
-    sigla: "UFBA",
+    nome: "Universidade Estadual de Ciências da Saúde de Alagoas",
+    sigla: "UNCISAL",
     cnpj: "11.222.333/0001-00",
     tipo_unidade: mockUnitTypes[0],
   },
@@ -180,13 +180,13 @@ const mockRciDistributions: RciDistribution[] = [
   },
   {
     id: 2,
-    id_unidade: 5, // FALE
+    id_unidade: 4, // IC
     id_contrato: 1,
     percentual: 8.2,
     valor_base_calculo: 850000.0,
     validado: false,
     data_criacao: "2024-01-16T10:30:00Z",
-    unidade: mockAcademicUnits[4], // FALE
+    unidade: mockAcademicUnits[3], // IC
   },
   {
     id: 3,
@@ -230,13 +230,13 @@ const mockRciDistributions: RciDistribution[] = [
   },
   {
     id: 7,
-    id_unidade: 4, // IC
+    id_unidade: 5, // IC
     id_contrato: 5,
     percentual: 8.5,
     valor_base_calculo: 450000.0,
     validado: false,
     data_criacao: "2024-03-20T13:45:00Z",
-    unidade: mockAcademicUnits[3], // IC
+    unidade: mockAcademicUnits[5], // IC
   },
   {
     id: 8,
@@ -514,7 +514,7 @@ export const mockContractsDetail: ContractDetail[] = [
     financiador: mockFinanciers[0],
     tipo_contrato: mockContractTypes[2],
     transferencias: [],
-    distribuicoes_rci: [mockRciDistributions[3], mockRciDistributions[4]],
+    distribuicoes_rci: [mockRciDistributions[3]],
     aditivos_contratuais: [],
     alertas: [],
   },
@@ -542,7 +542,7 @@ export const mockContractsDetail: ContractDetail[] = [
   },
   {
     id: 5,
-    id_unidade_academica: 4,
+    id_unidade_academica: 6,
     id_financiador: 1,
     id_tipo_contrato: 3,
     valor_total: 450000.0,
@@ -554,7 +554,7 @@ export const mockContractsDetail: ContractDetail[] = [
       "Desenvolvimento de aplicativo móvel para equipe de vendas com sincronização offline e GPS tracking.",
     data_criacao: "2024-03-20T13:45:00Z",
     data_atualizacao: "2024-03-20T13:45:00Z",
-    unidade_academica: mockAcademicUnits[3],
+    unidade_academica: mockAcademicUnits[5],
     financiador: mockFinanciers[0],
     tipo_contrato: mockContractTypes[2],
     transferencias: [],
