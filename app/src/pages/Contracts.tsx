@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Plus, FileX } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FileX } from "lucide-react";
 import { ContractListItem } from "@/types";
 import { contractsService } from "@/lib/contracts";
-import { calculateTotalRciPercentage } from "@/lib/contracts/utils";
+import type {
+  SortField,
+  SortDirection,
+  ContractsFilters as ContractsFiltersType,
+  ContractsStats,
+} from "@/lib/contracts/service";
 import Layout from "@/components/layout/Layout";
 import { toast } from "@/hooks/use-toast";
 import ContractsFilters from "@/components/contracts/ContractsFilters";
@@ -19,19 +17,18 @@ import ContractsTable from "@/components/contracts/ContractsTable";
 import ContractsPagination from "@/components/contracts/ContractsPagination";
 import { usePageTitle } from "@/hooks/use-page-title";
 
-type SortField =
-  | "nome"
-  | "percentual_rci"
-  | "valor_total"
-  | "data_criacao"
-  | "data_atualizacao";
-type SortDirection = "asc" | "desc";
-
 const Contracts = () => {
   usePageTitle("Contratos");
   const [searchParams, setSearchParams] = useSearchParams();
   const [contracts, setContracts] = useState<ContractListItem[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [stats, setStats] = useState<ContractsStats>({
+    totalContracts: 0,
+    validatedContracts: 0,
+    totalValue: 0,
+  });
   const [loading, setLoading] = useState(true);
+  const [tableLoading, setTableLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search") || ""
   );
@@ -47,18 +44,28 @@ const Contracts = () => {
 
   const itemsPerPage = 10;
 
-  // Load contracts
   useEffect(() => {
-    const loadContracts = async () => {
+    const loadInitialData = async () => {
       try {
         setLoading(true);
-        const response = await contractsService.getAll();
-        setContracts(response.results);
+        const [statsResponse, contractsResponse] = await Promise.all([
+          contractsService.getStats(),
+          contractsService.getAll({
+            sortField,
+            sortDirection,
+            page: currentPage,
+            pageSize: itemsPerPage,
+          }),
+        ]);
+
+        setStats(statsResponse);
+        setContracts(contractsResponse.results);
+        setTotalCount(contractsResponse.count);
       } catch (error) {
-        console.error("Error loading contracts:", error);
+        console.error("Error loading initial data:", error);
         toast({
-          title: "Erro ao carregar contratos",
-          description: "Não foi possível carregar a lista de contratos",
+          title: "Erro ao carregar dados",
+          description: "Não foi possível carregar os dados iniciais",
           variant: "destructive",
         });
       } finally {
@@ -66,64 +73,39 @@ const Contracts = () => {
       }
     };
 
-    loadContracts();
+    loadInitialData();
   }, []);
 
-  // Filter and sort contracts
-  const filteredAndSortedContracts = React.useMemo(() => {
-    const filtered = contracts.filter((contract) => {
-      const matchesSearch =
-        (contract.nome || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        (contract.descricao || "")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
-      return matchesSearch;
-    });
+  const loadContracts = async (filters: ContractsFiltersType) => {
+    try {
+      setTableLoading(true);
+      const response = await contractsService.getAll(filters);
+      setContracts(response.results);
+      setTotalCount(response.count);
+    } catch (error) {
+      console.error("Error loading contracts:", error);
+      toast({
+        title: "Erro ao carregar contratos",
+        description: "Não foi possível carregar a lista de contratos",
+        variant: "destructive",
+      });
+    } finally {
+      setTableLoading(false);
+    }
+  };
 
-    // Sort contracts
-    filtered.sort((a, b) => {
-      let aValue: string | number, bValue: string | number;
+  useEffect(() => {
+    const filters: ContractsFiltersType = {
+      search: searchTerm || undefined,
+      sortField,
+      sortDirection,
+      page: currentPage,
+      pageSize: itemsPerPage,
+    };
 
-      if (sortField === "nome") {
-        aValue = (a.nome || "").toLowerCase();
-        bValue = (b.nome || "").toLowerCase();
-      } else if (sortField === "percentual_rci") {
-        aValue = calculateTotalRciPercentage(a.unidades);
-        bValue = calculateTotalRciPercentage(b.unidades);
-      } else if (sortField === "valor_total") {
-        aValue = a.valor_total;
-        bValue = b.valor_total;
-      } else if (sortField === "data_criacao") {
-        aValue = new Date(a.data_criacao || "").getTime();
-        bValue = new Date(b.data_criacao || "").getTime();
-      } else if (sortField === "data_atualizacao") {
-        aValue = new Date(a.data_atualizacao || "").getTime();
-        bValue = new Date(b.data_atualizacao || "").getTime();
-      }
+    loadContracts(filters);
+  }, [searchTerm, sortField, sortDirection, currentPage]);
 
-      if (sortDirection === "asc") {
-        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-      } else {
-        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
-      }
-    });
-
-    return filtered;
-  }, [contracts, searchTerm, sortField, sortDirection]);
-
-  // Pagination
-  const totalPages = Math.ceil(
-    filteredAndSortedContracts.length / itemsPerPage
-  );
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedContracts = filteredAndSortedContracts.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
-
-  // Update URL when filters change
   useEffect(() => {
     const newSearchParams = new URLSearchParams();
 
@@ -137,7 +119,6 @@ const Contracts = () => {
     setSearchParams(newSearchParams, { replace: true });
   }, [searchTerm, currentPage, sortField, sortDirection, setSearchParams]);
 
-  // Event handlers
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     setCurrentPage(1);
@@ -162,14 +143,74 @@ const Contracts = () => {
     return new Date(dateString).toLocaleDateString("pt-BR");
   };
 
+  const StatsSkeleton = () => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {[1, 2, 3].map((i) => (
+        <Card key={i}>
+          <CardHeader className="pb-2">
+            <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
+          </CardHeader>
+          <CardContent>
+            <div className="h-8 bg-gray-200 rounded w-20 animate-pulse mb-2"></div>
+            <div className="h-3 bg-gray-200 rounded w-16 animate-pulse"></div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+
+  const TableSkeleton = () => (
+    <Card>
+      <CardContent className="p-0">
+        <div className="animate-pulse">
+          {/* Header */}
+          <div className="border-b border-gray-200 p-4">
+            <div className="grid grid-cols-6 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="h-4 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          </div>
+
+          {/* Rows */}
+          {[1, 2, 3, 4, 5].map((row) => (
+            <div key={row} className="border-b border-gray-100 p-4">
+              <div className="grid grid-cols-6 gap-4">
+                {[1, 2, 3, 4, 5, 6].map((col) => (
+                  <div key={col} className="h-4 bg-gray-100 rounded"></div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   if (loading) {
     return (
       <Layout>
-        <div className="container mx-auto py-6">
-          <div className="animate-pulse">
-            <div className="bg-gray-200 h-8 w-64 mb-4 rounded"></div>
-            <div className="bg-gray-200 h-96 rounded"></div>
+        <div className="container mx-auto py-6 space-y-6">
+          {/* Header Skeleton */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <div className="h-8 bg-gray-200 rounded w-32 animate-pulse mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-64 animate-pulse"></div>
+            </div>
           </div>
+
+          {/* Stats Skeleton */}
+          <StatsSkeleton />
+
+          {/* Filters Skeleton */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="h-10 bg-gray-200 rounded w-full animate-pulse"></div>
+            </CardContent>
+          </Card>
+
+          {/* Table Skeleton */}
+          <TableSkeleton />
         </div>
       </Layout>
     );
@@ -197,9 +238,7 @@ const Contracts = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                {filteredAndSortedContracts.length}
-              </div>
+              <div className="text-2xl font-bold">{stats.totalContracts}</div>
             </CardContent>
           </Card>
           <Card>
@@ -210,19 +249,12 @@ const Contracts = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {
-                  filteredAndSortedContracts.filter(
-                    (p) => p.status === "validated"
-                  ).length
-                }
+                {stats.validatedContracts}
               </div>
               <div className="text-sm text-gray-500 mt-1">
-                {filteredAndSortedContracts.length > 0
+                {stats.totalContracts > 0
                   ? `${(
-                      (filteredAndSortedContracts.filter(
-                        (p) => p.status === "validated"
-                      ).length /
-                        filteredAndSortedContracts.length) *
+                      (stats.validatedContracts / stats.totalContracts) *
                       100
                     ).toFixed(1)}%`
                   : "0%"}
@@ -237,12 +269,10 @@ const Contracts = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {filteredAndSortedContracts
-                  .reduce((total, p) => total + p.valor_total, 0)
-                  .toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
+                {stats.totalValue.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
               </div>
             </CardContent>
           </Card>
@@ -255,7 +285,9 @@ const Contracts = () => {
         />
 
         {/* Table */}
-        {paginatedContracts.length === 0 ? (
+        {tableLoading ? (
+          <TableSkeleton />
+        ) : contracts.length === 0 ? (
           <Card>
             <CardContent className="text-center py-8">
               <FileX className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -272,7 +304,7 @@ const Contracts = () => {
         ) : (
           <>
             <ContractsTable
-              contracts={paginatedContracts}
+              contracts={contracts}
               sortField={sortField}
               sortDirection={sortDirection}
               onSort={handleSort}
@@ -281,7 +313,7 @@ const Contracts = () => {
 
             <ContractsPagination
               currentPage={currentPage}
-              totalPages={totalPages}
+              totalPages={Math.ceil(totalCount / itemsPerPage)}
               onPageChange={handlePageChange}
             />
           </>

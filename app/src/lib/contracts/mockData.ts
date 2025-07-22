@@ -307,17 +307,14 @@ const mockContractAddendums: ContractAddendum[] = [
 // Legacy contracts for backward compatibility
 export const mockContracts: ContractListItem[] = [
   {
-    id: "1",
+    id: 1,
     nome: "Contrato FINEP - Infraestrutura Tecnológica 2024",
     descricao:
       "Contrato de financiamento para expansão da infraestrutura tecnológica para o ano de 2024, incluindo modernização de servidores e implementação de nova rede.",
     valor_total: 850000.0,
-    unidades: [
-      { id: "u1", nome: "Instituto de Computação", percentual_rci: 15.5 },
-      { id: "u2", nome: "Faculdade de Letras", percentual_rci: 8.2 },
-    ],
-    status: "pending",
+    validado: true,
     data_criacao: "2024-01-15T10:30:00Z",
+    porcentagem_rci: "15.5%",
     data_atualizacao: "2024-01-20T14:22:00Z",
     alertas: [
       {
@@ -339,17 +336,15 @@ export const mockContracts: ContractListItem[] = [
     ],
   },
   {
-    id: "2",
+    id: 2,
     nome: "Modernização de Sistemas",
     descricao:
       "Atualização dos sistemas legados para novas tecnologias, migração de base de dados e implementação de APIs REST.",
     valor_total: 1200000.0,
-    unidades: [
-      { id: "u3", nome: "Instituto de Computação", percentual_rci: 22.0 },
-    ],
-    status: "validated",
+    validado: true,
     data_criacao: "2024-02-01T09:15:00Z",
     data_atualizacao: "2024-02-10T16:45:00Z",
+    porcentagem_rci: "22.0%",
     alertas: [
       {
         tipo: {
@@ -362,47 +357,39 @@ export const mockContracts: ContractListItem[] = [
     ],
   },
   {
-    id: "3",
+    id: 3,
     nome: "Sistema de Gestão Documental",
     descricao:
       "Desenvolvimento de plataforma para gestão de documentos corporativos com controle de versão e workflow de aprovação.",
     valor_total: 675000.0,
-    unidades: [
-      { id: "u4", nome: "Instituto de Computação", percentual_rci: 12.5 },
-      { id: "u5", nome: "Centro de Informática", percentual_rci: 6.25 },
-    ],
-    status: "validated",
+    validado: false,
+    porcentagem_rci: "12.5%",
     data_criacao: "2024-03-05T14:20:00Z",
     data_atualizacao: "2024-03-15T11:30:00Z",
     alertas: [],
   },
   {
-    id: "4",
+    id: 4,
     nome: "Portal do Cliente",
     descricao:
       "Criação de portal web para clientes com funcionalidades de autoatendimento, consulta de pedidos e suporte online.",
     valor_total: 920000.0,
-    unidades: [
-      { id: "u6", nome: "Instituto de Computação", percentual_rci: 25.0 },
-    ],
-    status: "completed",
+    validado: true,
     data_criacao: "2024-01-10T08:00:00Z",
+    porcentagem_rci: "25.0%",
     data_atualizacao: "2024-04-02T16:00:00Z",
     alertas: [],
   },
   {
-    id: "5",
+    id: 5,
     nome: "Aplicativo Mobile Vendas",
     descricao:
       "Desenvolvimento de aplicativo móvel para equipe de vendas com sincronização offline e GPS tracking.",
     valor_total: 450000.0,
-    unidades: [
-      { id: "u7", nome: "Instituto de Computação", percentual_rci: 8.5 },
-      { id: "u8", nome: "Centro de Informática", percentual_rci: 3.8 },
-    ],
-    status: "draft",
+    validado: false,
     data_criacao: "2024-03-20T13:45:00Z",
     data_atualizacao: "2024-03-20T13:45:00Z",
+    porcentagem_rci: "8.5%",
     alertas: [
       {
         tipo: {

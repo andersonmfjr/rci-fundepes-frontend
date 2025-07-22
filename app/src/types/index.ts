@@ -23,14 +23,14 @@ export interface ContractUnit {
 }
 
 export interface ContractListItem {
-  id: string;
+  id: number;
   nome: string;
   descricao: string;
   valor_total: number;
+  porcentagem_rci: string;
   data_criacao: string;
   data_atualizacao: string;
-  unidades: ContractUnit[];
-  status: ContractStatus;
+  validado: boolean;
   alertas: Alert[];
 }
 

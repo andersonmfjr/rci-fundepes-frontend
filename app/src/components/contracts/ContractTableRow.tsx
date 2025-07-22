@@ -19,7 +19,7 @@ interface ContractTableRowProps {
 
 const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
   const [alertsDialogOpen, setAlertsDialogOpen] = useState(false);
-  const totalRciPercentage = calculateTotalRciPercentage(contract.unidades);
+  const totalRciPercentage = contract.porcentagem_rci;
   const hasAlerts = contract.alertas && contract.alertas.length > 0;
 
   return (
@@ -39,7 +39,7 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
           </div>
         </TableCell>
         <TableCell className="min-w-[80px]">
-          <Badge variant="outline">{totalRciPercentage.toFixed(1)}%</Badge>
+          <Badge variant="outline">{totalRciPercentage}</Badge>
         </TableCell>
         <TableCell className="min-w-[120px]">
           <span className="font-medium text-gray-900">
