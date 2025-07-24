@@ -194,6 +194,15 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
                     <ValidationButton
                       isValidated={addendumValidations[addendum.id] || false}
                       className="h-6 px-2 text-xs mb-2"
+                      interactive={true}
+                      entityType="addendum"
+                      entityId={addendum.id}
+                      onValidationChange={(isValidated) =>
+                        setAddendumValidations((prev) => ({
+                          ...prev,
+                          [addendum.id]: isValidated,
+                        }))
+                      }
                     />
                     <div className="text-lg font-bold text-gray-900">
                       {formatCurrency(addendum.novo_total)}
