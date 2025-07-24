@@ -141,6 +141,15 @@ const ContractRciDistribution = ({
                         distributionValidations[distribution.id] || false
                       }
                       className="h-6 px-2 text-xs"
+                      interactive={true}
+                      entityType="rciDistribution"
+                      entityId={distribution.id}
+                      onValidationChange={(isValidated) =>
+                        setDistributionValidations((prev) => ({
+                          ...prev,
+                          [distribution.id]: isValidated,
+                        }))
+                      }
                     />
                   </div>
                 </div>
