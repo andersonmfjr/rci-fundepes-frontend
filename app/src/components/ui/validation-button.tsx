@@ -13,7 +13,6 @@ interface ValidationButtonProps {
   isValidated: boolean;
   className?: string;
   showText?: boolean;
-  // Novas props para funcionalidade interativa
   interactive?: boolean;
   entityType?: "contract" | "transfer" | "rciDistribution" | "addendum";
   entityId?: number;
@@ -43,7 +42,6 @@ const ValidationButton = ({
     setIsLoading(true);
 
     try {
-      // Importar o serviço dinamicamente para evitar dependência circular
       const { contractsService } = await import("@/lib/contracts/service");
 
       let result: boolean;
