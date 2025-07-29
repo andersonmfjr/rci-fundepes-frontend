@@ -7,7 +7,7 @@ Sistema de gestão de contratos de Ressarcimento de Custos Indiretos (RCI) para 
 ![Vite](https://img.shields.io/badge/Vite-5.4.1-646CFF?logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4.11-06B6D4?logo=tailwindcss&logoColor=white)
 
-## 📋 Sobre o Contrato
+## 📋 Sobre o projeto
 
 O RCI Manager é uma aplicação web moderna para gestão de contratos de Ressarcimento de Custos Indiretos, desenvolvida para facilitar o controle e acompanhamento de:
 

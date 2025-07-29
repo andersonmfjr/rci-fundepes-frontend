@@ -149,3 +149,114 @@ export interface ContractDetail {
   aditivos_contratuais: ContractAddendum[];
   alertas: Alert[];
 }
+
+// Business Intelligence Types
+export interface BiContract {
+  id: number;
+  contrato: string;
+  financiador: string;
+  inicio: string;
+  fim: string;
+  valor_contrato: number;
+  valor_rci_reitoria: number;
+}
+
+export interface BiBankTransfer {
+  data: string;
+  origem: string;
+  destino: string;
+  valor: number;
+  observacao: string;
+}
+
+export interface BiRciReceived {
+  data: string;
+  origem: string;
+  destino: string;
+  valor: number;
+  observacao: string;
+}
+
+export interface BiOverviewStats {
+  valor_total_contratos: number;
+  total_contratos: number;
+  total_rci: number;
+  contratos_rci: number;
+  recebido_rci: number;
+  contratos_recebidos: number;
+  rci_a_receber: number;
+  contratos_a_receber: number;
+}
+
+export interface BiFilters {
+  search?: string;
+  unidade_academica?: number;
+  tipo_contrato?: number;
+  projeto_contrato?: number;
+  periodo_inicio?: string;
+  periodo_fim?: string;
+  sortField?: BiSortField;
+  sortDirection?: BiSortDirection;
+  page?: number;
+  pageSize?: number;
+}
+
+export type BiSortField = 
+  | "contrato"
+  | "financiador"
+  | "inicio"
+  | "fim"
+  | "valor_contrato"
+  | "valor_rci_reitoria";
+
+export type BiSortDirection = "asc" | "desc";
+
+export interface BiOverviewResponse {
+  stats: BiOverviewStats;
+  contracts: {
+    count: number;
+    previous: string | null;
+    next: string | null;
+    results: BiContract[];
+  };
+  bankTransfers: BiBankTransfer[];
+  rciReceived: BiRciReceived[];
+}
+
+export interface BiDetailsStats {
+  identificador: string;
+  status: string;
+  financiador: string;
+  unidade_academica: string;
+  percentual_rci_reitoria: number;
+  valor_total_projeto: number;
+  contratos_projeto: number;
+  rci_recebido: number;
+  contratos_recebidos: number;
+  rci_a_receber: number;
+  contratos_a_receber: number;
+  percentual_rci_unidade: number;
+}
+
+export interface BiChartData {
+  name: string;
+  value: number;
+  color?: string;
+}
+
+export interface BiBarChartData {
+  unidade_academica: BiChartData;
+  reitoria: BiChartData;
+}
+
+export interface BiDonutChartData {
+  realizado: BiChartData;
+  disponivel: BiChartData;
+  suspenso: BiChartData;
+}
+
+export interface BiDetailsResponse {
+  stats: BiDetailsStats;
+  barChart: BiBarChartData;
+  donutChart: BiDonutChartData;
+}
