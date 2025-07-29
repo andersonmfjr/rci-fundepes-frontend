@@ -23,7 +23,9 @@ interface ContractInfoProps {
 }
 
 const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
-  const [contractValidation] = useState(contract.validado || false);
+  const [contractValidation, setContractValidation] = useState(
+    contract.validado || false
+  );
   const [alertsDialogOpen, setAlertsDialogOpen] = useState(false);
   const hasAlerts = contract.alertas && contract.alertas.length > 0;
 
@@ -146,6 +148,10 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                 <ValidationButton
                   isValidated={contractValidation}
                   className="h-6 px-2 text-xs"
+                  interactive={true}
+                  entityType="contract"
+                  entityId={contract.id}
+                  onValidationChange={setContractValidation}
                 />
               </div>
 

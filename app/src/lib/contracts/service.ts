@@ -136,4 +136,144 @@ export const contractsService = {
 
     return contract;
   },
+
+  validateContract: async (contractId: number): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const contract = contracts.find((c) => c.id === contractId);
+    const contractDetail = contractsDetail.find((c) => c.id === contractId);
+
+    if (!contract || !contractDetail) {
+      throw new Error("Contrato não encontrado");
+    }
+
+    contract.validado = true;
+    contractDetail.validado = true;
+    contract.data_atualizacao = new Date().toISOString();
+    contractDetail.data_atualizacao = new Date().toISOString();
+
+    return true;
+  },
+
+  invalidateContract: async (contractId: number): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const contract = contracts.find((c) => c.id === contractId);
+    const contractDetail = contractsDetail.find((c) => c.id === contractId);
+
+    if (!contract || !contractDetail) {
+      throw new Error("Contrato não encontrado");
+    }
+
+    contract.validado = false;
+    contractDetail.validado = false;
+    contract.data_atualizacao = new Date().toISOString();
+    contractDetail.data_atualizacao = new Date().toISOString();
+
+    return false;
+  },
+
+  validateTransfer: async (transferId: number): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    for (const contract of contractsDetail) {
+      const transfer = contract.transferencias?.find(
+        (t) => t.id === transferId
+      );
+      if (transfer) {
+        transfer.validada = true;
+        contract.data_atualizacao = new Date().toISOString();
+        return true;
+      }
+    }
+
+    throw new Error("Transferência não encontrada");
+  },
+
+  invalidateTransfer: async (transferId: number): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    for (const contract of contractsDetail) {
+      const transfer = contract.transferencias?.find(
+        (t) => t.id === transferId
+      );
+      if (transfer) {
+        transfer.validada = false;
+        contract.data_atualizacao = new Date().toISOString();
+        return false;
+      }
+    }
+
+    throw new Error("Transferência não encontrada");
+  },
+
+  validateRciDistribution: async (distributionId: number): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    for (const contract of contractsDetail) {
+      const distribution = contract.distribuicoes_rci?.find(
+        (d) => d.id === distributionId
+      );
+      if (distribution) {
+        distribution.validado = true;
+        contract.data_atualizacao = new Date().toISOString();
+        return true;
+      }
+    }
+
+    throw new Error("Distribuição RCI não encontrada");
+  },
+
+  invalidateRciDistribution: async (
+    distributionId: number
+  ): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    for (const contract of contractsDetail) {
+      const distribution = contract.distribuicoes_rci?.find(
+        (d) => d.id === distributionId
+      );
+      if (distribution) {
+        distribution.validado = false;
+        contract.data_atualizacao = new Date().toISOString();
+        return false;
+      }
+    }
+
+    throw new Error("Distribuição RCI não encontrada");
+  },
+
+  validateAddendum: async (addendumId: number): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    for (const contract of contractsDetail) {
+      const addendum = contract.aditivos_contratuais?.find(
+        (a) => a.id === addendumId
+      );
+      if (addendum) {
+        addendum.validado = true;
+        contract.data_atualizacao = new Date().toISOString();
+        return true;
+      }
+    }
+
+    throw new Error("Aditivo não encontrado");
+  },
+
+  invalidateAddendum: async (addendumId: number): Promise<boolean> => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
+    for (const contract of contractsDetail) {
+      const addendum = contract.aditivos_contratuais?.find(
+        (a) => a.id === addendumId
+      );
+      if (addendum) {
+        addendum.validado = false;
+        contract.data_atualizacao = new Date().toISOString();
+        return false;
+      }
+    }
+
+    throw new Error("Aditivo não encontrado");
+  },
 };
