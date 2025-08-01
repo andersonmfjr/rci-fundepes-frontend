@@ -3,13 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Share2 } from "lucide-react";
-import {
-  BiContract,
-  BiFilters as BiFiltersType,
-  BiSortField,
-  BiSortDirection,
-  BiOverviewStats,
-} from "@/types";
 import { biService } from "@/lib/bi";
 import Layout from "@/components/layout/Layout";
 import { toast } from "@/hooks/use-toast";

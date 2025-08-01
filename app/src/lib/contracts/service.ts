@@ -1,9 +1,3 @@
-import {
-  ContractListItem,
-  ContractDetail,
-  ContractListResponse,
-  ContractStatus,
-} from "@/types";
 import { mockContracts, mockContractsDetail } from "./mockData";
 import { calculateTotalRciPercentage } from "./utils";
 

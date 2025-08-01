@@ -1,6 +1,5 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
-import { BiBarChartData } from "@/types";
 
 interface BiBarChartProps {
   data: BiBarChartData;

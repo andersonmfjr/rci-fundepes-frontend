@@ -1,4 +1,3 @@
-import { ContractUnit, AcademicUnit } from "@/types";
 
 // Calcula o percentual RCI total de um contrato (soma dos percentuais de todas as unidades)
 export const calculateTotalRciPercentage = (

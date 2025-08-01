@@ -9,7 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
-import { BiContract, BiSortField, BiSortDirection } from "@/types";
 
 interface BiContractsTableProps {
   contracts: BiContract[];
