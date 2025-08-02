@@ -10,12 +10,7 @@ import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 import type { ContractListItem } from "@/types";
 import ContractTableRow from "./ContractTableRow";
 
-type SortField =
-  | "nome"
-  | "percentual_rci"
-  | "valor_total"
-  | "data_criacao"
-  | "data_atualizacao";
+type SortField = "nome" | "valor_total" | "data_criacao" | "data_atualizacao";
 type SortDirection = "asc" | "desc";
 
 interface ContractsTableProps {
@@ -37,6 +32,7 @@ const ContractsTable = ({
     if (sortField !== field) {
       return <ArrowUpDown className="w-4 h-4 ml-1 text-gray-400" />;
     }
+
     return sortDirection === "asc" ? (
       <ChevronUp className="w-4 h-4 ml-1 text-blue-600" />
     ) : (
@@ -56,14 +52,6 @@ const ContractsTable = ({
               >
                 Nome
                 {getSortIcon("nome")}
-              </button>
-            </TableHead>
-            <TableHead className="min-w-[80px]">
-              <button
-                onClick={() => onSort("percentual_rci")}
-                className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
-              >
-                RCI %{getSortIcon("percentual_rci")}
               </button>
             </TableHead>
             <TableHead className="min-w-[120px]">

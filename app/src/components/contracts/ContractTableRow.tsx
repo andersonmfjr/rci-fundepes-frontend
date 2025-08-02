@@ -7,10 +7,7 @@ import { Eye, AlertTriangle } from "lucide-react";
 import type { ContractListItem } from "@/types";
 import ContractAlertsDialog from "./ContractAlertsDialog";
 
-import {
-  calculateTotalRciPercentage,
-  formatCurrency,
-} from "@/lib/contracts/utils";
+import { formatCurrency } from "@/lib/contracts/utils";
 
 interface ContractTableRowProps {
   contract: ContractListItem;
@@ -19,7 +16,6 @@ interface ContractTableRowProps {
 
 const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
   const [alertsDialogOpen, setAlertsDialogOpen] = useState(false);
-  const totalRciPercentage = contract.porcentagem_rci;
   const hasAlerts = contract.alertas && contract.alertas.length > 0;
 
   return (
@@ -37,9 +33,6 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
               {contract.descricao}
             </p>
           </div>
-        </TableCell>
-        <TableCell className="min-w-[80px]">
-          <Badge variant="outline">{totalRciPercentage}</Badge>
         </TableCell>
         <TableCell className="min-w-[120px]">
           <span className="font-medium text-gray-900">
