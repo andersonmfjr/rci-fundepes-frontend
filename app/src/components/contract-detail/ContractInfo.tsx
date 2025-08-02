@@ -4,8 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Button } from "@/components/ui/button";
 import type { ContractDetail } from "@/types";
-import { formatCurrency, buildUnitPathString } from "@/lib/contracts/utils";
-import { mockAcademicUnits } from "@/lib/contracts/mockData";
+import { formatCurrency } from "@/lib/contracts/utils";
 import ContractAlertsDialog from "@/components/contracts/ContractAlertsDialog";
 
 import {
@@ -31,7 +30,7 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
 
   const totalRciPercentage =
     contract.distribuicoes_rci?.reduce(
-      (total, dist) => total + (dist?.percentual || 0),
+      (total, dist) => total + parseFloat(dist?.percentual || "0"),
       0
     ) || 0;
 
@@ -39,7 +38,9 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
     contract.distribuicoes_rci?.reduce(
       (total, dist) =>
         total +
-        ((dist?.valor_base_calculo || 0) * (dist?.percentual || 0)) / 100,
+        (parseFloat(dist?.valor_base_calculo || "0") *
+          parseFloat(dist?.percentual || "0")) /
+          100,
       0
     ) || 0;
 
@@ -150,7 +151,7 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                   className="h-6 px-2 text-xs"
                   interactive={true}
                   entityType="contract"
-                  entityId={contract.id}
+                  entityId={contract.id_contrato}
                   onValidationChange={setContractValidation}
                 />
               </div>
@@ -163,7 +164,7 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4 text-gray-500" />
                     <span className="text-sm font-medium">
-                      {contract.tipo_contrato?.descricao || "Não informado"}
+                      {contract.tipo_contrato || "Não informado"}
                     </span>
                   </div>
                 </div>
@@ -176,11 +177,11 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                     <User className="w-4 h-4 text-gray-500" />
                     <div>
                       <div className="text-sm font-medium">
-                        {contract.financiador?.nome || "Não informado"}
+                        {contract.id_financiador?.nome || "Não informado"}
                       </div>
-                      {contract.financiador?.tipo && (
+                      {contract.id_financiador?.tipo_financiador && (
                         <div className="text-xs text-gray-500">
-                          {contract.financiador.tipo}
+                          {contract.id_financiador.tipo_financiador}
                         </div>
                       )}
                     </div>
@@ -209,18 +210,12 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                     <Building className="w-4 h-4 text-gray-500" />
                     <div>
                       <div className="text-sm font-medium">
-                        {contract.unidade_academica?.sigla || "Não informado"}
+                        {contract.unidade_academica?.[0]?.sigla ||
+                          "Não informado"}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {contract.unidade_academica?.nome || "Não informado"}
-                      </div>
-                      <div className="text-xs text-blue-600 mt-1">
-                        {contract.unidade_academica
-                          ? buildUnitPathString(
-                              contract.unidade_academica,
-                              mockAcademicUnits
-                            )
-                          : "Não informado"}
+                        {contract.unidade_academica?.[0]?.nome ||
+                          "Não informado"}
                       </div>
                     </div>
                   </div>

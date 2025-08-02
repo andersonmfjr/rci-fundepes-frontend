@@ -6,30 +6,21 @@ export interface User {
   refresh_token: string;
 }
 
-export type ContractStatus = "draft" | "pending" | "validated" | "completed";
-
 export interface Alert {
-  tipo: {
-    titulo: string;
-    descricao: string;
-  };
+  id_alerta: number;
+  titulo: string;
+  descricao: string;
+  ignorar: boolean;
   mensagem: string;
-}
-
-export interface ContractUnit {
-  id: string;
-  nome: string;
-  percentual_rci: number;
 }
 
 export interface ContractListItem {
   id: number;
   nome: string;
   descricao: string;
-  valor_total: number;
-  porcentagem_rci: string;
+  valor_total: string;
   data_criacao: string;
-  data_atualizacao: string;
+  data_atualizacao: string | null;
   validado: boolean;
   alertas: Alert[];
 }
@@ -53,12 +44,11 @@ export interface FinancierType {
 }
 
 export interface Financier {
-  id: number;
-  id_tipo_financiador: number;
+  id_financiador: number;
+  tipo_financiador: string;
+  tipo_financiador_descricao: string;
   nome: string;
-  tipo?: string;
-  cnpj?: string;
-  tipo_financiador: FinancierType;
+  cnpj: string | null;
 }
 
 export interface ContractType {
@@ -73,78 +63,73 @@ export interface UnitType {
 
 export interface AcademicUnit {
   id: number;
-  id_unidade_pai?: number;
-  id_tipo_unidade: number;
   nome: string;
-  sigla: string;
-  cnpj?: string;
-  unidade_pai?: AcademicUnit;
-  tipo_unidade: UnitType;
-  unidades_filhas?: AcademicUnit[];
-}
-
-export interface BankAccount {
-  id: number;
-  id_unidade: number;
-  id_banco: number;
-  agencia: string;
-  numero: string;
-  unidade: AcademicUnit;
-  banco: Bank;
+  sigla: string | null;
+  tipo_unidade: string;
+  parent: AcademicUnit | null;
+  cnpj: string | null;
 }
 
 export interface RciDistribution {
-  id: number;
-  id_unidade: number;
-  id_contrato: number;
-  percentual: number;
-  valor_base_calculo: number;
-  validado: boolean;
+  id_distribuicao_rci: number;
+  id_unidade: AcademicUnit;
+  percentual: string;
+  valor_base_calculo: string;
   data_criacao: string;
-  unidade: AcademicUnit;
+  transferencias: Transfer[];
+  validado: boolean;
+}
+
+export interface ProjectAccount {
+  id_conta_projeto: number;
+  agencia: string;
+  numero: string;
+  id_banco: Bank;
+  data_criacao: string;
+}
+
+export interface RciAccount {
+  id_conta_rci: number;
+  agencia: string;
+  numero: string;
+  id_unidade: AcademicUnit;
+  id_banco: Bank;
+  data_criacao: string;
 }
 
 export interface Transfer {
-  id: number;
-  id_conta_origem: number;
-  id_conta_destino: number;
-  id_distribuicao_rci: number;
+  id_transferencia: number;
   data: string;
-  valor: number;
-  observacao?: string;
+  valor: string;
+  observacao: string;
   validada: boolean;
   data_criacao: string;
-  conta_origem: BankAccount;
-  conta_destino: BankAccount;
+  id_conta_projeto: ProjectAccount;
+  id_conta_rci: RciAccount;
 }
 
 export interface ContractAddendum {
-  id: number;
-  id_contrato: number;
+  id_aditivo_contrato: number;
   data: string;
-  novo_total: number;
+  novo_total: string;
   validado: boolean;
-  descricao?: string;
   data_criacao: string;
 }
 
 export interface ContractDetail {
-  id: number;
-  id_unidade_academica: number;
-  id_financiador: number;
-  id_tipo_contrato: number;
-  valor_total: number;
+  id_contrato: number;
+  valor_total: string;
   vigencia_inicio: string;
   vigencia_fim: string;
   validado: boolean;
   nome: string;
   descricao: string;
   data_criacao: string;
-  data_atualizacao: string;
-  unidade_academica: AcademicUnit;
-  financiador: Financier;
-  tipo_contrato: ContractType;
-  transferencias: Transfer[];
+  data_atualizacao: string | null;
+  tipo_contrato: string;
+  coordenador_contrato: string;
+  unidade_academica: AcademicUnit[];
+  id_financiador: Financier;
   distribuicoes_rci: RciDistribution[];
   aditivos_contratuais: ContractAddendum[];
   alertas: Alert[];
@@ -201,7 +186,7 @@ export interface BiFilters {
   pageSize?: number;
 }
 
-export type BiSortField = 
+export type BiSortField =
   | "contrato"
   | "financiador"
   | "inicio"
