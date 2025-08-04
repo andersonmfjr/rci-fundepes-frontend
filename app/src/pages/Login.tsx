@@ -17,6 +17,7 @@ import { fetcher } from "@/lib/fetcher";
 import { z } from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/providers/auth-provider";
 
 const formSchema = z.object({
   email: z.string().min(1, 'Informe o e-mail.'),
@@ -25,18 +26,11 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-const login = (data: FormSchema) => fetcher('/token', {
-  method: 'POST',
-  body: JSON.stringify({
-    username: data.email,
-    password: data.password,
-  }),
-  withoutAuth: true,
-});
-
 function Login() {
   usePageTitle("Login");
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const { isPending, mutate } = useMutation({
     mutationFn: login,
     onSuccess: () => {
@@ -57,8 +51,8 @@ function Login() {
 
   const { register, handleSubmit } = useForm<FormSchema>({
     defaultValues: {
-      email: 'admin@rci.com',
-      password: 'admin123',
+      email: '',
+      password: '',
     },
     resolver: zodResolver(formSchema),
   });

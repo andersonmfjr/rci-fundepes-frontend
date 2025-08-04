@@ -11,6 +11,7 @@ import BiDetails from "./pages/BiDetails";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { authService } from "./lib/auth";
 import NotFound from "./pages/NotFound";
+import { AuthProvider } from "./providers/auth-provider";
 
 const queryClient = new QueryClient();
 
@@ -19,58 +20,61 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ? (
-                  <Navigate to="/contracts" replace />
-                ) : (
-                  <Login />
-                )
-              }
-            />
-            <Route
-              path="/contracts"
-              element={
-                <ProtectedRoute>
-                  <Contracts />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/contracts/:id"
-              element={
-                <ProtectedRoute>
-                  <ContractDetail />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/bi"
-              element={
-                <ProtectedRoute>
-                  <BiOverview />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/bi/:id"
-              element={
-                <ProtectedRoute>
-                  <BiDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/" element={<Navigate to="/contracts" replace />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AuthProvider>
+
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/login"
+                element={
+                  isAuthenticated ? (
+                    <Navigate to="/contracts" replace />
+                  ) : (
+                    <Login />
+                  )
+                }
+              />
+              <Route
+                path="/contracts"
+                element={
+                  <ProtectedRoute>
+                    <Contracts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/contracts/:id"
+                element={
+                  <ProtectedRoute>
+                    <ContractDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/bi"
+                element={
+                  <ProtectedRoute>
+                    <BiOverview />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/bi/:id"
+                element={
+                  <ProtectedRoute>
+                    <BiDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/" element={<Navigate to="/contracts" replace />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
