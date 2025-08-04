@@ -1,9 +1,20 @@
+interface LoginResponse {
+    access: string;
+    refresh: string;
+}
+
+type UserType = 'P' | 'A';
+
 interface User {
     id: string;
-    nome: string;
+    first_name: string;
+    username: string;
     email: string;
+    tipo_usuario: UserType;
+    tipo_usuario_descricao: string;
     token: string;
     refresh_token: string;
+    unidade_academica: null;
 }
 
 interface Alert {
@@ -244,4 +255,10 @@ interface BiDetailsResponse {
     stats: BiDetailsStats;
     barChart: BiBarChartData;
     donutChart: BiDonutChartData;
+}
+
+
+interface RequestInit {
+    withoutAuth?: boolean;
+    token?: string;
 }

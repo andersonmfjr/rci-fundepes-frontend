@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { fetcher } from "@/lib/fetcher";
-import { createContext, ReactNode, useCallback, useContext, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
 interface IAuthContext {
     user: User | null;
@@ -21,10 +22,17 @@ const AuthContext = createContext({} as IAuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
-    const isAuthenticated = !!user;
+    const isAuthenticated = !!localStorage.getItem(TOKEN_KEY);
+
+    const { data: fetchedUser } = useQuery({
+        queryKey: ['get-user'],
+        queryFn: async () => fetcher<User>('/app/perfil'),
+        staleTime: 0,
+        enabled: isAuthenticated,
+    });
 
     const login = useCallback(async (data: { email: string, password: string }) => {
-        const { data: fetchedUser } = await fetcher('/token/', {
+        const loginData = await fetcher<LoginResponse>('/token/', {
             method: 'POST',
             body: JSON.stringify({
                 username: data.email,
@@ -33,11 +41,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             withoutAuth: true,
         });
 
-        console.log(fetchedUser);
-        localStorage.setItem(TOKEN_KEY, user.token);
-        localStorage.setItem(REFRESH_TOKEN_KEY, user.refresh_token);
-        localStorage.setItem(USER_KEY, JSON.stringify(user));
-    }, [user]);
+        const userData = await fetcher<User>('/app/perfil', {
+            token: loginData.access,
+        });
+
+        setUser({ ...userData, token: loginData.access, refresh_token: loginData.refresh });
+
+        localStorage.setItem(TOKEN_KEY, loginData.access);
+        localStorage.setItem(REFRESH_TOKEN_KEY, loginData.refresh);
+    }, []);
 
     const handleSetUser = useCallback((user: User | null) => {
         setUser(user);
@@ -47,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(REFRESH_TOKEN_KEY);
         localStorage.removeItem(USER_KEY);
+        setUser(null);
     }, []);
 
     const refreshToken = async () => {
@@ -54,6 +67,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem(TOKEN_KEY, newToken);
         return newToken;
     };
+
+    useEffect(() => {
+        setUser(fetchedUser);
+    }, [fetchedUser]);
 
     return (
         <AuthContext.Provider value={{ user, isAuthenticated, login, logout, refreshToken, handleSetUser }}>

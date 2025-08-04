@@ -1,15 +1,15 @@
 
 import { Button } from "@/components/ui/button";
 import { User, LogOut } from "lucide-react";
-import { authService } from "@/lib/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/providers/auth-provider";
 
-const Header = () => {
+export function Header() {
   const navigate = useNavigate();
-  const user = authService.getCurrentUser();
+  const { logout, user } = useAuth();
 
   const handleLogout = () => {
-    authService.logout();
+    logout();
     setTimeout(() => {
       navigate('/login');
     }, 500);
@@ -30,7 +30,7 @@ const Header = () => {
       <div className="flex items-center gap-2 lg:gap-4">
         <div className="flex items-center gap-2 text-sm">
           <User className="w-4 h-4 text-gray-600" />
-          <span className="text-gray-700 hidden sm:inline">{user?.name}</span>
+          <span className="text-gray-700 hidden sm:inline">{user?.username}</span>
         </div>
         <Button
           variant="outline"
@@ -46,4 +46,3 @@ const Header = () => {
   );
 };
 
-export default Header;

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +29,7 @@ type FormSchema = z.infer<typeof formSchema>;
 function Login() {
   usePageTitle("Login");
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   const { isPending, mutate } = useMutation({
     mutationFn: login,
@@ -41,9 +41,14 @@ function Login() {
       });
     },
     onError: (error: any) => {
+      let description = error.message;
+
+      if (error.message.includes('Unauthorized'))
+        description = 'Usuário e/ou senha incorretos.';
+
       toast({
         title: "Erro no login",
-        description: error.message,
+        description,
         variant: "destructive",
       });
     }
@@ -59,6 +64,11 @@ function Login() {
 
   const handleLogin = ({ email, password }: FormSchema) =>
     mutate({ email, password });
+
+
+  if (isAuthenticated) {
+    return <Navigate to="/contracts" replace />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -81,7 +91,7 @@ function Login() {
               <Input
                 {...register('email')}
                 id="email"
-                type="email"
+                // type="email"
                 placeholder="email@exemplo.com"
                 required
               />

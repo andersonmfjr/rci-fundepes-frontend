@@ -9,15 +9,12 @@ import ContractDetail from "./pages/ContractDetail";
 import BiOverview from "./pages/BiOverview";
 import BiDetails from "./pages/BiDetails";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import { authService } from "./lib/auth";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./providers/auth-provider";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const isAuthenticated = authService.isAuthenticated();
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -30,11 +27,7 @@ const App = () => {
               <Route
                 path="/login"
                 element={
-                  isAuthenticated ? (
-                    <Navigate to="/contracts" replace />
-                  ) : (
-                    <Login />
-                  )
+                  <Login />
                 }
               />
               <Route
