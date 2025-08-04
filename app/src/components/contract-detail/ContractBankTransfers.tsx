@@ -22,14 +22,17 @@ interface ContractBankTransfersProps {
 }
 
 const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
-  const transfers = contract.transferencias || [];
+  const transfers = contract.distribuicoes_rci.flatMap(
+    (distribuicao) => distribuicao.transferencias
+  );
+
   const [transferValidations, setTransferValidations] = useState<
     Record<number, boolean>
   >(
     transfers.reduce(
       (acc, transfer) => ({
         ...acc,
-        [transfer.id]: transfer.validada,
+        [transfer.id_transferencia]: transfer.validada,
       }),
       {}
     )
@@ -39,19 +42,25 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
     return new Date(dateString).toLocaleDateString("pt-BR");
   };
 
-  const renderBankAccount = (account: BankAccount, label: string) => (
+  const renderBankAccount = (
+    account: ProjectAccount | RciAccount,
+    label: string
+  ) => (
     <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
       <Building className="w-4 h-4 text-gray-500" />
       <div className="flex-1 min-w-0">
         <div className="text-sm font-medium text-gray-900 truncate">
-          {account.banco.nome}
+          {account.id_banco.nome}
         </div>
         <div className="text-xs text-gray-500">
           Ag: {account.agencia} | CC: {account.numero}
         </div>
-        <div className="text-xs text-gray-600">
-          {account.unidade.sigla} - {account.unidade.nome}
-        </div>
+        {(account as RciAccount).id_unidade && (
+          <div className="text-xs text-gray-600">
+            {(account as RciAccount).id_unidade.sigla} -{" "}
+            {(account as RciAccount).id_unidade.nome}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -83,7 +92,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
 
   // Calcular totais
   const totalTransferencias = transfers.reduce(
-    (sum, transfer) => sum + transfer.valor,
+    (sum, transfer) => sum + parseFloat(transfer.valor),
     0
   );
 
@@ -117,8 +126,8 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
         <div className="space-y-4">
           {transfers.map((transfer) => (
             <div
-              key={transfer.id}
-              className={`border rounded-lg p-4 ${transferValidations[transfer.id] || false
+              key={transfer.id_transferencia}
+              className={`border rounded-lg p-4 ${transferValidations[transfer.id_transferencia] || false
                   ? "border-gray-200"
                   : "border-4 border-red-400"
                 }`}
@@ -127,12 +136,14 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-gray-900">
-                    Transferência #{transfer.id}
+                    Transferência #{transfer.id_transferencia}
                   </span>
                 </div>
                 <div className="text-right">
                   <ValidationButton
-                    isValidated={transferValidations[transfer.id] || false}
+                    isValidated={
+                      transferValidations[transfer.id_transferencia] || false
+                    }
                     className="h-6 px-2 text-xs mb-2"
                   />
                   <div className="text-lg font-bold text-gray-900">
@@ -150,7 +161,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
                   <label className="text-xs font-medium text-gray-600 mb-1 block">
                     CONTA ORIGEM
                   </label>
-                  {renderBankAccount(transfer.conta_origem, "Origem")}
+                  {renderBankAccount(transfer.id_conta_projeto, "Origem")}
                 </div>
 
                 <div className="flex justify-center items-center">
@@ -161,7 +172,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
                   <label className="text-xs font-medium text-gray-600 mb-1 block">
                     CONTA DESTINO
                   </label>
-                  {renderBankAccount(transfer.conta_destino, "Destino")}
+                  {renderBankAccount(transfer.id_conta_rci, "Destino")}
                 </div>
               </div>
 

@@ -22,7 +22,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
     addendums.reduce(
       (acc, addendum) => ({
         ...acc,
-        [addendum.id]: addendum.validado,
+        [addendum.id_aditivo_contrato]: addendum.validado,
       }),
       {}
     )
@@ -34,13 +34,15 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
 
   const getValueChangeIndicator = (
     addendum: ContractAddendum,
-    previousValue: number
+    previousValue: string
   ) => {
-    const difference = addendum.novo_total - previousValue;
+    const difference =
+      parseFloat(addendum.novo_total) - parseFloat(previousValue);
     const isIncrease = difference > 0;
-    const percentage = ((Math.abs(difference) / previousValue) * 100).toFixed(
-      1
-    );
+    const percentage = (
+      (Math.abs(difference) / parseFloat(previousValue)) *
+      100
+    ).toFixed(1);
 
     return {
       difference,
@@ -88,7 +90,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
     sortedAddendums.length > 0
       ? sortedAddendums[sortedAddendums.length - 1].novo_total
       : valorOriginal;
-  const totalAumento = valorAtual - valorOriginal;
+  const totalAumento = parseFloat(valorAtual) - parseFloat(valorOriginal);
 
   return (
     <Card>
@@ -164,8 +166,8 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
 
             return (
               <div
-                key={addendum.id}
-                className={`border rounded-lg p-4 ${addendumValidations[addendum.id] || false
+                key={addendum.id_aditivo_contrato}
+                className={`border rounded-lg p-4 ${addendumValidations[addendum.id_aditivo_contrato] || false
                     ? "border-gray-200"
                     : "border-4 border-red-400"
                   }`}
@@ -180,7 +182,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900">
-                        Aditivo #{addendum.id}
+                        Aditivo #{addendum.id_aditivo_contrato}
                       </h3>
                       <p className="text-sm text-gray-600">
                         {formatDate(addendum.data)}
@@ -189,15 +191,18 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
                   </div>
                   <div className="text-right">
                     <ValidationButton
-                      isValidated={addendumValidations[addendum.id] || false}
+                      isValidated={
+                        addendumValidations[addendum.id_aditivo_contrato] ||
+                        false
+                      }
                       className="h-6 px-2 text-xs mb-2"
                       interactive={true}
                       entityType="addendum"
-                      entityId={addendum.id}
+                      entityId={addendum.id_aditivo_contrato}
                       onValidationChange={(isValidated) =>
                         setAddendumValidations((prev) => ({
                           ...prev,
-                          [addendum.id]: isValidated,
+                          [addendum.id_aditivo_contrato]: isValidated,
                         }))
                       }
                     />
@@ -228,7 +233,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
                   </div>
                 </div>
 
-                {/* Descrição do aditivo */}
+                {/* Descrição do aditivo 
                 {addendum.descricao && (
                   <div className="p-2 bg-blue-50 rounded-md">
                     <label className="text-xs font-medium text-blue-700 mb-1 block">
@@ -238,7 +243,8 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
                       {addendum.descricao}
                     </p>
                   </div>
-                )}
+                )} 
+                */}
               </div>
             );
           })}

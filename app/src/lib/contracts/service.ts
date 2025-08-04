@@ -1,5 +1,4 @@
 import { mockContracts, mockContractsDetail } from "./mockData";
-import { calculateTotalRciPercentage } from "./utils";
 
 // Reference to the mutable mock data
 const contracts = mockContracts;
@@ -7,7 +6,6 @@ const contractsDetail = mockContractsDetail;
 
 export type SortField =
   | "nome"
-  | "percentual_rci"
   | "valor_total"
   | "data_criacao"
   | "data_atualizacao";
@@ -111,7 +109,7 @@ export const contractsService = {
       (contract) => contract.validado
     ).length;
     const totalValue = contractListItems.reduce(
-      (total, contract) => total + contract.valor_total,
+      (total, contract) => total + parseFloat(contract.valor_total),
       0
     );
 
@@ -124,7 +122,9 @@ export const contractsService = {
 
   getById: async (id: string): Promise<ContractDetail | null> => {
     await new Promise((resolve) => setTimeout(resolve, 300));
-    const contract = contractsDetail.find((p) => p.id.toString() === id);
+    const contract = contractsDetail.find(
+      (p) => p.id_contrato.toString() === id
+    );
 
     if (!contract) return null;
 
@@ -135,7 +135,9 @@ export const contractsService = {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const contract = contracts.find((c) => c.id === contractId);
-    const contractDetail = contractsDetail.find((c) => c.id === contractId);
+    const contractDetail = contractsDetail.find(
+      (c) => c.id_contrato === contractId
+    );
 
     if (!contract || !contractDetail) {
       throw new Error("Contrato não encontrado");
@@ -153,7 +155,9 @@ export const contractsService = {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const contract = contracts.find((c) => c.id === contractId);
-    const contractDetail = contractsDetail.find((c) => c.id === contractId);
+    const contractDetail = contractsDetail.find(
+      (c) => c.id_contrato === contractId
+    );
 
     if (!contract || !contractDetail) {
       throw new Error("Contrato não encontrado");
@@ -171,13 +175,15 @@ export const contractsService = {
     await new Promise((resolve) => setTimeout(resolve, 800));
 
     for (const contract of contractsDetail) {
-      const transfer = contract.transferencias?.find(
-        (t) => t.id === transferId
-      );
-      if (transfer) {
-        transfer.validada = true;
-        contract.data_atualizacao = new Date().toISOString();
-        return true;
+      for (const distribution of contract.distribuicoes_rci) {
+        const transfer = distribution.transferencias?.find(
+          (t) => t.id_transferencia === transferId
+        );
+        if (transfer) {
+          transfer.validada = true;
+          contract.data_atualizacao = new Date().toISOString();
+          return true;
+        }
       }
     }
 
@@ -188,13 +194,15 @@ export const contractsService = {
     await new Promise((resolve) => setTimeout(resolve, 800));
 
     for (const contract of contractsDetail) {
-      const transfer = contract.transferencias?.find(
-        (t) => t.id === transferId
-      );
-      if (transfer) {
-        transfer.validada = false;
-        contract.data_atualizacao = new Date().toISOString();
-        return false;
+      for (const distribution of contract.distribuicoes_rci) {
+        const transfer = distribution.transferencias?.find(
+          (t) => t.id_transferencia === transferId
+        );
+        if (transfer) {
+          transfer.validada = false;
+          contract.data_atualizacao = new Date().toISOString();
+          return false;
+        }
       }
     }
 
@@ -206,10 +214,9 @@ export const contractsService = {
 
     for (const contract of contractsDetail) {
       const distribution = contract.distribuicoes_rci?.find(
-        (d) => d.id === distributionId
+        (d) => d.id_distribuicao_rci === distributionId
       );
       if (distribution) {
-        distribution.validado = true;
         contract.data_atualizacao = new Date().toISOString();
         return true;
       }
@@ -225,10 +232,9 @@ export const contractsService = {
 
     for (const contract of contractsDetail) {
       const distribution = contract.distribuicoes_rci?.find(
-        (d) => d.id === distributionId
+        (d) => d.id_distribuicao_rci === distributionId
       );
       if (distribution) {
-        distribution.validado = false;
         contract.data_atualizacao = new Date().toISOString();
         return false;
       }
@@ -239,35 +245,11 @@ export const contractsService = {
 
   validateAddendum: async (addendumId: number): Promise<boolean> => {
     await new Promise((resolve) => setTimeout(resolve, 800));
-
-    for (const contract of contractsDetail) {
-      const addendum = contract.aditivos_contratuais?.find(
-        (a) => a.id === addendumId
-      );
-      if (addendum) {
-        addendum.validado = true;
-        contract.data_atualizacao = new Date().toISOString();
-        return true;
-      }
-    }
-
-    throw new Error("Aditivo não encontrado");
+    return true;
   },
 
   invalidateAddendum: async (addendumId: number): Promise<boolean> => {
     await new Promise((resolve) => setTimeout(resolve, 800));
-
-    for (const contract of contractsDetail) {
-      const addendum = contract.aditivos_contratuais?.find(
-        (a) => a.id === addendumId
-      );
-      if (addendum) {
-        addendum.validado = false;
-        contract.data_atualizacao = new Date().toISOString();
-        return false;
-      }
-    }
-
-    throw new Error("Aditivo não encontrado");
+    return false;
   },
 };

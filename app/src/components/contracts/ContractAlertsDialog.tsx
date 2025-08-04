@@ -44,11 +44,11 @@ const ContractAlertsDialog = ({
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <Badge variant="secondary" className="text-xs">
-                        {alert.tipo.titulo}
+                        {alert.titulo}
                       </Badge>
                     </div>
                     <p className="text-sm font-medium text-gray-900 mb-1">
-                      {alert.tipo.descricao}
+                      {alert.descricao}
                     </p>
                     <p className="text-sm text-gray-700">{alert.mensagem}</p>
                   </div>

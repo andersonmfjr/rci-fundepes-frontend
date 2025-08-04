@@ -29,7 +29,7 @@ const ContractRciDistribution = ({
     distributions.reduce(
       (acc, distribution) => ({
         ...acc,
-        [distribution.id]: distribution.validado,
+        [distribution.id_distribuicao_rci]: distribution.validado,
       }),
       {}
     )
@@ -67,11 +67,11 @@ const ContractRciDistribution = ({
 
   // Calcular totais
   const totalPercentual = distributions.reduce(
-    (sum, dist) => sum + dist.percentual,
+    (sum, dist) => sum + parseFloat(dist.percentual),
     0
   );
   const totalValorBase = distributions.reduce(
-    (sum, dist) => sum + dist.valor_base_calculo,
+    (sum, dist) => sum + parseFloat(dist.valor_base_calculo),
     0
   );
 
@@ -110,12 +110,15 @@ const ContractRciDistribution = ({
         <div className="space-y-4">
           {distributions.map((distribution) => {
             const valorRci =
-              (distribution.valor_base_calculo * distribution.percentual) / 100;
+              (parseFloat(distribution.valor_base_calculo) *
+                parseFloat(distribution.percentual)) /
+              100;
 
             return (
               <div
-                key={distribution.id}
-                className={`border rounded-lg p-4 ${distributionValidations[distribution.id] || false
+                key={distribution.id_distribuicao_rci}
+                className={`border rounded-lg p-4 ${distributionValidations[distribution.id_distribuicao_rci] ||
+                    false
                     ? "border-gray-200"
                     : "border-4 border-red-400"
                   }`}
@@ -126,26 +129,29 @@ const ContractRciDistribution = ({
                     <Building2 className="w-5 h-5 text-blue-600" />
                     <div>
                       <h3 className="font-semibold text-gray-900">
-                        {distribution.unidade.sigla}
+                        {distribution.id_unidade.sigla}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {distribution.unidade.nome}
+                        {distribution.id_unidade.nome} |{" "}
+                        {distribution.id_unidade.tipo_unidade}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
                     <ValidationButton
                       isValidated={
-                        distributionValidations[distribution.id] || false
+                        distributionValidations[
+                        distribution.id_distribuicao_rci
+                        ] || false
                       }
                       className="h-6 px-2 text-xs"
                       interactive={true}
                       entityType="rciDistribution"
-                      entityId={distribution.id}
+                      entityId={distribution.id_distribuicao_rci}
                       onValidationChange={(isValidated) =>
                         setDistributionValidations((prev) => ({
                           ...prev,
-                          [distribution.id]: isValidated,
+                          [distribution.id_distribuicao_rci]: isValidated,
                         }))
                       }
                     />
@@ -188,31 +194,6 @@ const ContractRciDistribution = ({
                     <div className="text-xs text-gray-600">
                       {formatDate(distribution.data_criacao)}
                     </div>
-                  </div>
-                </div>
-
-                {/* Informações da unidade e hierarquia */}
-                <div className="mt-3 pt-3 border-t border-gray-100">
-                  <div className="text-xs text-gray-500">
-                    <span className="font-medium">Instituição:</span>{" "}
-                    {(() => {
-                      const rootUnit = getRootUnit(
-                        distribution.unidade,
-                        mockAcademicUnits
-                      );
-                      return `${rootUnit.sigla} - ${rootUnit.nome}`;
-                    })()}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <span className="font-medium">Hierarquia:</span>{" "}
-                    {buildUnitPathString(
-                      distribution.unidade,
-                      mockAcademicUnits
-                    )}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <span className="font-medium">Tipo de Unidade:</span>{" "}
-                    {distribution.unidade.tipo_unidade.descricao}
                   </div>
                 </div>
               </div>
