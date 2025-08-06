@@ -1,4 +1,3 @@
-
 // Calcula o percentual RCI total de um contrato (soma dos percentuais de todas as unidades)
 export const calculateTotalRciPercentage = (
   unidades: ContractUnit[] = []
@@ -23,9 +22,7 @@ export const formatCurrency = (value: number | string): string => {
 /**
  * Obtém o caminho completo de uma unidade até a raiz
  */
-export const getUnitPath = (
-  unit: AcademicUnit
-): AcademicUnit[] => {
+export const getUnitPath = (unit: AcademicUnit): AcademicUnit[] => {
   const path: AcademicUnit[] = [unit];
 
   let currentUnit = unit;
@@ -41,9 +38,7 @@ export const getUnitPath = (
 /**
  * Encontra a unidade raiz (instituição) de uma unidade
  */
-export const getRootUnit = (
-  unit: AcademicUnit
-): AcademicUnit => {
+export const getRootUnit = (unit: AcademicUnit): AcademicUnit => {
   const path = getUnitPath(unit);
   return path[0]; // O primeiro item é sempre a raiz
 };

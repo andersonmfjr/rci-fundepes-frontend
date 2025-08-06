@@ -1,4 +1,3 @@
-
 // Dados mock para as estruturas do banco de dados
 const mockBanks: Bank[] = [
   { id: 1, codigo: "001", nome: "Banco do Brasil S.A." },

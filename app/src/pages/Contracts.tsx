@@ -189,9 +189,9 @@ const Contracts = () => {
               <div className="text-sm text-gray-500 mt-1">
                 {stats.totalContracts > 0
                   ? `${(
-                    (stats.validatedContracts / stats.totalContracts) *
-                    100
-                  ).toFixed(1)}%`
+                      (stats.validatedContracts / stats.totalContracts) *
+                      100
+                    ).toFixed(1)}%`
                   : "0%"}
               </div>
             </CardContent>

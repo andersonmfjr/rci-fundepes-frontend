@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Upload, X, File } from "lucide-react";
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface FileUploadProps {
   label: string;
@@ -24,66 +24,80 @@ const FileUpload = ({
   onFileSelect,
   onFilesSelect,
   selectedFile,
-  selectedFiles = []
+  selectedFiles = [],
 }: FileUploadProps) => {
-  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>(
+    {}
+  );
 
   // Convert acceptedTypes array to react-dropzone format
-  const accept = acceptedTypes.reduce((acc, type) => {
-    if (type.startsWith('.')) {
-      // Handle file extensions
-      const mimeTypes = {
-        '.pdf': 'application/pdf',
-        '.doc': 'application/msword',
-        '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        '.ofx': 'application/x-ofx',
-        '.csv': 'text/csv',
-        '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      };
-      const mimeType = mimeTypes[type as keyof typeof mimeTypes];
-      if (mimeType) {
-        acc[mimeType] = [type];
-      }
-    }
-    return acc;
-  }, {} as Record<string, string[]>);
-
-  const currentFiles = multiple ? selectedFiles : (selectedFile ? [selectedFile] : []);
-
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (multiple && onFilesSelect) {
-      const newFiles = [...selectedFiles, ...acceptedFiles];
-      onFilesSelect(newFiles);
-    } else if (!multiple && onFileSelect && acceptedFiles.length > 0) {
-      onFileSelect(acceptedFiles[0]);
-    }
-
-    // Simulate upload progress
-    acceptedFiles.forEach(file => {
-      const fileName = file.name;
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 10;
-        setUploadProgress(prev => ({ ...prev, [fileName]: progress }));
-        if (progress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setUploadProgress(prev => {
-              const newProgress = { ...prev };
-              delete newProgress[fileName];
-              return newProgress;
-            });
-          }, 1000);
+  const accept = acceptedTypes.reduce(
+    (acc, type) => {
+      if (type.startsWith(".")) {
+        // Handle file extensions
+        const mimeTypes = {
+          ".pdf": "application/pdf",
+          ".doc": "application/msword",
+          ".docx":
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          ".ofx": "application/x-ofx",
+          ".csv": "text/csv",
+          ".xlsx":
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        };
+        const mimeType = mimeTypes[type as keyof typeof mimeTypes];
+        if (mimeType) {
+          acc[mimeType] = [type];
         }
-      }, 100);
-    });
-  }, [selectedFiles, multiple, onFilesSelect, onFileSelect]);
+      }
+      return acc;
+    },
+    {} as Record<string, string[]>
+  );
+
+  const currentFiles = multiple
+    ? selectedFiles
+    : selectedFile
+      ? [selectedFile]
+      : [];
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (multiple && onFilesSelect) {
+        const newFiles = [...selectedFiles, ...acceptedFiles];
+        onFilesSelect(newFiles);
+      } else if (!multiple && onFileSelect && acceptedFiles.length > 0) {
+        onFileSelect(acceptedFiles[0]);
+      }
+
+      // Simulate upload progress
+      acceptedFiles.forEach((file) => {
+        const fileName = file.name;
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 10;
+          setUploadProgress((prev) => ({ ...prev, [fileName]: progress }));
+          if (progress >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+              setUploadProgress((prev) => {
+                const newProgress = { ...prev };
+                delete newProgress[fileName];
+                return newProgress;
+              });
+            }, 1000);
+          }
+        }, 100);
+      });
+    },
+    [selectedFiles, multiple, onFilesSelect, onFileSelect]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept,
     maxSize,
-    multiple
+    multiple,
   });
 
   const removeFile = (index: number) => {
@@ -96,11 +110,11 @@ const FileUpload = ({
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -123,7 +137,8 @@ const FileUpload = ({
             : "Arraste arquivos aqui ou clique para selecionar"}
         </p>
         <p className="text-xs text-gray-500 mt-2">
-          Formatos aceitos: {acceptedTypes.join(', ')} | Tamanho máximo: {formatFileSize(maxSize)}
+          Formatos aceitos: {acceptedTypes.join(", ")} | Tamanho máximo:{" "}
+          {formatFileSize(maxSize)}
         </p>
       </div>
 
@@ -131,18 +146,28 @@ const FileUpload = ({
         <div className="space-y-2">
           <h4 className="font-medium text-gray-900">Arquivos selecionados:</h4>
           {currentFiles.map((file, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div
+              key={index}
+              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+            >
               <div className="flex items-center gap-3">
                 <File className="h-4 w-4 text-gray-500" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{file.name}</p>
-                  <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {file.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {formatFileSize(file.size)}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 {uploadProgress[file.name] && (
                   <div className="w-20">
-                    <Progress value={uploadProgress[file.name]} className="h-2" />
+                    <Progress
+                      value={uploadProgress[file.name]}
+                      className="h-2"
+                    />
                   </div>
                 )}
                 <Button

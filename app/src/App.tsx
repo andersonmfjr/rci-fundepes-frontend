@@ -18,18 +18,12 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route
-                path="/login"
-                element={
-                  <Login />
-                }
-              />
+              <Route path="/login" element={<Login />} />
               <Route
                 path="/contracts"
                 element={

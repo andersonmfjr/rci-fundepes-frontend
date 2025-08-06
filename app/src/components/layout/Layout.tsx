@@ -1,7 +1,6 @@
-
-import React from 'react';
-import { Header } from './Header';
-import Sidebar from './Sidebar';
+import React from "react";
+import { Header } from "./Header";
+import Sidebar from "./Sidebar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -21,9 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
           <Sidebar />
         </div>
         <main className="flex-1 p-4 lg:p-6 lg:ml-64 w-full min-w-0 pt-24 lg:pt-4">
-          <div className="max-w-7xl mx-auto w-full">
-            {children}
-          </div>
+          <div className="max-w-7xl mx-auto w-full">{children}</div>
         </main>
       </div>
     </div>

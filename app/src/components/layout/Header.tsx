@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,7 @@ export function Header() {
   const handleLogout = () => {
     logout();
     setTimeout(() => {
-      navigate('/login');
+      navigate("/login");
     }, 500);
   };
 
@@ -23,14 +22,18 @@ export function Header() {
         </div>
         <div className="hidden sm:block">
           <h1 className="text-lg lg:text-xl font-bold text-gray-900">RCI BI</h1>
-          <p className="text-xs text-gray-500 hidden lg:block">Sistema de Gestão RCI</p>
+          <p className="text-xs text-gray-500 hidden lg:block">
+            Sistema de Gestão RCI
+          </p>
         </div>
       </div>
 
       <div className="flex items-center gap-2 lg:gap-4">
         <div className="flex items-center gap-2 text-sm">
           <User className="w-4 h-4 text-gray-600" />
-          <span className="text-gray-700 hidden sm:inline">{user?.username}</span>
+          <span className="text-gray-700 hidden sm:inline">
+            {user?.username}
+          </span>
         </div>
         <Button
           variant="outline"
@@ -44,5 +47,4 @@ export function Header() {
       </div>
     </header>
   );
-};
-
+}

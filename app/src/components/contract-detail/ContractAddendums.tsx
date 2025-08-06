@@ -120,8 +120,9 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
           <div className="text-sm">
             <span className="text-gray-600 block">Valor Atual</span>
             <span
-              className={`font-semibold text-lg ${totalAumento >= 0 ? "text-green-600" : "text-red-600"
-                }`}
+              className={`font-semibold text-lg ${
+                totalAumento >= 0 ? "text-green-600" : "text-red-600"
+              }`}
             >
               {formatCurrency(valorAtual)}
             </span>
@@ -167,10 +168,11 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
             return (
               <div
                 key={addendum.id_aditivo_contrato}
-                className={`border rounded-lg p-4 ${addendumValidations[addendum.id_aditivo_contrato] || false
+                className={`border rounded-lg p-4 ${
+                  addendumValidations[addendum.id_aditivo_contrato] || false
                     ? "border-gray-200"
                     : "border-4 border-red-400"
-                  }`}
+                }`}
               >
                 {/* Cabeçalho do aditivo */}
                 <div className="flex items-center justify-between mb-3">
@@ -259,15 +261,16 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
                     {totalAumento >= 0
                       ? `Aumento total de ${formatCurrency(totalAumento)}`
                       : `Redução total de ${formatCurrency(
-                        Math.abs(totalAumento)
-                      )}`}
+                          Math.abs(totalAumento)
+                        )}`}
                   </p>
                 </div>
                 <div className="text-right">
                   <div className="text-sm text-gray-600">Valor Final</div>
                   <div
-                    className={`text-xl font-bold ${totalAumento >= 0 ? "text-green-600" : "text-red-600"
-                      }`}
+                    className={`text-xl font-bold ${
+                      totalAumento >= 0 ? "text-green-600" : "text-red-600"
+                    }`}
                   >
                     {formatCurrency(valorAtual)}
                   </div>

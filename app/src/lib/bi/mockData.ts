@@ -1,4 +1,3 @@
-
 // Mock data for Business Intelligence module
 export const mockBiContracts: BiContract[] = [
   {

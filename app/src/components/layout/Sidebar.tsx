@@ -10,11 +10,11 @@ const Sidebar = () => {
       href: "/contracts",
       icon: File,
     },
-    {
-      title: "BI",
-      href: "/bi",
-      icon: BarChart3,
-    },
+    // {
+    //  title: "BI",
+    //  href: "/bi",
+    //  icon: BarChart3,
+    //},
     // FIXME: New contract menu item
     /* {
       title: 'Novo Contrato',
