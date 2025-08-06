@@ -36,7 +36,7 @@ const Contracts = () => {
     parseInt(searchParams.get("page") || "1")
   );
   const [sortField, setSortField] = useState<SortField>(
-    (searchParams.get("sortField") as SortField) || "data_atualizacao"
+    (searchParams.get("sortField") as SortField) || "updated_at"
   );
   const [sortDirection, setSortDirection] = useState<SortDirection>(
     (searchParams.get("sortDirection") as SortDirection) || "desc"
@@ -111,8 +111,7 @@ const Contracts = () => {
 
     if (searchTerm) newSearchParams.set("search", searchTerm);
     if (currentPage > 1) newSearchParams.set("page", currentPage.toString());
-    if (sortField !== "data_atualizacao")
-      newSearchParams.set("sortField", sortField);
+    if (sortField !== "updated_at") newSearchParams.set("sortField", sortField);
     if (sortDirection !== "desc")
       newSearchParams.set("sortDirection", sortDirection);
 

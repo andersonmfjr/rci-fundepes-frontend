@@ -9,7 +9,7 @@ import {
 import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 import ContractTableRow from "./ContractTableRow";
 
-type SortField = "nome" | "valor_total" | "data_criacao" | "data_atualizacao";
+type SortField = "nome" | "valor_total" | "created_at" | "updated_at";
 type SortDirection = "asc" | "desc";
 
 interface ContractsTableProps {
@@ -58,27 +58,27 @@ const ContractsTable = ({
                 onClick={() => onSort("valor_total")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
-                Valor Total
+                Valor total
                 {getSortIcon("valor_total")}
               </button>
             </TableHead>
 
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort("data_criacao")}
+                onClick={() => onSort("created_at")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Criado em
-                {getSortIcon("data_criacao")}
+                {getSortIcon("created_at")}
               </button>
             </TableHead>
             <TableHead className="min-w-[120px]">
               <button
-                onClick={() => onSort("data_atualizacao")}
+                onClick={() => onSort("updated_at")}
                 className="flex items-center hover:text-blue-600 transition-colors whitespace-nowrap"
               >
                 Atualizado em
-                {getSortIcon("data_atualizacao")}
+                {getSortIcon("updated_at")}
               </button>
             </TableHead>
             <TableHead className="text-right min-w-[100px] whitespace-nowrap">

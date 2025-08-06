@@ -1,10 +1,6 @@
 import { fetcher } from "@/lib/fetcher";
 
-export type SortField =
-  | "nome"
-  | "valor_total"
-  | "data_criacao"
-  | "data_atualizacao";
+export type SortField = "nome" | "valor_total" | "created_at" | "updated_at";
 
 export type SortDirection = "asc" | "desc";
 
