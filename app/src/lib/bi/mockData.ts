@@ -1,11 +1,3 @@
-import {
-  BiContract,
-  BiBankTransfer,
-  BiRciReceived,
-  BiOverviewStats,
-  AcademicUnit,
-  ContractType,
-} from "@/types";
 
 // Mock data for Business Intelligence module
 export const mockBiContracts: BiContract[] = [

@@ -1,6 +1,5 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
-import { BiDonutChartData } from "@/types";
 
 interface BiDonutChartProps {
   data: BiDonutChartData;

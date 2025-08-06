@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import type { ContractDetail } from "@/types";
 import { contractsService } from "@/lib/contracts";
 
 import Layout from "@/components/layout/Layout";

@@ -1,8 +1,3 @@
-import {
-  ContractListItem,
-  ContractDetail,
-  ContractListResponse,
-} from "@/types";
 import { mockContracts, mockContractsDetail } from "./mockData";
 
 // Reference to the mutable mock data

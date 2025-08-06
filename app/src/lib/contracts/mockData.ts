@@ -1,18 +1,3 @@
-import {
-  ContractListItem,
-  ContractDetail,
-  Transfer,
-  RciDistribution,
-  ContractAddendum,
-  Bank,
-  Financier,
-  FinancierType,
-  ContractType,
-  AcademicUnit,
-  UnitType,
-  ProjectAccount,
-  RciAccount,
-} from "@/types";
 
 // Dados mock para as estruturas do banco de dados
 const mockBanks: Bank[] = [

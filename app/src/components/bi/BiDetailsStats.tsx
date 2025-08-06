@@ -1,10 +1,9 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BiDetailsStats as BiDetailsStatsType } from "@/types";
 
 interface BiDetailsStatsProps {
-  stats: BiDetailsStatsType;
+  stats: BiDetailsStats;
   formatCurrency: (value: number) => string;
   formatCompactCurrency: (value: number) => string;
 }

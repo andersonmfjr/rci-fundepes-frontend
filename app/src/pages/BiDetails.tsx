@@ -4,10 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Edit, Share2 } from "lucide-react";
-import {
-  BiDetailsResponse,
-  BiDetailsStats as BiDetailsStatsType,
-} from "@/types";
 import { biService } from "@/lib/bi";
 import Layout from "@/components/layout/Layout";
 import { toast } from "@/hooks/use-toast";

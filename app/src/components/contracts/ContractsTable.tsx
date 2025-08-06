@@ -7,7 +7,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
-import type { ContractListItem } from "@/types";
 import ContractTableRow from "./ContractTableRow";
 
 type SortField = "nome" | "valor_total" | "data_criacao" | "data_atualizacao";

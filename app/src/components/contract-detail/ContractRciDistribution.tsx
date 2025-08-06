@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Clock, Building2, Percent } from "lucide-react";
-import type { ContractDetail } from "@/types";
 import {
   formatCurrency,
   getRootUnit,
@@ -118,12 +117,11 @@ const ContractRciDistribution = ({
             return (
               <div
                 key={distribution.id_distribuicao_rci}
-                className={`border rounded-lg p-4 ${
-                  distributionValidations[distribution.id_distribuicao_rci] ||
-                  false
+                className={`border rounded-lg p-4 ${distributionValidations[distribution.id_distribuicao_rci] ||
+                    false
                     ? "border-gray-200"
                     : "border-4 border-red-400"
-                }`}
+                  }`}
               >
                 {/* Cabeçalho da distribuição */}
                 <div className="flex items-center justify-between mb-3">
@@ -143,7 +141,7 @@ const ContractRciDistribution = ({
                     <ValidationButton
                       isValidated={
                         distributionValidations[
-                          distribution.id_distribuicao_rci
+                        distribution.id_distribuicao_rci
                         ] || false
                       }
                       className="h-6 px-2 text-xs"

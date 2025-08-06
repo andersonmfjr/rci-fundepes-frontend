@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BiBankTransfer, BiRciReceived } from "@/types";
 
 interface BiTransfersTablesProps {
   bankTransfers: BiBankTransfer[];

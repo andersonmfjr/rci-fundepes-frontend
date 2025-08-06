@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,39 +10,65 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { authService } from "@/lib/auth";
-import { toast } from "@/hooks/use-toast";
 import { usePageTitle } from "@/hooks/use-page-title";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { fetcher } from "@/lib/fetcher";
+import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/providers/auth-provider";
 
-const Login = () => {
+const formSchema = z.object({
+  email: z.string().min(1, 'Informe o e-mail.'),
+  password: z.string().min(1, 'Informe a senha.'),
+});
+
+type FormSchema = z.infer<typeof formSchema>;
+
+function Login() {
   usePageTitle("Login");
-  const [email, setEmail] = useState("admin@rci.com");
-  const [password, setPassword] = useState("admin123");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      await authService.login(email, password);
+  const { isPending, mutate } = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      navigate('/contracts');
       toast({
         title: "Login realizado com sucesso",
         description: "Bem-vindo ao sistema RCI BI",
       });
-      navigate("/contracts");
-    } catch (error) {
+    },
+    onError: (error: any) => {
+      let description = error.message;
+
+      if (error.message.includes('Unauthorized'))
+        description = 'Usuário e/ou senha incorretos.';
+
       toast({
         title: "Erro no login",
-        description:
-          error instanceof Error ? error.message : "Erro desconhecido",
+        description,
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
     }
-  };
+  });
+
+  const { register, handleSubmit } = useForm<FormSchema>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+    resolver: zodResolver(formSchema),
+  });
+
+  const handleLogin = ({ email, password }: FormSchema) =>
+    mutate({ email, password });
+
+
+  if (isAuthenticated) {
+    return <Navigate to="/contracts" replace />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -59,31 +85,29 @@ const Login = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">E-mail</Label>
               <Input
+                {...register('email')}
                 id="email"
-                type="email"
+                // type="email"
                 placeholder="email@exemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Senha</Label>
               <Input
+                {...register('password')}
                 id="password"
                 type="password"
                 placeholder="Sua senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Entrando..." : "Entrar"}
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? "Entrando..." : "Entrar"}
             </Button>
           </form>
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">

@@ -1,17 +1,4 @@
 import {
-  BiContract,
-  BiBankTransfer,
-  BiRciReceived,
-  BiOverviewStats,
-  BiFilters,
-  BiSortField,
-  BiSortDirection,
-  BiOverviewResponse,
-  AcademicUnit,
-  ContractType,
-  BiDetailsResponse,
-} from "@/types";
-import {
   mockBiContracts,
   mockBiBankTransfers,
   mockBiRciReceived,

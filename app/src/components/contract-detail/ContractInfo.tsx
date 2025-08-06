@@ -3,8 +3,9 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Button } from "@/components/ui/button";
+import { buildUnitPathString, formatCurrency } from "@/lib/contracts/utils";
+import { mockAcademicUnits } from "@/lib/contracts/mockData";
 import type { ContractDetail } from "@/types";
-import { formatCurrency } from "@/lib/contracts/utils";
 import ContractAlertsDialog from "@/components/contracts/ContractAlertsDialog";
 
 import {
@@ -40,7 +41,7 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
         total +
         (parseFloat(dist?.valor_base_calculo || "0") *
           parseFloat(dist?.percentual || "0")) /
-          100,
+        100,
       0
     ) || 0;
 
@@ -136,11 +137,10 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
           {/* Informações do contrato detalhadas */}
           <div className="space-y-4">
             <div
-              className={`border rounded-lg p-4 ${
-                contractValidation
-                  ? "border-gray-200"
-                  : "border-4 border-red-400"
-              }`}
+              className={`border rounded-lg p-4 ${contractValidation
+                ? "border-gray-200"
+                : "border-4 border-red-400"
+                }`}
             >
               <div className="flex items-center justify-between mb-3">
                 <h4 className="font-semibold text-gray-900">
@@ -217,9 +217,9 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                         {contract.unidade_academica?.[0]?.nome ||
                           "Não informado"}
                       </div>
-                    </div>
-                  </div>
-                </div>
+                    </div >
+                  </div >
+                </div >
 
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -247,8 +247,8 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                       <div className="text-sm font-medium">
                         {contract.vigencia_inicio && contract.vigencia_fim
                           ? `${formatDate(
-                              contract.vigencia_inicio
-                            )} até ${formatDate(contract.vigencia_fim)}`
+                            contract.vigencia_inicio
+                          )} até ${formatDate(contract.vigencia_fim)}`
                           : "Não informado"}
                       </div>
                     </div>
@@ -268,21 +268,21 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                     </span>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </div >
+            </div >
+          </div >
 
           {/* Descrição */}
-          <div>
+          < div >
             <label className="text-sm font-medium text-gray-700">
               Descrição
             </label>
             <p className="mt-1 text-gray-900 break-words">
               {contract.descricao || "Descrição não informada"}
             </p>
-          </div>
-        </CardContent>
-      </Card>
+          </div >
+        </CardContent >
+      </Card >
 
       {hasAlerts && (
         <ContractAlertsDialog

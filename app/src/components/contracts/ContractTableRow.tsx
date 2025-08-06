@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Eye, AlertTriangle } from "lucide-react";
-import type { ContractListItem } from "@/types";
 import ContractAlertsDialog from "./ContractAlertsDialog";
 
 import { formatCurrency } from "@/lib/contracts/utils";
