@@ -3,9 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Button } from "@/components/ui/button";
-import { buildUnitPathString, formatCurrency } from "@/lib/contracts/utils";
-import { mockAcademicUnits } from "@/lib/contracts/mockData";
-import type { ContractDetail } from "@/types";
+import { formatCurrency } from "@/lib/contracts/utils";
 import ContractAlertsDialog from "@/components/contracts/ContractAlertsDialog";
 
 import {

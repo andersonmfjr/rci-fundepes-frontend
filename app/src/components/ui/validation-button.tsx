@@ -52,9 +52,6 @@ const ValidationButton = ({
           case "contract":
             result = await contractsService.invalidateContract(entityId);
             break;
-          case "transfer":
-            result = await contractsService.invalidateTransfer(entityId);
-            break;
           case "rciDistribution":
             result = await contractsService.invalidateRciDistribution(entityId);
             break;
@@ -69,9 +66,6 @@ const ValidationButton = ({
         switch (entityType) {
           case "contract":
             result = await contractsService.validateContract(entityId);
-            break;
-          case "transfer":
-            result = await contractsService.validateTransfer(entityId);
             break;
           case "rciDistribution":
             result = await contractsService.validateRciDistribution(entityId);
