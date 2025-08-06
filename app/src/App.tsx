@@ -8,6 +8,7 @@ import Contracts from "./pages/Contracts";
 import ContractDetail from "./pages/ContractDetail";
 import BiOverview from "./pages/BiOverview";
 import BiDetails from "./pages/BiDetails";
+import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./providers/auth-provider";
@@ -53,6 +54,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <BiDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <UserProfile />
                   </ProtectedRoute>
                 }
               />

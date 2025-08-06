@@ -29,12 +29,15 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-2 lg:gap-4">
-        <div className="flex items-center gap-2 text-sm">
+        <button
+          onClick={() => navigate("/profile")}
+          className="flex items-center gap-2 text-sm hover:bg-gray-100 px-2 py-1 rounded-md transition-colors"
+        >
           <User className="w-4 h-4 text-gray-600" />
           <span className="text-gray-700 hidden sm:inline">
             {user?.username}
           </span>
-        </div>
+        </button>
         <Button
           variant="outline"
           size="sm"
