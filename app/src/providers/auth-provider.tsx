@@ -1,5 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { fetcher } from "@/lib/fetcher";
+import { REFRESH_TOKEN_KEY, TOKEN_KEY, USER_KEY } from "@/lib/keys";
+import { removeUserKeys } from "@/lib/remove-user-keys";
 import { useQuery } from "@tanstack/react-query";
 import {
   createContext,
@@ -18,10 +20,6 @@ interface IAuthContext {
   logout(): void;
   handleSetUser(user: User): void;
 }
-
-const TOKEN_KEY = "rci_token";
-const REFRESH_TOKEN_KEY = "rci_refresh_token";
-const USER_KEY = "rci_user";
 
 const AuthContext = createContext({} as IAuthContext);
 
@@ -68,9 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+    removeUserKeys();
     setUser(null);
   }, []);
 
