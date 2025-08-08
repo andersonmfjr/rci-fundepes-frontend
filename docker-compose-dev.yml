@@ -1,6 +1,7 @@
 x-frontend-environment: &frontend-environment
   WEBHOOK_HOST_FILE: /run/secrets/webhook_host
   WEBHOOK_PORT_FILE: /run/secrets/webhook_port
+  VITE_API_URL: http://api-dev.rci-ufal.fundepes.br/api
 
 x-frontend-secret: &frontend-secret
   - source: rci-ufal-frontend-dev-webhook_host-v1
