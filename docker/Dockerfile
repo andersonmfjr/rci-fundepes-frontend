@@ -5,7 +5,8 @@ WORKDIR /app
 
 COPY app/package*.json ./
 RUN npm i
-
+# Copia variaveis de ambiente
+COPY docker/.env .env
 COPY app/ .
 RUN npm run build
 
