@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Contracts from "./pages/Contracts";
@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./providers/auth-provider";
+import { ExtractsManagement } from "./pages/extracts-management";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Contracts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/extracts"
+                element={
+                  <ProtectedRoute>
+                    <ExtractsManagement />
                   </ProtectedRoute>
                 }
               />

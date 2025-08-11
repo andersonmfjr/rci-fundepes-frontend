@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const isAuthenticated = !!localStorage.getItem(TOKEN_KEY);
 
-  const { data: fetchedUser } = useQuery({
+  const { data: fetchedUser, status } = useQuery({
     queryKey: ["get-user"],
     queryFn: async () => fetcher<User>("/app/perfil"),
     staleTime: 0,
@@ -77,6 +77,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    if (status == 'error') {
+      window.location.href = '/login';
+      removeUserKeys();
+      return;
+    }
+
     setUser(fetchedUser);
   }, [fetchedUser]);
 

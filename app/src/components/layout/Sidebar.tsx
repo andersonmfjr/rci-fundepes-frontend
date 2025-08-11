@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { File, Plus, BarChart3 } from "lucide-react";
+import { File, Plus, BarChart3, LucideUpload } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Sidebar = () => {
@@ -10,6 +10,11 @@ const Sidebar = () => {
       href: "/contracts",
       icon: File,
     },
+    {
+      title: 'Gestão de Extratos',
+      href: '/extracts',
+      icon: LucideUpload,
+    }
     // {
     //  title: "BI",
     //  href: "/bi",
