@@ -8,12 +8,7 @@ import {
 } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Clock, Building2, Percent } from "lucide-react";
-import {
-  formatCurrency,
-  getRootUnit,
-  buildUnitPathString,
-} from "@/lib/contracts/utils";
-import { mockAcademicUnits } from "@/lib/contracts/mockData";
+import { formatCurrency } from "@/lib/contracts/utils";
 
 interface ContractRciDistributionProps {
   contract: ContractDetail;

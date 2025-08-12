@@ -33,7 +33,7 @@ function Login() {
   const { isPending, mutate } = useMutation({
     mutationFn: login,
     onSuccess: () => {
-      navigate("/contracts");
+      navigate("/validations");
       toast({
         title: "Login realizado com sucesso",
         description: "Bem-vindo ao sistema RCI BI",
@@ -65,7 +65,7 @@ function Login() {
     mutate({ email, password });
 
   if (isAuthenticated) {
-    return <Navigate to="/contracts" replace />;
+    return <Navigate to="/validations" replace />;
   }
 
   return (

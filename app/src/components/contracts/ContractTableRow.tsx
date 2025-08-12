@@ -22,7 +22,7 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
         <TableCell className="min-w-[200px]">
           <div>
             <Link
-              to={`/contracts/${contract.id}`}
+              to={`/validations/${contract.id}`}
               className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
             >
               {contract.nome}
@@ -57,7 +57,7 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
               </Button>
             )}
             <Button variant="ghost" size="sm" asChild>
-              <Link to={`/contracts/${contract.id}`}>
+              <Link to={`/validations/${contract.id}`}>
                 <Eye className="w-4 h-4" />
               </Link>
             </Button>
