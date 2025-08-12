@@ -67,7 +67,7 @@ const ContractDetail = () => {
             O contrato solicitado não existe ou foi removido
           </p>
           <Button onClick={() => navigate("/contracts")}>
-            Voltar para Contratos
+            Voltar para listagem
           </Button>
         </div>
       </Layout>

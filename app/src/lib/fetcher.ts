@@ -17,14 +17,14 @@ export async function fetcher<T>(url: string, config?: RequestInit) {
     return null;
   }
 
-  if (response.status == 400) {
+  if (response.status === 400) {
     const errorData = await response.json();
     throw new Error(errorData[Object.keys(errorData)[0]]);
   }
 
-  if (response.status == 401) {
+  if (response.status === 401) {
     removeUserKeys();
-    window.location.href = '/login';
+    window.location.href = "/login";
   }
 
   if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
