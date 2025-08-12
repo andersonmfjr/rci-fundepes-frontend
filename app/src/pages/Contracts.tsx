@@ -190,7 +190,7 @@ const Contracts = () => {
                   ? `${(
                       (stats.validatedContracts / stats.totalContracts) *
                       100
-                    ).toFixed(1)}%`
+                    ).toFixed(2)}%`
                   : "0%"}
               </div>
             </CardContent>

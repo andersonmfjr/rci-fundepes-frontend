@@ -42,7 +42,7 @@ const ContractAddendums = ({ contract }: ContractAddendumsProps) => {
     const percentage = (
       (Math.abs(difference) / parseFloat(previousValue)) *
       100
-    ).toFixed(1);
+    ).toFixed(2);
 
     return {
       difference,

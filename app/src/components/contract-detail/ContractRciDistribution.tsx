@@ -90,7 +90,7 @@ const ContractRciDistribution = ({
           </div>
           <div className="text-sm">
             <span className="text-gray-600">Percentual Total: </span>
-            <span className="font-semibold">{totalPercentual.toFixed(1)}%</span>
+            <span className="font-semibold">{totalPercentual.toFixed(2)}%</span>
           </div>
           <div className="text-sm">
             <span className="text-gray-600">Valor Base Total: </span>
