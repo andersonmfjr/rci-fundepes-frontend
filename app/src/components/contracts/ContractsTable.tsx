@@ -89,7 +89,7 @@ const ContractsTable = ({
         <TableBody>
           {contracts.map((contract) => (
             <ContractTableRow
-              key={contract.id}
+              key={contract.id_contrato}
               contract={contract}
               formatDate={formatDate}
             />
