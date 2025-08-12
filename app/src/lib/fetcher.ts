@@ -27,7 +27,11 @@ export async function fetcher<T>(url: string, config?: RequestInit) {
     window.location.href = "/login";
   }
 
-  if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+  if (!response.ok) {
+    const errorData = await response.json();
+    const message = errorData?.[Object.keys(errorData)?.[0]];
+    throw new Error(message ?? `${response.statusText}`);
+  }
 
   const data: T = await response.json();
 
