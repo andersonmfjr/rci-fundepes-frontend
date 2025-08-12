@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Contracts from "./pages/Contracts";
@@ -26,7 +26,7 @@ const App = () => {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route
-                path="/contracts"
+                path="/validations"
                 element={
                   <ProtectedRoute>
                     <Contracts />
@@ -34,7 +34,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/contracts/:id"
+                path="/validations/:id"
                 element={
                   <ProtectedRoute>
                     <ContractDetail />
@@ -65,7 +65,10 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/" element={<Navigate to="/contracts" replace />} />
+              <Route
+                path="/"
+                element={<Navigate to="/validations" replace />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
