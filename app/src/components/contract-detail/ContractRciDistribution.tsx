@@ -204,10 +204,10 @@ const ContractRciDistribution = ({
               <Clock className="w-4 h-4 text-yellow-600" />
               <span className="text-sm font-medium text-yellow-700">
                 Atenção: O percentual total de distribuição é{" "}
-                {totalPercentual.toFixed(1)}%
+                {totalPercentual.toFixed(2)}%
                 {totalPercentual < 100
-                  ? " (faltam " + (100 - totalPercentual).toFixed(1) + "%)"
-                  : " (excede em " + (totalPercentual - 100).toFixed(1) + "%)"}
+                  ? " (faltam " + (100 - totalPercentual).toFixed(2) + "%)"
+                  : " (excede em " + (totalPercentual - 100).toFixed(2) + "%)"}
               </span>
             </div>
           </div>

@@ -178,9 +178,9 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                       <div className="text-sm font-medium">
                         {contract.id_financiador?.nome || "Não informado"}
                       </div>
-                      {contract.id_financiador?.tipo_financiador && (
+                      {contract.id_financiador?.tipo_financiador_descricao && (
                         <div className="text-xs text-gray-500">
-                          {contract.id_financiador.tipo_financiador}
+                          {contract.id_financiador.tipo_financiador_descricao}
                         </div>
                       )}
                     </div>
