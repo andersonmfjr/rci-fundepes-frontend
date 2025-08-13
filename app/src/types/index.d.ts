@@ -5,6 +5,9 @@ interface LoginResponse {
 
 type UserType = "P" | "A";
 
+
+// Domain
+
 interface User {
   id: string;
   first_name: string;
@@ -146,6 +149,17 @@ interface ContractDetail {
   alertas: Alert[];
 }
 
+
+interface BankExtract {
+  id: number;
+  id_conta_rci: number;
+  descricao: string;
+  link_arquivo: string;
+  mes_referencia: string
+  ano_referencia: string;
+  processado: boolean;
+}
+
 // Business Intelligence Types
 interface BiContract {
   id: number;
@@ -260,4 +274,11 @@ interface BiDetailsResponse {
 interface RequestInit {
   withoutAuth?: boolean;
   token?: string;
+}
+
+interface Pagination<T> {
+  count: number;
+  next: number | null;
+  previous: number | null;
+  results: T[];
 }
