@@ -77,8 +77,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    if (status == 'error') {
-      window.location.href = '/login';
+    if (status == "error") {
+      window.location.href = "/login";
       removeUserKeys();
       return;
     }
