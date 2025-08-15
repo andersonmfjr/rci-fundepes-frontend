@@ -15,6 +15,18 @@ import { FormSchema, formSchema } from "./schema";
 import { useMutation } from "@tanstack/react-query";
 import { fetcher } from "@/lib/fetcher";
 import { toFormData } from "@/lib/to-form-data";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Feedback } from "@/components/feedback";
 
 const uploadFile = async (data: FormSchema) => {
   await fetcher("/app/extrato-bancario", {
@@ -49,6 +61,8 @@ export function UploadExtractModal({
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      month: "",
+      year: "",
       extractFile: null,
     },
   });
@@ -73,45 +87,82 @@ export function UploadExtractModal({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="py-3">
-            <label
-              className="border-dashed border-2 rounded-md h-56 items-center justify-center cursor-pointer data-[visible=true]:flex hidden group hover:bg-blue-500/20 transition-colors duration-300 data-[error=true]:border-red-600"
-              htmlFor="extractFile"
-              data-visible={!file}
-              data-error={!!errors?.extractFile?.message}
-            >
-              <Upload className="text-gray-500 group-hover:hidden" />
-              <span className="hidden text-gray-400 group-hover:block">
-                Clique e selecione o arquivo, ou arraste ele para essa área.
-              </span>
-            </label>
-            <input
-              type="file"
-              id="extractFile"
-              className="hidden"
-              {...register("extractFile", {
-                onChange: (e) => setValue("extractFile", e.target.files[0]),
-              })}
-            />
+          <div className="my-3">
+            <div className="mb-3 space-y-1">
+              <div className="flex gap-2">
+                <div className="w-full">
+                  <Label htmlFor="monthAndYear">Mês/ano</Label>
+                  <Input placeholder="Ex. 01/2025" id="monthAndYear" />
+                  <Feedback
+                    message={errors?.month?.message || errors?.year?.message}
+                  />
+                </div>
+                <div className="w-full">
+                  <Label htmlFor="account">Conta</Label>
+                  <Select {...register("account")}>
+                    <SelectTrigger id="account">
+                      <SelectValue placeholder="Selecione a conta bancária" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="apple">Apple</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <Feedback message={errors?.account?.message} />
+                </div>
+              </div>
 
-            <div
-              className="border-2 border-blue-500 bg-blue-500/30 p-2 rounded-md justify-between data-[visible=true]:flex hidden data-[error=true]:border-red-600"
-              data-error={!!errors?.extractFile?.message}
-              data-visible={!!file}
-            >
-              <span className="text-blue-600">
-                {file?.name} - {(file?.size / 1024).toFixed(1)}KB
-              </span>
-              <button
-                type="button"
-                onClick={() => setValue("extractFile", null)}
-              >
-                <X className="text-blue-600" />
-              </button>
+              <div className="w-full">
+                <Label htmlFor="description">Descrição</Label>
+                <Input
+                  id="description"
+                  {...register("description")}
+                  placeholder="Ex. Extrato de verificação"
+                />
+                <Feedback message={errors?.description?.message} />
+              </div>
             </div>
-            <span className="text-red-600 text-xs">
-              {errors?.extractFile?.message}
-            </span>
+
+            <div id="upload">
+              <Label>Arquivo</Label>
+              <label
+                className="border-dashed border-2 rounded-md h-56 items-center justify-center cursor-pointer data-[visible=true]:flex hidden group hover:bg-blue-500/20 transition-colors duration-300 data-[error=true]:border-red-600"
+                htmlFor="extractFile"
+                data-visible={!file}
+                data-error={!!errors?.extractFile?.message}
+              >
+                <Upload className="text-gray-500 group-hover:hidden" />
+                <span className="hidden text-gray-400 group-hover:block">
+                  Clique e selecione o arquivo, ou arraste ele para essa área.
+                </span>
+              </label>
+              <input
+                type="file"
+                id="extractFile"
+                className="hidden"
+                {...register("extractFile", {
+                  onChange: (e) => setValue("extractFile", e.target.files[0]),
+                })}
+              />
+
+              <div
+                className="border-2 border-blue-500 bg-blue-500/30 p-2 rounded-md justify-between data-[visible=true]:flex hidden data-[error=true]:border-red-600"
+                data-error={!!errors?.extractFile?.message}
+                data-visible={!!file}
+              >
+                <span className="text-blue-600">
+                  {file?.name} - {(file?.size / 1024).toFixed(1)}KB
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setValue("extractFile", null)}
+                >
+                  <X className="text-blue-600" />
+                </button>
+              </div>
+              <Feedback message={errors?.extractFile?.message} />
+            </div>
           </div>
 
           <DialogFooter>

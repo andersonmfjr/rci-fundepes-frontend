@@ -88,12 +88,14 @@ export function ExtractsManagement() {
             </p>
           </div>
         </header>
-        <Button onClick={() => setOpen(true)}>
-          Adicionar extrato
-          <Plus />
-        </Button>
-
         <main>
+          <div className="flex justify-end mb-6">
+            <Button onClick={() => setOpen(true)}>
+              Adicionar extrato
+              <Plus />
+            </Button>
+          </div>
+
           <div className="rounded-md border bg-white">
             <Table>
               <TableHeader>

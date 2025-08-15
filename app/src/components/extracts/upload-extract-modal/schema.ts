@@ -1,6 +1,10 @@
 import { z } from "zod";
 
 export const formSchema = z.object({
+  description: z.string().trim().optional(),
+  month: z.string().min(1, "Campo obrigatório"),
+  year: z.string().min(1, "Campo obrigatório"),
+  account: z.number({ required_error: "Campo obrigatório" }),
   extractFile: z
     .instanceof(File)
     .nullish()
