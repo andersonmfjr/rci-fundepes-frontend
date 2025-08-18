@@ -2,8 +2,18 @@ import { z } from "zod";
 
 export const formSchema = z.object({
   description: z.string().trim().optional(),
-  month: z.string().min(1, "Campo obrigatório"),
-  year: z.string().min(1, "Campo obrigatório"),
+  monthAndYear: z
+    .string()
+    .trim()
+    .min(1, "Campo obrigatório")
+    .refine((value) => {
+      const splittedValue = value.split("/");
+      return !!Number(splittedValue[0]) && !!Number(splittedValue[1]);
+    }, "Este campo só aceita o formato XX/XXXX")
+    .refine((value) => {
+      const splittedValue = value.split("/");
+      return Number(splittedValue[0]) >= 1 && Number(splittedValue[0]) <= 12;
+    }, "Informe um mês válido"),
   account: z.number({ required_error: "Campo obrigatório" }),
   extractFile: z
     .instanceof(File)
@@ -21,3 +31,8 @@ export const formSchema = z.object({
 });
 
 export type FormSchema = z.infer<typeof formSchema>;
+
+export type MutationSchema = Omit<FormSchema, "monthAndYear"> & {
+  month: string;
+  year: string;
+};

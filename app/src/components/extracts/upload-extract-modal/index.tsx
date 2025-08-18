@@ -11,7 +11,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { FormSchema, formSchema } from "./schema";
+import { FormSchema, formSchema, MutationSchema } from "./schema";
 import { useMutation } from "@tanstack/react-query";
 import { fetcher } from "@/lib/fetcher";
 import { toFormData } from "@/lib/to-form-data";
@@ -26,9 +26,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Feedback } from "@/components/feedback";
-import { DragEvent } from "react";
+import { ChangeEvent, DragEvent } from "react";
 
-const uploadFile = async (data: FormSchema) => {
+const uploadFile = async (data: MutationSchema) => {
   await fetcher("/app/extrato-bancario", {
     method: "POST",
     body: toFormData(data),
@@ -60,16 +60,30 @@ export function UploadExtractModal({
     formState: { errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
     defaultValues: {
-      month: "",
-      year: "",
+      monthAndYear: "",
+      description: "",
       extractFile: null,
     },
   });
 
   const file = watch("extractFile");
 
-  const submitForm = (data: FormSchema) => mutate(data);
+  const submitForm = (data: FormSchema) => {
+    const monthAndYearSplitted = data.monthAndYear?.split("/");
+    mutate({
+      month: monthAndYearSplitted[0],
+      year: monthAndYearSplitted[1],
+      ...data,
+    });
+  };
+
+  const handleClose = () => {
+    reset();
+    onOpenChange();
+  };
 
   const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
@@ -83,9 +97,16 @@ export function UploadExtractModal({
     event.preventDefault();
   };
 
-  const handleClose = () => {
-    reset();
-    onOpenChange();
+  const handleChangeMonthAndYear = (event: ChangeEvent<HTMLInputElement>) => {
+    let value = event.target.value.replace(/[^0-9/]/g, "");
+
+    if (value.length > 7) value = value.slice(0, 7);
+
+    if (value.length == 2 && !value.includes("/")) {
+      value = value + "/";
+    }
+
+    event.target.value = value;
   };
 
   return (
@@ -99,29 +120,37 @@ export function UploadExtractModal({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="my-3">
+          <div className="my-2">
             <div className="mb-3 space-y-1">
               <div className="flex gap-2">
                 <div className="w-full">
                   <Label htmlFor="monthAndYear">
                     Mês/ano <span className="text-red-600">*</span>
                   </Label>
-                  <Input placeholder="Ex. 01/2025" id="monthAndYear" />
-                  <Feedback
-                    message={errors?.month?.message || errors?.year?.message}
+                  <Input
+                    {...register("monthAndYear")}
+                    autoComplete="off"
+                    placeholder="Ex. 01/2025"
+                    id="monthAndYear"
+                    onChange={handleChangeMonthAndYear}
                   />
+                  <Feedback message={errors?.monthAndYear?.message} />
                 </div>
                 <div className="w-full">
                   <Label htmlFor="account">
                     Conta <span className="text-red-600">*</span>
                   </Label>
-                  <Select {...register("account")}>
+                  <Select
+                    onValueChange={(value) =>
+                      setValue("account", Number(value))
+                    }
+                  >
                     <SelectTrigger id="account">
                       <SelectValue placeholder="Selecione a conta bancária" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="apple">Apple</SelectItem>
+                        <SelectItem value="1">Apple</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -171,7 +200,7 @@ export function UploadExtractModal({
               </div>
               <Feedback message={errors?.extractFile?.message} />
             </div>
-            <div className="w-full">
+            <div className="w-full mt-2">
               <Label htmlFor="description">Descrição</Label>
               <Input
                 id="description"
