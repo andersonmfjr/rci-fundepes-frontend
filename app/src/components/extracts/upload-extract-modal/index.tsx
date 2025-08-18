@@ -22,11 +22,11 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Feedback } from "@/components/feedback";
+import { DragEvent } from "react";
 
 const uploadFile = async (data: FormSchema) => {
   await fetcher("/app/extrato-bancario", {
@@ -71,6 +71,18 @@ export function UploadExtractModal({
 
   const submitForm = (data: FormSchema) => mutate(data);
 
+  const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    const droppedFile = event.dataTransfer.files[0];
+    if (droppedFile) {
+      setValue("extractFile", droppedFile);
+    }
+  };
+
+  const handleDragOver = (event: DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+  };
+
   const handleClose = () => {
     reset();
     onOpenChange();
@@ -91,14 +103,18 @@ export function UploadExtractModal({
             <div className="mb-3 space-y-1">
               <div className="flex gap-2">
                 <div className="w-full">
-                  <Label htmlFor="monthAndYear">Mês/ano</Label>
+                  <Label htmlFor="monthAndYear">
+                    Mês/ano <span className="text-red-600">*</span>
+                  </Label>
                   <Input placeholder="Ex. 01/2025" id="monthAndYear" />
                   <Feedback
                     message={errors?.month?.message || errors?.year?.message}
                   />
                 </div>
                 <div className="w-full">
-                  <Label htmlFor="account">Conta</Label>
+                  <Label htmlFor="account">
+                    Conta <span className="text-red-600">*</span>
+                  </Label>
                   <Select {...register("account")}>
                     <SelectTrigger id="account">
                       <SelectValue placeholder="Selecione a conta bancária" />
@@ -112,21 +128,13 @@ export function UploadExtractModal({
                   <Feedback message={errors?.account?.message} />
                 </div>
               </div>
-
-              <div className="w-full">
-                <Label htmlFor="description">Descrição</Label>
-                <Input
-                  id="description"
-                  {...register("description")}
-                  placeholder="Ex. Extrato de verificação"
-                />
-                <Feedback message={errors?.description?.message} />
-              </div>
             </div>
 
             <div id="upload">
               <Label>Arquivo</Label>
               <label
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
                 className="border-dashed border-2 rounded-md h-56 items-center justify-center cursor-pointer data-[visible=true]:flex hidden group hover:bg-blue-500/20 transition-colors duration-300 data-[error=true]:border-red-600"
                 htmlFor="extractFile"
                 data-visible={!file}
@@ -162,6 +170,15 @@ export function UploadExtractModal({
                 </button>
               </div>
               <Feedback message={errors?.extractFile?.message} />
+            </div>
+            <div className="w-full">
+              <Label htmlFor="description">Descrição</Label>
+              <Input
+                id="description"
+                {...register("description")}
+                placeholder="Ex. Extrato de verificação"
+              />
+              <Feedback message={errors?.description?.message} />
             </div>
           </div>
 
