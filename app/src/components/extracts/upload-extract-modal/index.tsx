@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { FormSchema, formSchema, MutationSchema } from "./schema";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetcher } from "@/lib/fetcher";
 import { toFormData } from "@/lib/to-form-data";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { Feedback } from "@/components/feedback";
 import { ChangeEvent, DragEvent } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const uploadFile = async (data: MutationSchema) => {
   await fetcher("/app/extrato-bancario", {
@@ -47,8 +48,30 @@ export function UploadExtractModal({
   open,
   onOpenChange,
 }: UploadExtractModalProps) {
+  const { toast } = useToast();
+  const { data: rciAccounts } = useQuery({
+    queryKey: ["get-rci-accounts"],
+    queryFn: async () => fetcher<Pagination<RciAccount>>("/app/contas-rci"),
+    enabled: open,
+  });
+
   const { mutate } = useMutation({
     mutationFn: uploadFile,
+    onSuccess: () => {
+      toast({
+        title: "Extrato cadastrado com sucesso",
+        description:
+          "O extrato cadastrado será processado dentro de alguns instantes.",
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+      toast({
+        title: "Algo deu errado ao tentar cadastrar este extrato",
+        description: "Verifique o console de seu navegador",
+        variant: "destructive",
+      });
+    },
   });
 
   const {
@@ -153,7 +176,14 @@ export function UploadExtractModal({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="1">Apple</SelectItem>
+                        {rciAccounts?.results?.map((account) => (
+                          <SelectItem
+                            value={String(account.id_conta_rci)}
+                            key={account.id_conta_rci}
+                          >
+                            {account?.numero} - {account?.id_banco?.nome}
+                          </SelectItem>
+                        ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>

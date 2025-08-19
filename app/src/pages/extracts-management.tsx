@@ -18,54 +18,6 @@ import { useSearchParams } from "react-router-dom";
 import { ExtractDetailsModal } from "@/components/extracts/extract-details-modal";
 import { Badge } from "@/components/ui/badge";
 
-const data = [
-  {
-    id: 1,
-    descricao: "Relatório Financeiro Janeiro",
-    id_conta_rci: 101,
-    mes_referencia: "01",
-    ano_referencia: "2025",
-    processado: true,
-    link_arquivo: "https://exemplo.com/relatorio-janeiro.pdf",
-  },
-  {
-    id: 2,
-    descricao: "Resumo de Vendas Fevereiro",
-    id_conta_rci: 102,
-    mes_referencia: "02",
-    ano_referencia: "2025",
-    processado: false,
-    link_arquivo: "https://exemplo.com/resumo-fevereiro.pdf",
-  },
-  {
-    id: 3,
-    descricao: "Demonstrativo de Custos Março",
-    id_conta_rci: 103,
-    mes_referencia: "03",
-    ano_referencia: "2025",
-    processado: true,
-    link_arquivo: "https://exemplo.com/custos-marco.pdf",
-  },
-  {
-    id: 4,
-    descricao: "Relatório Anual 2024",
-    id_conta_rci: 104,
-    mes_referencia: "12",
-    ano_referencia: "2025",
-    processado: true,
-    link_arquivo: "https://exemplo.com/relatorio-anual-2024.pdf",
-  },
-  {
-    id: 5,
-    descricao: "Projeções Financeiras Abril",
-    id_conta_rci: 105,
-    mes_referencia: "04",
-    ano_referencia: "2025",
-    processado: false,
-    link_arquivo: "https://exemplo.com/projecoes-abril.pdf",
-  },
-];
-
 export function ExtractsManagement() {
   const [open, setOpen] = useState(false);
   const [_, setSearchParams] = useSearchParams();
@@ -120,46 +72,54 @@ export function ExtractsManagement() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.map((extract) => (
-                  <TableRow key={extract.id}>
-                    <TableCell className="min-w-[200px]">
-                      {extract.descricao}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {extract.id_conta_rci}
-                    </TableCell>
-                    <TableCell className="text-center">{`${extract.mes_referencia}/${extract.ano_referencia}`}</TableCell>
-                    <TableCell className="text-center">
-                      {extract.processado ? (
-                        <Badge className="bg-emerald-600">Processado</Badge>
-                      ) : (
-                        <Badge className="bg-orange-500">
-                          Em processamento
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <a
-                        href={extract.link_arquivo}
-                        download
-                        className="text-blue-400 hover:underline"
-                      >
-                        {extract.link_arquivo}
-                      </a>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() =>
-                          setSearchParams({ current: String(extract.id) })
-                        }
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
+                {extracts?.results?.length ? (
+                  extracts?.results?.map((extract) => (
+                    <TableRow key={extract.id}>
+                      <TableCell className="min-w-[200px]">
+                        {extract.descricao}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {extract.id_conta_rci}
+                      </TableCell>
+                      <TableCell className="text-center">{`${extract.mes_referencia}/${extract.ano_referencia}`}</TableCell>
+                      <TableCell className="text-center">
+                        {extract.processado ? (
+                          <Badge className="bg-emerald-600">Processado</Badge>
+                        ) : (
+                          <Badge className="bg-orange-500">
+                            Em processamento
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <a
+                          href={extract.link_arquivo}
+                          download
+                          className="text-blue-400 hover:underline"
+                        >
+                          {extract.link_arquivo}
+                        </a>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() =>
+                            setSearchParams({ current: String(extract.id) })
+                          }
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center">
+                      Nenhum registro encontrado
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </div>
