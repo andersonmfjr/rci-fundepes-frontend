@@ -28,7 +28,9 @@ export function ExtractsManagement() {
   const { data: extracts } = useQuery({
     queryKey: ["extracts", searchParams.get("page") || "1"],
     queryFn: ({ queryKey: [_, page] }) =>
-      fetcher<Pagination<BankExtract>>(`/app/extrato-bancario?page=${page}`),
+      fetcher<Pagination<BankExtract>>(
+        `/app/extrato-bancario?page=${page}&page_size=10`
+      ),
   });
 
   const handleClose = useCallback(() => {
@@ -38,6 +40,7 @@ export function ExtractsManagement() {
   const handlePageChange = (page: number) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("page", String(page));
+    setSearchParams(newSearchParams);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 

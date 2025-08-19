@@ -1,6 +1,4 @@
-import { Feedback } from "@/components/feedback";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { fetcher } from "@/lib/fetcher";
 import {
   Select,
