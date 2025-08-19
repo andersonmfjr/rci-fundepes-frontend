@@ -18,6 +18,7 @@ import { useSearchParams } from "react-router-dom";
 import { ExtractDetailsModal } from "@/components/extracts/extract-details-modal";
 import { Badge } from "@/components/ui/badge";
 import { ExtractPagination } from "@/components/extracts/extracts-pagination";
+import { ExtractsFilter } from "@/components/extracts/extracts-filters";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -40,8 +41,6 @@ export function ExtractsManagement() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  console.log(extracts);
-
   return (
     <Layout>
       <div className="container mx-auto py-6 space-y-6">
@@ -53,13 +52,15 @@ export function ExtractsManagement() {
             </p>
           </div>
         </header>
-        <main>
-          <div className="flex justify-end mb-6">
+        <main className="space-y-6">
+          <div className="">
             <Button onClick={() => setOpen(true)}>
               Adicionar extrato
               <Plus />
             </Button>
           </div>
+
+          <ExtractsFilter />
 
           <div className="rounded-md border bg-white">
             <Table>
@@ -103,11 +104,11 @@ export function ExtractsManagement() {
                           </Badge>
                         )}
                       </TableCell>
-                      <TableCell className="text-center">
+                      <TableCell className="text-center max-w-32">
                         <a
                           href={extract.link_arquivo}
                           download
-                          className="text-blue-400 hover:underline"
+                          className="text-blue-400 hover:underline text-ellipsis max-w-32 block overflow-hidden whitespace-nowrap"
                         >
                           {extract.link_arquivo}
                         </a>

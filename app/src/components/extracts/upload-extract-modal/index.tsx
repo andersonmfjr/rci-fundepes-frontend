@@ -53,6 +53,7 @@ export function UploadExtractModal({
     queryKey: ["get-rci-accounts"],
     queryFn: async () => fetcher<Pagination<RciAccount>>("/app/contas-rci"),
     enabled: open,
+    staleTime: 0,
   });
 
   const { mutate, isPending } = useMutation({
@@ -63,6 +64,7 @@ export function UploadExtractModal({
         description:
           "O extrato cadastrado será processado dentro de alguns instantes.",
       });
+
       handleClose();
     },
     onError: (error) => {
