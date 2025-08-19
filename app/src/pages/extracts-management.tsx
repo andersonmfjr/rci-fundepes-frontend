@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetcher } from "@/lib/fetcher";
 import { useSearchParams } from "react-router-dom";
 import { ExtractDetailsModal } from "@/components/extracts/extract-details-modal";
+import { Badge } from "@/components/ui/badge";
 
 const data = [
   {
@@ -129,7 +130,13 @@ export function ExtractsManagement() {
                     </TableCell>
                     <TableCell className="text-center">{`${extract.mes_referencia}/${extract.ano_referencia}`}</TableCell>
                     <TableCell className="text-center">
-                      {extract.processado ? "Processado" : "Em processamento"}
+                      {extract.processado ? (
+                        <Badge className="bg-emerald-600">Processado</Badge>
+                      ) : (
+                        <Badge className="bg-orange-500">
+                          Em processamento
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className="text-center">
                       <a
