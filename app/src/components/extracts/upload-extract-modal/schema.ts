@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 export const formSchema = z.object({
   description: z.string().trim().optional(),
@@ -32,7 +32,11 @@ export const formSchema = z.object({
 
 export type FormSchema = z.infer<typeof formSchema>;
 
-export type MutationSchema = Omit<FormSchema, "monthAndYear"> & {
-  month: string;
-  year: string;
+export type MutationSchema = {
+  descricao: string;
+  mes_referencia: string;
+  ano_referencia: string;
+  processado: boolean;
+  id_conta_rci: number;
+  link_arquivo: File;
 };

@@ -74,9 +74,12 @@ export function UploadExtractModal({
   const submitForm = (data: FormSchema) => {
     const monthAndYearSplitted = data.monthAndYear?.split("/");
     mutate({
-      month: monthAndYearSplitted[0],
-      year: monthAndYearSplitted[1],
-      ...data,
+      mes_referencia: monthAndYearSplitted[0],
+      ano_referencia: monthAndYearSplitted[1],
+      descricao: data.description,
+      id_conta_rci: data.account,
+      link_arquivo: data.extractFile,
+      processado: false,
     });
   };
 

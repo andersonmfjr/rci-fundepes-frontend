@@ -24,7 +24,7 @@ export async function fetcher<T>(url: string, config?: RequestInit) {
 
   if (response.status == 401) {
     removeUserKeys();
-    window.location.href = '/login';
+    window.location.href = "/login";
   }
 
   if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
