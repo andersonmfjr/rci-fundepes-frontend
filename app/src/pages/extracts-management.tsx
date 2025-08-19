@@ -17,18 +17,30 @@ import { fetcher } from "@/lib/fetcher";
 import { useSearchParams } from "react-router-dom";
 import { ExtractDetailsModal } from "@/components/extracts/extract-details-modal";
 import { Badge } from "@/components/ui/badge";
+import { ExtractPagination } from "@/components/extracts/extracts-pagination";
+
+const ITEMS_PER_PAGE = 10;
 
 export function ExtractsManagement() {
   const [open, setOpen] = useState(false);
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { data: extracts } = useQuery({
-    queryKey: ["extracts"],
-    queryFn: () => fetcher<Pagination<BankExtract>>("/app/extrato-bancario"),
+    queryKey: ["extracts", searchParams.get("page") || "1"],
+    queryFn: ({ queryKey: [_, page] }) =>
+      fetcher<Pagination<BankExtract>>(`/app/extrato-bancario?page=${page}`),
   });
 
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
+
+  const handlePageChange = (page: number) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("page", String(page));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  console.log(extracts);
 
   return (
     <Layout>
@@ -123,6 +135,11 @@ export function ExtractsManagement() {
               </TableBody>
             </Table>
           </div>
+          <ExtractPagination
+            currentPage={Number(searchParams.get("page") || 1)}
+            onPageChange={handlePageChange}
+            totalPages={Math.ceil(extracts?.count) / ITEMS_PER_PAGE}
+          />
         </main>
         <UploadExtractModal onOpenChange={handleClose} open={open} />
       </div>

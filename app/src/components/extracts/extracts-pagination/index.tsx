@@ -92,11 +92,8 @@ export function ExtractPagination({
           <PaginationItem>
             <PaginationPrevious
               onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-              className={
-                currentPage === 1
-                  ? "pointer-events-none opacity-50"
-                  : "cursor-pointer"
-              }
+              data-enabled={currentPage != 1}
+              className="pointer-events-none data-[enabled=false]:opacity-50 data-[enabled=true]:cursor-pointer"
             >
               Anterior
             </PaginationPrevious>
@@ -107,11 +104,8 @@ export function ExtractPagination({
               onClick={() =>
                 onPageChange(Math.min(totalPages, currentPage + 1))
               }
-              className={
-                currentPage === totalPages
-                  ? "pointer-events-none opacity-50"
-                  : "cursor-pointer"
-              }
+              data-enabled={currentPage != totalPages && !!totalPages}
+              className="pointer-events-none data-[enabled=false]:opacity-50 data-[enabled=true]:cursor-pointer"
             >
               Próxima
             </PaginationNext>

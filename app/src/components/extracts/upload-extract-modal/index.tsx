@@ -30,7 +30,7 @@ import { ChangeEvent, DragEvent } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const uploadFile = async (data: MutationSchema) => {
-  await fetcher("/app/extrato-bancario", {
+  await fetcher("/app/extrato-bancario/", {
     method: "POST",
     body: toFormData(data),
     headers: {
@@ -55,7 +55,7 @@ export function UploadExtractModal({
     enabled: open,
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: uploadFile,
     onSuccess: () => {
       toast({
@@ -63,6 +63,7 @@ export function UploadExtractModal({
         description:
           "O extrato cadastrado será processado dentro de alguns instantes.",
       });
+      handleClose();
     },
     onError: (error) => {
       console.log(error);
@@ -250,7 +251,9 @@ export function UploadExtractModal({
                 Cancelar
               </Button>
             </DialogClose>
-            <Button type="submit">Enviar</Button>
+            <Button type="submit" disabled={isPending}>
+              Enviar
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
