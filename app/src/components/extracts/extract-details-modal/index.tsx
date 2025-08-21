@@ -16,7 +16,6 @@ import {
   TableRow,
   TableCell,
 } from "@/components/ui/table";
-import { Upload } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export function ExtractDetailsModal() {

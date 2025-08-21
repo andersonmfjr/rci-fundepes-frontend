@@ -44,6 +44,8 @@ export function ExtractsManagement() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  console.log(extracts);
+
   return (
     <Layout>
       <div className="container mx-auto py-6 space-y-6">
@@ -142,7 +144,7 @@ export function ExtractsManagement() {
           <ExtractPagination
             currentPage={Number(searchParams.get("page") || 1)}
             onPageChange={handlePageChange}
-            totalPages={Math.ceil(extracts?.count) / ITEMS_PER_PAGE}
+            totalPages={Math.ceil(extracts?.count / ITEMS_PER_PAGE)}
           />
         </main>
         <UploadExtractModal onOpenChange={handleClose} open={open} />
