@@ -5,7 +5,6 @@ interface LoginResponse {
 
 type UserType = "P" | "A";
 
-
 // Domain
 
 interface User {
@@ -149,13 +148,12 @@ interface ContractDetail {
   alertas: Alert[];
 }
 
-
 interface BankExtract {
-  id: number;
+  id_extrato: number;
   id_conta_rci: number;
   descricao: string;
   link_arquivo: string;
-  mes_referencia: string
+  mes_referencia: string;
   ano_referencia: string;
   processado: boolean;
 }

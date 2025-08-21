@@ -44,8 +44,6 @@ export function ExtractsManagement() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  console.log(extracts);
-
   return (
     <Layout>
       <div className="container mx-auto py-6 space-y-6">
@@ -92,7 +90,7 @@ export function ExtractsManagement() {
               <TableBody>
                 {extracts?.results?.length ? (
                   extracts?.results?.map((extract) => (
-                    <TableRow key={extract.id}>
+                    <TableRow key={extract.id_extrato}>
                       <TableCell className="min-w-[200px]">
                         {extract.descricao}
                       </TableCell>
