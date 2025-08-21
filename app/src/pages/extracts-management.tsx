@@ -121,7 +121,9 @@ export function ExtractsManagement() {
                           variant="ghost"
                           size="sm"
                           onClick={() =>
-                            setSearchParams({ current: String(extract.id) })
+                            setSearchParams({
+                              current: String(extract.id_extrato),
+                            })
                           }
                         >
                           <Eye className="w-4 h-4" />
