@@ -101,7 +101,7 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                 {formatCurrency(totalRciValue)}
               </div>
               <div className="text-sm text-green-600 mt-1">
-                {(totalRciPercentage * 100).toFixed(2)}% do valor total
+                {(totalRciPercentage * 100).toFixed(0)}% do valor total
               </div>
             </div>
           </div>
