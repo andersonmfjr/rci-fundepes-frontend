@@ -2,18 +2,8 @@ import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
-import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/contracts/utils";
-import ContractAlertsDialog from "@/components/contracts/ContractAlertsDialog";
-
-import {
-  Calendar,
-  DollarSign,
-  Building,
-  User,
-  FileText,
-  AlertTriangle,
-} from "lucide-react";
+import { Calendar, DollarSign, Building, User, FileText } from "lucide-react";
 
 interface ContractInfoProps {
   contract: ContractDetail;
@@ -24,9 +14,6 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
   const [contractValidation, setContractValidation] = useState(
     contract.validado || false
   );
-  const [alertsDialogOpen, setAlertsDialogOpen] = useState(false);
-  const hasAlerts = contract.alertas && contract.alertas.length > 0;
-
   const totalRciPercentage =
     contract.distribuicoes_rci?.reduce(
       (total, dist) => total + parseFloat(dist?.percentual || "0"),
@@ -85,21 +72,9 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
     <>
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <CardTitle className="text-lg lg:text-xl">
-              Informações do contrato
-            </CardTitle>
-            {hasAlerts && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setAlertsDialogOpen(true)}
-                className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-100 p-1 h-auto"
-              >
-                <AlertTriangle className="w-5 h-5" />
-              </Button>
-            )}
-          </div>
+          <CardTitle className="text-lg lg:text-xl">
+            Informações do contrato
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Informações financeiras principais */}
@@ -282,15 +257,6 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
           </div>
         </CardContent>
       </Card>
-
-      {hasAlerts && (
-        <ContractAlertsDialog
-          open={alertsDialogOpen}
-          onOpenChange={setAlertsDialogOpen}
-          alerts={contract.alertas}
-          contractName={contract.nome || "Contrato"}
-        />
-      )}
     </>
   );
 };

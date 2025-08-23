@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Eye, AlertTriangle } from "lucide-react";
-import ContractAlertsDialog from "./ContractAlertsDialog";
+import { Eye } from "lucide-react";
 
 import { formatCurrency } from "@/lib/contracts/utils";
 
@@ -13,12 +12,9 @@ interface ContractTableRowProps {
 }
 
 const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
-  const [alertsDialogOpen, setAlertsDialogOpen] = useState(false);
-  const hasAlerts = contract.alertas && contract.alertas.length > 0;
-
   return (
     <>
-      <TableRow className={hasAlerts ? "bg-yellow-50/50" : ""}>
+      <TableRow>
         <TableCell className="min-w-[200px]">
           <div>
             <Link
@@ -47,34 +43,13 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
             : "-"}
         </TableCell>
         <TableCell className="text-right min-w-[100px]">
-          <div className="flex items-center justify-end gap-1 lg:gap-2">
-            {hasAlerts && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setAlertsDialogOpen(true)}
-                className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-100"
-              >
-                <AlertTriangle className="w-4 h-4" />
-              </Button>
-            )}
-            <Button variant="ghost" size="sm" asChild>
-              <Link to={`/validations/${contract.id_contrato}`}>
-                <Eye className="w-4 h-4" />
-              </Link>
-            </Button>
-          </div>
+          <Button variant="ghost" size="sm" asChild>
+            <Link to={`/validations/${contract.id_contrato}`}>
+              <Eye className="w-4 h-4" />
+            </Link>
+          </Button>
         </TableCell>
       </TableRow>
-
-      {hasAlerts && (
-        <ContractAlertsDialog
-          open={alertsDialogOpen}
-          onOpenChange={setAlertsDialogOpen}
-          alerts={contract.alertas}
-          contractName={contract.nome}
-        />
-      )}
     </>
   );
 };
