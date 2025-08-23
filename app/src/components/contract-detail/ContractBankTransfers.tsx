@@ -38,6 +38,23 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
     )
   );
 
+  const totalTransferencias = transfers.reduce(
+    (sum, transfer) => sum + parseFloat(transfer.valor),
+    0
+  );
+
+  const totalPercentual = contract.distribuicoes_rci.reduce(
+    (sum, dist) => sum + parseFloat(dist.percentual),
+    0
+  );
+  const valorTotalContrato = parseFloat(contract.valor_total || "0");
+  const valorTotalRci = valorTotalContrato * totalPercentual;
+
+  const percentualRciDistribuido =
+    valorTotalRci > 0 ? (totalTransferencias / valorTotalRci) * 100 : 0;
+  const valorRciFaltante = valorTotalRci - totalTransferencias;
+  const percentualRciFaltante = 100 - percentualRciDistribuido;
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("pt-BR");
   };
@@ -85,16 +102,23 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
               As transferências aparecerão aqui quando forem processadas
             </p>
           </div>
+
+          {/* Alerta se o valor distribuído não bate com o valor total de RCI */}
+          {valorTotalRci > 0 && (
+            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-yellow-600" />
+                <span className="text-sm font-medium text-yellow-700">
+                  Atenção: Falta distribuir {formatCurrency(valorTotalRci)}{" "}
+                  (100%) do RCI total
+                </span>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     );
   }
-
-  // Calcular totais
-  const totalTransferencias = transfers.reduce(
-    (sum, transfer) => sum + parseFloat(transfer.valor),
-    0
-  );
 
   return (
     <Card>
@@ -189,6 +213,27 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
             </div>
           ))}
         </div>
+
+        {/* Alerta se o valor distribuído não bate com o valor total de RCI */}
+        {totalTransferencias !== valorTotalRci && valorTotalRci > 0 && (
+          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-yellow-600" />
+              <span className="text-sm font-medium text-yellow-700">
+                Atenção:{" "}
+                {totalTransferencias < valorTotalRci
+                  ? `Falta distribuir ${formatCurrency(
+                      valorRciFaltante
+                    )} (${percentualRciFaltante.toFixed(
+                      0
+                    )}%) do RCI total de ${formatCurrency(valorTotalRci)}`
+                  : `Excede em ${formatCurrency(
+                      totalTransferencias - valorTotalRci
+                    )} o RCI total de ${formatCurrency(valorTotalRci)}`}
+              </span>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

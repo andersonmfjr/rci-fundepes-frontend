@@ -68,21 +68,6 @@ const ContractRciDistribution = ({
   const valorTotalContrato = parseFloat(contract.valor_total || "0");
   const valorTotalRci = valorTotalContrato * totalPercentual;
 
-  const valorTotalDistribuido = distributions.reduce((sum, dist) => {
-    const transferenciasTotal =
-      dist.transferencias?.reduce(
-        (transSum, trans) => transSum + parseFloat(trans.valor || "0"),
-        0
-      ) || 0;
-    return sum + transferenciasTotal;
-  }, 0);
-
-  const percentualRciDistribuido =
-    valorTotalRci > 0 ? (valorTotalDistribuido / valorTotalRci) * 100 : 0;
-
-  const valorRciFaltante = valorTotalRci - valorTotalDistribuido;
-  const percentualRciFaltante = 100 - percentualRciDistribuido;
-
   return (
     <Card>
       <CardHeader>
@@ -111,13 +96,6 @@ const ContractRciDistribution = ({
             <span className="text-gray-600">RCI Total do Contrato: </span>
             <span className="font-semibold">
               {formatCurrency(valorTotalRci)}
-            </span>
-          </div>
-          <div className="text-sm">
-            <span className="text-gray-600">RCI Distribuído: </span>
-            <span className="font-semibold">
-              {formatCurrency(valorTotalDistribuido)} (
-              {percentualRciDistribuido.toFixed(0)}%)
             </span>
           </div>
         </div>
@@ -218,27 +196,6 @@ const ContractRciDistribution = ({
             );
           })}
         </div>
-
-        {/* Alerta se o valor distribuído não bate com o valor total de RCI */}
-        {valorTotalDistribuido !== valorTotalRci && valorTotalRci > 0 && (
-          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-yellow-600" />
-              <span className="text-sm font-medium text-yellow-700">
-                Atenção:{" "}
-                {valorTotalDistribuido < valorTotalRci
-                  ? `Falta distribuir ${formatCurrency(
-                      valorRciFaltante
-                    )} (${percentualRciFaltante.toFixed(
-                      0
-                    )}%) do RCI total de ${formatCurrency(valorTotalRci)}`
-                  : `Excede em ${formatCurrency(
-                      valorTotalDistribuido - valorTotalRci
-                    )} o RCI total de ${formatCurrency(valorTotalRci)}`}
-              </span>
-            </div>
-          </div>
-        )}
       </CardContent>
     </Card>
   );
