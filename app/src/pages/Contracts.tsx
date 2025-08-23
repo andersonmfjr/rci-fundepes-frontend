@@ -7,7 +7,6 @@ import type {
   SortField,
   SortDirection,
   ContractsFilters as ContractsFiltersType,
-  ContractsStats,
 } from "@/lib/contracts/service";
 import Layout from "@/components/layout/Layout";
 import { toast } from "@/hooks/use-toast";
@@ -22,11 +21,7 @@ const Contracts = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [contracts, setContracts] = useState<ContractListItem[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [stats, setStats] = useState<ContractsStats>({
-    totalContracts: 0,
-    validatedContracts: 0,
-    totalValue: 0,
-  });
+
   const [loading, setLoading] = useState(true);
   const [tableLoading, setTableLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState(
@@ -49,16 +44,12 @@ const Contracts = () => {
     const loadInitialData = async () => {
       try {
         setLoading(true);
-        const [statsResponse, contractsResponse] = await Promise.all([
-          contractsService.getStats(),
-          contractsService.getAll({
-            sortField,
-            sortDirection,
-            page: currentPage,
-            pageSize: itemsPerPage,
-          }),
-        ]);
-        setStats(statsResponse);
+        const contractsResponse = await contractsService.getAll({
+          sortField,
+          sortDirection,
+          page: currentPage,
+          pageSize: itemsPerPage,
+        });
         setContracts(contractsResponse.results);
         setTotalCount(contractsResponse.count);
       } catch (error) {
@@ -74,6 +65,7 @@ const Contracts = () => {
     };
 
     loadInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadContracts = async (filters: ContractsFiltersType) => {
@@ -161,55 +153,6 @@ const Contracts = () => {
               Gerencie as validações de contratos, RCI e aditivos
             </p>
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Total de contratos
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalContracts}</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Contratos validados
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.validatedContracts}
-              </div>
-              <div className="text-sm text-gray-500 mt-1">
-                {stats.totalContracts > 0
-                  ? `${(
-                      (stats.validatedContracts / stats.totalContracts) *
-                      100
-                    ).toFixed(2)}%`
-                  : "0%"}
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">
-                Valor total dos contratos
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.totalValue.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Filters */}

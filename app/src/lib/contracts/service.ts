@@ -12,12 +12,6 @@ export interface ContractsFilters {
   pageSize?: number;
 }
 
-export interface ContractsStats {
-  totalContracts: number;
-  validatedContracts: number;
-  totalValue: number;
-}
-
 export const contractsService = {
   getAll: async (filters?: ContractsFilters): Promise<ContractListResponse> => {
     const params = new URLSearchParams();
@@ -47,10 +41,6 @@ export const contractsService = {
     const url = `/app/contratos/${queryString ? `?${queryString}` : ""}`;
 
     return await fetcher<ContractListResponse>(url);
-  },
-
-  getStats: async (): Promise<ContractsStats> => {
-    return await fetcher<ContractsStats>(`/app/contratos/resumo/`);
   },
 
   getById: async (id: string): Promise<ContractDetail | null> => {

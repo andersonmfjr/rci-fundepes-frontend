@@ -1,5 +1,4 @@
 export {
-  StatsSkeleton,
   TableSkeleton,
   HeaderSkeleton as ContractsHeaderSkeleton,
   FiltersSkeleton,

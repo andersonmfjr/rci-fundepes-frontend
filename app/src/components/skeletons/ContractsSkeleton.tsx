@@ -1,22 +1,6 @@
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-export const StatsSkeleton = () => (
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-    {[1, 2, 3].map((i) => (
-      <Card key={i}>
-        <CardHeader className="pb-2">
-          <div className="h-4 bg-gray-200 rounded w-32 animate-pulse"></div>
-        </CardHeader>
-        <CardContent>
-          <div className="h-8 bg-gray-200 rounded w-20 animate-pulse mb-2"></div>
-          <div className="h-3 bg-gray-200 rounded w-16 animate-pulse"></div>
-        </CardContent>
-      </Card>
-    ))}
-  </div>
-);
-
 export const TableSkeleton = () => (
   <Card>
     <CardContent className="p-0">
@@ -64,7 +48,6 @@ export const FiltersSkeleton = () => (
 export const ContractsPageSkeleton = () => (
   <div className="container mx-auto py-6 space-y-6">
     <HeaderSkeleton />
-    <StatsSkeleton />
     <FiltersSkeleton />
     <TableSkeleton />
   </div>
