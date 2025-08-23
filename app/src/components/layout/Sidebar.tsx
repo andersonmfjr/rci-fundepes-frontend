@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 const Sidebar = () => {
   const menuItems = [
     {
-      title: "Contratos",
-      href: "/contracts",
+      title: "Validações",
+      href: "/validations",
       icon: File,
     },
     {

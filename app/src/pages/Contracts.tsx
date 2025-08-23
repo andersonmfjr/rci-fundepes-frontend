@@ -156,9 +156,9 @@ const Contracts = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Contratos</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Validações</h1>
             <p className="text-gray-600">
-              Gerencie os contratos de ressarcimento de custos indiretos
+              Gerencie as validações de contratos, RCI e aditivos
             </p>
           </div>
         </div>
@@ -188,9 +188,9 @@ const Contracts = () => {
               <div className="text-sm text-gray-500 mt-1">
                 {stats.totalContracts > 0
                   ? `${(
-                    (stats.validatedContracts / stats.totalContracts) *
-                    100
-                  ).toFixed(1)}%`
+                      (stats.validatedContracts / stats.totalContracts) *
+                      100
+                    ).toFixed(2)}%`
                   : "0%"}
               </div>
             </CardContent>

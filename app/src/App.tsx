@@ -27,7 +27,7 @@ const App = () => {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route
-                path="/contracts"
+                path="/validations"
                 element={
                   <ProtectedRoute>
                     <Contracts />
@@ -43,7 +43,7 @@ const App = () => {
                 }
               />
               <Route
-                path="/contracts/:id"
+                path="/validations/:id"
                 element={
                   <ProtectedRoute>
                     <ContractDetail />
@@ -74,7 +74,10 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route path="/" element={<Navigate to="/contracts" replace />} />
+              <Route
+                path="/"
+                element={<Navigate to="/validations" replace />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

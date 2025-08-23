@@ -28,7 +28,7 @@ interface Alert {
 }
 
 interface ContractListItem {
-  id: number;
+  id_contrato: number;
   nome: string;
   descricao: string;
   valor_total: string;

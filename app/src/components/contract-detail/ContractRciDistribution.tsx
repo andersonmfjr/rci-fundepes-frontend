@@ -8,12 +8,7 @@ import {
 } from "@/components/ui/card";
 import { ValidationButton } from "@/components/ui/validation-button";
 import { Clock, Building2, Percent } from "lucide-react";
-import {
-  formatCurrency,
-  getRootUnit,
-  buildUnitPathString,
-} from "@/lib/contracts/utils";
-import { mockAcademicUnits } from "@/lib/contracts/mockData";
+import { formatCurrency } from "@/lib/contracts/utils";
 
 interface ContractRciDistributionProps {
   contract: ContractDetail;
@@ -95,7 +90,7 @@ const ContractRciDistribution = ({
           </div>
           <div className="text-sm">
             <span className="text-gray-600">Percentual Total: </span>
-            <span className="font-semibold">{totalPercentual.toFixed(1)}%</span>
+            <span className="font-semibold">{totalPercentual.toFixed(2)}%</span>
           </div>
           <div className="text-sm">
             <span className="text-gray-600">Valor Base Total: </span>
@@ -209,10 +204,10 @@ const ContractRciDistribution = ({
               <Clock className="w-4 h-4 text-yellow-600" />
               <span className="text-sm font-medium text-yellow-700">
                 Atenção: O percentual total de distribuição é{" "}
-                {totalPercentual.toFixed(1)}%
+                {totalPercentual.toFixed(2)}%
                 {totalPercentual < 100
-                  ? " (faltam " + (100 - totalPercentual).toFixed(1) + "%)"
-                  : " (excede em " + (totalPercentual - 100).toFixed(1) + "%)"}
+                  ? " (faltam " + (100 - totalPercentual).toFixed(2) + "%)"
+                  : " (excede em " + (totalPercentual - 100).toFixed(2) + "%)"}
               </span>
             </div>
           </div>

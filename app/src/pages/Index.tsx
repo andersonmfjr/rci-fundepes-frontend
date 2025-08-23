@@ -5,7 +5,7 @@ const Index = () => {
   const isAuthenticated = authService.isAuthenticated();
 
   if (isAuthenticated) {
-    return <Navigate to="/contracts" replace />;
+    return <Navigate to="/validations" replace />;
   }
 
   return <Navigate to="/login" replace />;

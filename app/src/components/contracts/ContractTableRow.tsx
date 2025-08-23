@@ -22,7 +22,7 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
         <TableCell className="min-w-[200px]">
           <div>
             <Link
-              to={`/contracts/${contract.id}`}
+              to={`/validations/${contract.id_contrato}`}
               className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
             >
               {contract.nome}
@@ -42,7 +42,9 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
           {formatDate(contract.data_criacao || "")}
         </TableCell>
         <TableCell className="text-gray-600 min-w-[120px]">
-          {formatDate(contract.data_atualizacao || "")}
+          {contract.data_atualizacao
+            ? formatDate(contract.data_atualizacao)
+            : "-"}
         </TableCell>
         <TableCell className="text-right min-w-[100px]">
           <div className="flex items-center justify-end gap-1 lg:gap-2">
@@ -57,7 +59,7 @@ const ContractTableRow = ({ contract, formatDate }: ContractTableRowProps) => {
               </Button>
             )}
             <Button variant="ghost" size="sm" asChild>
-              <Link to={`/contracts/${contract.id}`}>
+              <Link to={`/validations/${contract.id_contrato}`}>
                 <Eye className="w-4 h-4" />
               </Link>
             </Button>

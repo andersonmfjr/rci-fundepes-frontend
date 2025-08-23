@@ -66,8 +66,8 @@ const ContractDetail = () => {
           <p className="text-gray-600 mb-6">
             O contrato solicitado não existe ou foi removido
           </p>
-          <Button onClick={() => navigate("/contracts")}>
-            Voltar para Contratos
+          <Button onClick={() => navigate("/validations")}>
+            Voltar para listagem
           </Button>
         </div>
       </Layout>
@@ -79,7 +79,7 @@ const ContractDetail = () => {
       <div className="space-y-4 lg:space-y-6">
         <Button
           variant="ghost"
-          onClick={() => navigate("/contracts")}
+          onClick={() => navigate("/validations")}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="w-4 h-4" />

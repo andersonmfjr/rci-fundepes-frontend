@@ -127,7 +127,7 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                 {formatCurrency(totalRciValue)}
               </div>
               <div className="text-sm text-green-600 mt-1">
-                {totalRciPercentage.toFixed(1)}% do valor total
+                {totalRciPercentage.toFixed(2)}% do valor total
               </div>
             </div>
           </div>
@@ -178,9 +178,9 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                       <div className="text-sm font-medium">
                         {contract.id_financiador?.nome || "Não informado"}
                       </div>
-                      {contract.id_financiador?.tipo_financiador && (
+                      {contract.id_financiador?.tipo_financiador_descricao && (
                         <div className="text-xs text-gray-500">
-                          {contract.id_financiador.tipo_financiador}
+                          {contract.id_financiador.tipo_financiador_descricao}
                         </div>
                       )}
                     </div>
