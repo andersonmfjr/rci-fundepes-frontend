@@ -24,9 +24,8 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
     contract.distribuicoes_rci?.reduce(
       (total, dist) =>
         total +
-        (parseFloat(dist?.valor_base_calculo || "0") *
-          parseFloat(dist?.percentual || "0")) /
-          100,
+        parseFloat(dist?.valor_base_calculo || "0") *
+          parseFloat(dist?.percentual || "0"),
       0
     ) || 0;
 
@@ -102,7 +101,7 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                 {formatCurrency(totalRciValue)}
               </div>
               <div className="text-sm text-green-600 mt-1">
-                {totalRciPercentage.toFixed(2)}% do valor total
+                {(totalRciPercentage * 100).toFixed(2)}% do valor total
               </div>
             </div>
           </div>
