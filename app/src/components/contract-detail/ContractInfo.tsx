@@ -133,51 +133,6 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <label className="text-xs font-medium text-gray-600 mb-1 block">
-                    TIPO DE CONTRATO
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm font-medium">
-                      {contract.tipo_contrato || "Não informado"}
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">
-                    FINANCIADOR
-                  </label>
-                  <div className="flex items-start gap-2">
-                    <User className="w-4 h-4 text-gray-500" />
-                    <div>
-                      <div className="text-sm font-medium">
-                        {contract.id_financiador?.nome || "Não informado"}
-                      </div>
-                      {contract.id_financiador?.tipo_financiador_descricao && (
-                        <div className="text-xs text-gray-500">
-                          {contract.id_financiador.tipo_financiador_descricao}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">
-                    DATA DE CRIAÇÃO
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm font-medium">
-                      {contract.data_criacao
-                        ? formatDate(contract.data_criacao)
-                        : "Não informado"}
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">
                     UNIDADE ACADÊMICA
                   </label>
                   <div className="flex items-start gap-2">
