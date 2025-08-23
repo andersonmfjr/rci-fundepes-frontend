@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./providers/auth-provider";
+import { ExtractsManagement } from "./pages/extracts-management";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Contracts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/extracts"
+                element={
+                  <ProtectedRoute>
+                    <ExtractsManagement />
                   </ProtectedRoute>
                 }
               />
