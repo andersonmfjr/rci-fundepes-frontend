@@ -44,9 +44,7 @@ const BiOverview = () => {
   const [sortDirection, setSortDirection] = useState<BiSortDirection>(
     (searchParams.get("sortDirection") as BiSortDirection) || "asc"
   );
-  const [activeFilters, setActiveFilters] = useState<Partial<BiFiltersType>>(
-    {}
-  );
+  const [activeFilters, setActiveFilters] = useState<Partial<BiFilters>>({});
 
   const itemsPerPage = 5;
 
@@ -81,7 +79,7 @@ const BiOverview = () => {
     loadInitialData();
   }, []);
 
-  const loadData = useCallback(async (filters: BiFiltersType) => {
+  const loadData = useCallback(async (filters: BiFilters) => {
     try {
       setTableLoading(true);
       const response = await biService.getOverview(filters);
@@ -145,7 +143,7 @@ const BiOverview = () => {
     setCurrentPage(1);
   }, []);
 
-  const handleFiltersChange = useCallback((filters: Partial<BiFiltersType>) => {
+  const handleFiltersChange = useCallback((filters: Partial<BiFilters>) => {
     setActiveFilters(filters);
     setCurrentPage(1);
   }, []);

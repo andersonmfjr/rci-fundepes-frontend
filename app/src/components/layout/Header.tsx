@@ -15,14 +15,14 @@ export function Header() {
   };
 
   const formatName = (user: User) => {
-    if (user.name) {
+    if (user?.name) {
       return user.name;
     }
 
-    const name = user.first_name + " " + (user.last_name || "");
+    const name = user?.first_name + " " + (user?.last_name || "");
 
     if (name.trim() === "") {
-      return user.username;
+      return user?.username;
     }
 
     return name.trim();
