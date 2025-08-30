@@ -14,6 +14,20 @@ export function Header() {
     }, 500);
   };
 
+  const formatName = (user: User) => {
+    if (user.name) {
+      return user.name;
+    }
+
+    const name = user.first_name + " " + (user.last_name || "");
+
+    if (name.trim() === "") {
+      return user.username;
+    }
+
+    return name.trim();
+  };
+
   return (
     <header className="h-16 border-b bg-white shadow-sm flex items-center justify-between px-4 lg:px-6">
       <div className="flex items-center gap-3">
@@ -35,7 +49,7 @@ export function Header() {
         >
           <User className="w-4 h-4 text-gray-600" />
           <span className="text-gray-700 hidden sm:inline">
-            {user?.username}
+            {formatName(user)}
           </span>
         </button>
         <Button

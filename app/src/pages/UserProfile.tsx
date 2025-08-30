@@ -60,7 +60,7 @@ const UserProfile = () => {
       form.reset();
       setIsChangingPassword(false);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       console.error("Error updating password:", error);
       toast.error(
         "Erro ao alterar senha. Verifique se a senha atual está correta."
@@ -83,6 +83,15 @@ const UserProfile = () => {
   const getUserTypeBadge = (tipo: string) => {
     const variant = tipo === "P" ? "secondary" : "default";
     return <Badge variant={variant}>{getUserTypeLabel(tipo)}</Badge>;
+  };
+
+  const formatName = (user: User) => {
+    if (user.name) {
+      return user.name;
+    }
+
+    const name = user.first_name + " " + (user.last_name || "");
+    return name.trim();
   };
 
   if (!user) {
@@ -117,7 +126,7 @@ const UserProfile = () => {
                   Nome
                 </Label>
                 <div className="p-3 bg-gray-50 rounded-md border">
-                  <span className="text-gray-900">{user.first_name}</span>
+                  <span className="text-gray-900">{formatName(user)}</span>
                 </div>
               </div>
 

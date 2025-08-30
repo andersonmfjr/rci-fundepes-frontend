@@ -10,6 +10,8 @@ type UserType = "P" | "A";
 interface User {
   id: string;
   first_name: string;
+  last_name: string;
+  name: string;
   username: string;
   email: string;
   tipo_usuario: UserType;
