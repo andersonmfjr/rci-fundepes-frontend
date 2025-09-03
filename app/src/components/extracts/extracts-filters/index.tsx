@@ -19,7 +19,7 @@ export function ExtractsFilter() {
   return (
     <fieldset className="border rounded-md pb-5 pt-1 px-4">
       <legend className="font-bold mb-2 text-lg">Filtros</legend>
-      <div className="flex gap-4  lg:gap-10 flex-col lg:flex-row">
+      <div className="flex gap-4 lg:gap-10 flex-col lg:flex-row">
         <Input placeholder="Filtrar por mês/ano" />
 
         <Select>

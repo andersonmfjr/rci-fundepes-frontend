@@ -50,6 +50,7 @@ const Contracts = () => {
           page: currentPage,
           pageSize: itemsPerPage,
         });
+
         setContracts(contractsResponse.results);
         setTotalCount(contractsResponse.count);
       } catch (error) {
