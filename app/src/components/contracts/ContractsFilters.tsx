@@ -9,36 +9,84 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 
-interface ContractsFiltersProps {
-  searchTerm: string;
-  onSearchChange: (value: string) => void;
-}
+type FilterSchema = {
+  status: string;
+  from: string;
+  to: string;
+  unity: string;
+  description: string;
+};
 
-const ContractsFilters = ({
-  searchTerm,
-  onSearchChange,
-}: ContractsFiltersProps) => {
+const ContractsFilters = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { register, handleSubmit, setValue, reset } = useForm<FilterSchema>({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    defaultValues: {
+      status: "",
+      from: "",
+      to: "",
+      unity: "",
+      description: "",
+    },
+  });
+
+  const handleFilter = (data: FilterSchema) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    const keys = Object.keys(data);
+
+    for (const key of keys) {
+      if (data[key]) newSearchParams.set(key, data[key]);
+    }
+
+    setSearchParams(newSearchParams);
+  };
+
+  const handleRemoveFilter = () => {
+    setSearchParams({});
+    reset();
+  };
+
   return (
     <fieldset className="border rounded-md pb-5 pt-1 px-4">
       <legend className="font-bold mb-2 text-lg">Filtros</legend>
-      <div className="flex gap-4 lg:gap-10 flex-col lg:flex-row">
+      <form onSubmit={handleSubmit(handleFilter)}>
         <div className="space-y-1">
           <Label htmlFor="from">Vigência (inicial e final)</Label>
-          <div className="flex gap-2">
-            <Input type="date" id="from" />
-            <Input type="date" id="to" />
+          <div className="flex gap-2 lg:w-56">
+            <Input type="date" id="from" {...register("from")} />
+            <Input type="date" id="to" {...register("to")} />
           </div>
         </div>
-        <div className="space-y-1 w-full">
-          <Label htmlFor="unity">Unidade</Label>
-          <Select>
-            <SelectTrigger className="self-end" id="unity">
-              <SelectValue placeholder="Filtrar por unidade" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {/* {rciAccounts?.results?.map((account) => (
+        <div className="flex gap-4 flex-col lg:flex-row mt-2">
+          <div className="space-y-1 w-full">
+            <Label htmlFor="status">Status</Label>
+            <Select onValueChange={(value) => setValue("status", value)}>
+              <SelectTrigger className="self-end" id="status">
+                <SelectValue placeholder="Filtrar por status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="true">Validado</SelectItem>
+                  <SelectItem value="false">Não validado</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1 w-full">
+            <Label htmlFor="unity">Unidade</Label>
+            <Select onValueChange={(value) => setValue("unity", value)}>
+              <SelectTrigger className="self-end" id="unity">
+                <SelectValue placeholder="Filtrar por unidade" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {/* {rciAccounts?.results?.map((account) => (
               <SelectItem
               value={String(account.id_conta_rci)}
               key={account.id_conta_rci}
@@ -46,23 +94,35 @@ const ContractsFilters = ({
               {account?.numero} - {account?.id_banco?.nome}
               </SelectItem>
               ))} */}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-1 w-full">
-          <Label>Busca textual</Label>
-          <div className="relative flex-1 self-end">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Buscar contratos..."
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10"
-            />
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
+          <div className="space-y-1 w-full">
+            <Label>Busca textual</Label>
+            <div className="relative flex-1 self-end">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Buscar contratos..."
+                className="pl-10"
+                {...register("description")}
+              />
+            </div>
+          </div>
+          <Button className="self-end" type="submit">
+            Filtrar
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            className="hidden self-end data-[visible=true]:block"
+            data-visible={searchParams.size > 0}
+            onClick={handleRemoveFilter}
+          >
+            Remover filtro
+          </Button>
         </div>
-      </div>
+      </form>
     </fieldset>
   );
 };

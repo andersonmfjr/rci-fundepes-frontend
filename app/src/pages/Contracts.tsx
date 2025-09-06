@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,17 +17,22 @@ import ContractsPagination from "@/components/contracts/ContractsPagination";
 import { usePageTitle } from "@/hooks/use-page-title";
 import { TableSkeleton, ContractsPageSkeleton } from "@/components/skeletons";
 
+type FilterKey =
+  | "initialDate"
+  | "finalDate"
+  | "status"
+  | "unity"
+  | "description";
+
 const Contracts = () => {
   usePageTitle("Contratos");
   const [searchParams, setSearchParams] = useSearchParams();
   const [contracts, setContracts] = useState<ContractListItem[]>([]);
+  const [timer, setTimer] = useState<any>(undefined);
   const [totalCount, setTotalCount] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [tableLoading, setTableLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(
-    searchParams.get("search") || ""
-  );
   const [currentPage, setCurrentPage] = useState(
     parseInt(searchParams.get("page") || "1")
   );
@@ -89,7 +95,6 @@ const Contracts = () => {
 
   useEffect(() => {
     const filters: ContractsFiltersType = {
-      search: searchTerm || undefined,
       sortField,
       sortDirection,
       page: currentPage,
@@ -97,24 +102,17 @@ const Contracts = () => {
     };
 
     loadContracts(filters);
-  }, [searchTerm, sortField, sortDirection, currentPage]);
+  }, [sortField, sortDirection, currentPage]);
 
-  useEffect(() => {
-    const newSearchParams = new URLSearchParams();
+  // useEffect(() => {
+  //   const newSearchParams = new URLSearchParams();
+  //   if (currentPage > 1) newSearchParams.set("page", currentPage.toString());
+  //   if (sortField !== "updated_at") newSearchParams.set("sortField", sortField);
+  //   if (sortDirection !== "desc")
+  //     newSearchParams.set("sortDirection", sortDirection);
 
-    if (searchTerm) newSearchParams.set("search", searchTerm);
-    if (currentPage > 1) newSearchParams.set("page", currentPage.toString());
-    if (sortField !== "updated_at") newSearchParams.set("sortField", sortField);
-    if (sortDirection !== "desc")
-      newSearchParams.set("sortDirection", sortDirection);
-
-    setSearchParams(newSearchParams, { replace: true });
-  }, [searchTerm, currentPage, sortField, sortDirection, setSearchParams]);
-
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-    setCurrentPage(1);
-  };
+  //   setSearchParams(newSearchParams, { replace: true });
+  // }, [currentPage, sortField, sortDirection, setSearchParams]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -157,10 +155,7 @@ const Contracts = () => {
         </div>
 
         {/* Filters */}
-        <ContractsFilters
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-        />
+        <ContractsFilters />
 
         {/* Table */}
         {tableLoading ? (
@@ -172,11 +167,6 @@ const Contracts = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Nenhum contrato encontrado
               </h3>
-              <p className="text-gray-600">
-                {searchTerm
-                  ? "Tente ajustar os filtros ou termos de busca"
-                  : "Comece criando um novo contrato"}
-              </p>
             </CardContent>
           </Card>
         ) : (
