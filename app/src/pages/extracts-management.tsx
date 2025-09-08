@@ -26,11 +26,16 @@ export function ExtractsManagement() {
   const [open, setOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: extracts } = useQuery({
-    queryKey: ["extracts", searchParams.get("page") || "1"],
-    queryFn: ({ queryKey: [_, page] }) =>
-      fetcher<Pagination<BankExtract>>(
-        `/app/extrato-bancario?page=${page}&page_size=10`
-      ),
+    queryKey: ["extracts", searchParams.toString()],
+    queryFn: () => {
+      const queryParams = new URLSearchParams(searchParams);
+      queryParams.set("page", queryParams.get("page") || "1");
+      queryParams.set("page_size", "10");
+
+      return fetcher<Pagination<BankExtract>>(
+        `/app/extrato-bancario?${queryParams.toString()}`
+      );
+    },
   });
 
   const handleClose = useCallback(() => {
