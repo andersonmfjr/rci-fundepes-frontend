@@ -11,16 +11,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { FilterSchema } from "./schema";
 import { onlyNumbers } from "@/lib/only-numbers";
-
-type FilterSchema = {
-  mes_referencia: string;
-  ano_referencia: string;
-  id_conta_rci: string;
-  status: string;
-};
 
 export function ExtractsFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,8 +24,6 @@ export function ExtractsFilter() {
 
   const { register, setValue, handleSubmit, reset } = useForm<FilterSchema>({
     defaultValues: {
-      mes_referencia: "",
-      ano_referencia: "",
       status: "",
       id_conta_rci: "",
     },
@@ -42,13 +33,13 @@ export function ExtractsFilter() {
     const newSearchParams = new URLSearchParams();
     const keys = Object.keys(data);
 
-    for (const key of keys) if (data[key]) newSearchParams.set(key, data[key]);
+    for (const key of keys)
+      if (data[key]?.numberValue)
+        newSearchParams.set(key, data[key]?.numberValue);
+      else if (data[key]) newSearchParams.set(key, data[key]);
 
     setSearchParams(newSearchParams);
   };
-
-  const handleChangeOnlyNumbers = (event: ChangeEvent<HTMLInputElement>) =>
-    (event.target.value = onlyNumbers(event.target.value));
 
   const handleRemoveFilter = () => {
     setSearchParams({});
@@ -67,7 +58,11 @@ export function ExtractsFilter() {
               autoComplete="off"
               placeholder="Mês"
               maxLength={2}
-              onChange={handleChangeOnlyNumbers}
+              onChange={(e) => {
+                const onlyNums = onlyNumbers(e.target.value);
+                setValue("mes_referencia.stringValue", onlyNums);
+                setValue("mes_referencia.numberValue", Number(onlyNums));
+              }}
             />
             <Input
               className="lg:w-36"
@@ -75,7 +70,11 @@ export function ExtractsFilter() {
               autoComplete="off"
               placeholder="Ano"
               maxLength={4}
-              onChange={handleChangeOnlyNumbers}
+              onChange={(e) => {
+                const onlyNums = onlyNumbers(e.target.value);
+                setValue("ano_referencia.stringValue", onlyNums);
+                setValue("ano_referencia.numberValue", Number(onlyNums));
+              }}
             />
           </div>
 
