@@ -50,6 +50,14 @@ export function ExtractsManagement() {
     setOpen(false);
   }, []);
 
+  const handleOpenDetails = (id: string) => {
+    const query = new URLSearchParams(searchParams);
+
+    query.set("current", id);
+
+    setSearchParams(query);
+  };
+
   const handlePageChange = (page: number) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("page", String(page));
@@ -134,9 +142,7 @@ export function ExtractsManagement() {
                           variant="ghost"
                           size="sm"
                           onClick={() =>
-                            setSearchParams({
-                              current: String(extract.id_extrato),
-                            })
+                            handleOpenDetails(String(extract.id_extrato))
                           }
                         >
                           <Eye className="w-4 h-4" />

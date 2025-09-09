@@ -19,11 +19,10 @@ import {
 } from "@/components/ui/table";
 import { fetcher } from "@/lib/fetcher";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export function ExtractDetailsModal() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { data: extract } = useQuery({
     queryKey: ["get-extract", searchParams.get("current")],
     queryFn: async ({ queryKey: [_, id] }) =>
@@ -31,7 +30,12 @@ export function ExtractDetailsModal() {
     enabled: !!searchParams.get("current"),
   });
 
-  const handleClose = () => navigate("/extracts", { replace: true });
+  const handleClose = () => {
+    const query = new URLSearchParams(searchParams);
+
+    query.delete("current");
+    setSearchParams(query);
+  };
 
   return (
     <Dialog open={!!searchParams.get("current")} onOpenChange={handleClose}>
