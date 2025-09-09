@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,7 +27,6 @@ const Contracts = () => {
   usePageTitle("Contratos");
   const [searchParams, setSearchParams] = useSearchParams();
   const [contracts, setContracts] = useState<ContractListItem[]>([]);
-  const [timer, setTimer] = useState<any>(undefined);
   const [totalCount, setTotalCount] = useState(0);
 
   const [loading, setLoading] = useState(true);
@@ -99,20 +97,24 @@ const Contracts = () => {
       sortDirection,
       page: currentPage,
       pageSize: itemsPerPage,
+      from: searchParams.get("from"),
+      to: searchParams.get("to"),
+      status: searchParams.get("status"),
+      unity: searchParams.get("unity"),
+      search: searchParams.get("search"),
     };
 
     loadContracts(filters);
-  }, [sortField, sortDirection, currentPage]);
+  }, [sortField, sortDirection, currentPage, searchParams]);
 
-  // useEffect(() => {
-  //   const newSearchParams = new URLSearchParams();
-  //   if (currentPage > 1) newSearchParams.set("page", currentPage.toString());
-  //   if (sortField !== "updated_at") newSearchParams.set("sortField", sortField);
-  //   if (sortDirection !== "desc")
-  //     newSearchParams.set("sortDirection", sortDirection);
-
-  //   setSearchParams(newSearchParams, { replace: true });
-  // }, [currentPage, sortField, sortDirection, setSearchParams]);
+  useEffect(() => {
+    // const newSearchParams = new URLSearchParams();
+    // if (currentPage > 1) newSearchParams.set("page", currentPage.toString());
+    // if (sortField !== "updated_at") newSearchParams.set("sortField", sortField);
+    // if (sortDirection !== "desc")
+    //   newSearchParams.set("sortDirection", sortDirection);
+    // setSearchParams(newSearchParams, { replace: true });
+  }, [currentPage, sortField, sortDirection, setSearchParams]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {

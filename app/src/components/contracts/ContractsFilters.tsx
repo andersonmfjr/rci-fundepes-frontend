@@ -18,7 +18,7 @@ type FilterSchema = {
   from: string;
   to: string;
   unity: string;
-  description: string;
+  search: string;
 };
 
 const ContractsFilters = () => {
@@ -32,7 +32,7 @@ const ContractsFilters = () => {
       from: "",
       to: "",
       unity: "",
-      description: "",
+      search: "",
     },
   });
 
@@ -105,7 +105,7 @@ const ContractsFilters = () => {
               <Input
                 placeholder="Buscar contratos..."
                 className="pl-10"
-                {...register("description")}
+                {...register("search")}
               />
             </div>
           </div>
