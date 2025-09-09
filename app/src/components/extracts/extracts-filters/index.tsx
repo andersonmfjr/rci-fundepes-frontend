@@ -14,10 +14,11 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { FilterSchema } from "./schema";
 import { onlyNumbers } from "@/lib/only-numbers";
+import { ExtractsFilterSkeleton } from "@/components/skeletons/extracts-skeleton";
 
 export function ExtractsFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { data: rciAccounts } = useQuery({
+  const { data: rciAccounts, isLoading } = useQuery({
     queryKey: ["get-rci-accounts"],
     queryFn: async () => fetcher<Pagination<RciAccount>>("/app/contas-rci"),
   });
@@ -59,6 +60,8 @@ export function ExtractsFilter() {
       year: "",
     });
   };
+
+  if (isLoading) return <ExtractsFilterSkeleton />;
 
   return (
     <fieldset className="border rounded-md pb-5 pt-1 px-4">
