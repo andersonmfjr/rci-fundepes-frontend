@@ -29,8 +29,16 @@ export function ExtractsManagement() {
     queryKey: ["extracts", searchParams.toString()],
     queryFn: () => {
       const queryParams = new URLSearchParams(searchParams);
+      const { month, year, account, status } = Object.fromEntries(
+        queryParams.entries()
+      );
       queryParams.set("page", queryParams.get("page") || "1");
       queryParams.set("page_size", "10");
+
+      if (month) queryParams.set("mes_referencia", month);
+      if (year) queryParams.set("ano_referencia", year);
+      if (account) queryParams.set("id_conta_rci", account);
+      if (status) queryParams.set("status", status);
 
       return fetcher<Pagination<BankExtract>>(
         `/app/extrato-bancario?${queryParams.toString()}`

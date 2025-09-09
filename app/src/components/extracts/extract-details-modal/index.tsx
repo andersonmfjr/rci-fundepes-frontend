@@ -31,8 +31,6 @@ export function ExtractDetailsModal() {
     enabled: !!searchParams.get("current"),
   });
 
-  console.log(extract);
-
   const handleClose = () => navigate("/extracts", { replace: true });
 
   return (

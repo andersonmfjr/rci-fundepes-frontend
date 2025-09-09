@@ -22,28 +22,42 @@ export function ExtractsFilter() {
     queryFn: async () => fetcher<Pagination<RciAccount>>("/app/contas-rci"),
   });
 
-  const { register, setValue, handleSubmit, reset } = useForm<FilterSchema>({
-    defaultValues: {
-      status: "",
-      id_conta_rci: "",
-    },
-  });
+  const { register, watch, setValue, handleSubmit, reset } =
+    useForm<FilterSchema>({
+      defaultValues: {
+        status: searchParams.get("status") || "",
+        account: searchParams.get("account") || "",
+      },
+    });
+
+  const account = watch("account");
+  const status = watch("status");
 
   const handleFilter = (data: FilterSchema) => {
     const newSearchParams = new URLSearchParams();
     const keys = Object.keys(data);
 
-    for (const key of keys)
-      if (data[key]?.numberValue)
-        newSearchParams.set(key, data[key]?.numberValue);
-      else if (data[key]) newSearchParams.set(key, data[key]);
+    for (const key of keys) {
+      if (data[key]) {
+        if (key == "month" || key == "year") {
+          newSearchParams.set(key, String(Number(data[key])));
+          continue;
+        }
+        newSearchParams.set(key, data[key]);
+      }
+    }
 
     setSearchParams(newSearchParams);
   };
 
   const handleRemoveFilter = () => {
-    setSearchParams({});
-    reset();
+    setSearchParams({}, { replace: true });
+    reset({
+      account: "",
+      month: "",
+      status: "",
+      year: "",
+    });
   };
 
   return (
@@ -53,33 +67,36 @@ export function ExtractsFilter() {
         <div className="flex gap-4 flex-col lg:flex-row">
           <div className="flex gap-4">
             <Input
+              {...register("month")}
               className="lg:w-36"
-              {...register("mes_referencia")}
               autoComplete="off"
               placeholder="Mês"
               maxLength={2}
+              defaultValue={searchParams.get("month")}
               onChange={(e) => {
                 const onlyNums = onlyNumbers(e.target.value);
-                setValue("mes_referencia.stringValue", onlyNums);
-                setValue("mes_referencia.numberValue", Number(onlyNums));
+                setValue("month", onlyNums);
               }}
             />
             <Input
+              {...register("year")}
               className="lg:w-36"
-              {...register("ano_referencia")}
               autoComplete="off"
               placeholder="Ano"
               maxLength={4}
+              defaultValue={searchParams.get("year")}
               onChange={(e) => {
                 const onlyNums = onlyNumbers(e.target.value);
-                setValue("ano_referencia.stringValue", onlyNums);
-                setValue("ano_referencia.numberValue", Number(onlyNums));
+                setValue("year", onlyNums);
               }}
             />
           </div>
 
-          <Select onValueChange={(value) => setValue("id_conta_rci", value)}>
-            <SelectTrigger id="id_conta_rci">
+          <Select
+            onValueChange={(value) => setValue("account", value)}
+            value={account}
+          >
+            <SelectTrigger id="account">
               <SelectValue placeholder="Conta RCI" />
             </SelectTrigger>
             <SelectContent>
@@ -96,7 +113,10 @@ export function ExtractsFilter() {
             </SelectContent>
           </Select>
 
-          <Select onValueChange={(value) => setValue("status", value)}>
+          <Select
+            onValueChange={(value) => setValue("status", value)}
+            value={status}
+          >
             <SelectTrigger id="status">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
