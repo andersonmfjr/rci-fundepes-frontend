@@ -268,9 +268,6 @@ export const contractsService = {
     transferId: number,
     transferIds: number[]
   ): Promise<void> => {
-    // MOCK - Remover quando API estiver pronta
-    console.log(`Validando transferência ${transferId} com IDs:`, transferIds);
-
     // Simular delay de requisição
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -282,5 +279,24 @@ export const contractsService = {
     //   method: "POST",
     //   body: JSON.stringify({ transferencias: transferIds }),
     // });
+  },
+
+  getSelectedTransferIds: async (transferId: number): Promise<number[]> => {
+    // MOCK - Remover quando API estiver pronta
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const mockSelectedIds: Record<number, number[]> = {
+      1: [101, 102],
+      2: [103],
+      3: [],
+    };
+
+    return mockSelectedIds[transferId] || [1, 2];
+
+    // IMPLEMENTAÇÃO REAL - Descomentar quando API estiver pronta
+    // const response = await fetcher<{ transferencias: number[] }>(
+    //   `/app/transferencias/${transferId}/transferencias-selecionadas/`
+    // );
+    // return response.transferencias;
   },
 };

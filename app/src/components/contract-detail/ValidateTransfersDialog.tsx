@@ -44,6 +44,7 @@ const ValidateTransfersDialog = ({
     new Set()
   );
   const [loading, setLoading] = useState(false);
+  const [loadingSelected, setLoadingSelected] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -76,6 +77,7 @@ const ValidateTransfersDialog = ({
         page: 1,
         pageSize: 10,
       });
+      fetchSelectedTransferIds();
       fetchTransfers();
       fetchAccounts();
     }
@@ -88,6 +90,24 @@ const ValidateTransfersDialog = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, page]);
+
+  const fetchSelectedTransferIds = async () => {
+    setLoadingSelected(true);
+    try {
+      const selectedIds =
+        await contractsService.getSelectedTransferIds(transferId);
+      setSelectedTransfers(new Set(selectedIds));
+    } catch (error) {
+      console.error("Erro ao buscar transferências selecionadas:", error);
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar transferências já selecionadas",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingSelected(false);
+    }
+  };
 
   const fetchTransfers = async () => {
     setLoading(true);
@@ -265,9 +285,14 @@ const ValidateTransfersDialog = ({
             </div>
 
             <ScrollArea className="h-[400px]">
-              {loading ? (
-                <div className="flex items-center justify-center py-8">
+              {loading || loadingSelected ? (
+                <div className="flex flex-col items-center justify-center py-8 gap-2">
                   <Loader2 className="w-6 h-6 animate-spin" />
+                  {loadingSelected && (
+                    <p className="text-sm text-gray-500">
+                      Carregando seleções anteriores...
+                    </p>
+                  )}
                 </div>
               ) : transfers.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 text-gray-500">

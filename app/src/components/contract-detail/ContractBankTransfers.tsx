@@ -176,34 +176,43 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
                   </span>
                 </div>
                 <div className="text-right">
-                  {!transferValidations[transfer.id_transferencia] && (
-                    <TooltipProvider delayDuration={300}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedTransferId(transfer.id_transferencia);
-                              setSelectedTransfer(transfer);
-                              setDialogOpen(true);
-                            }}
-                            className={cn(
-                              "inline-flex items-center gap-2 rounded-md text-xs font-medium border transition-colors",
-                              "px-2 py-1",
-                              "bg-red-50 text-red-700 border-red-200",
-                              "hover:bg-red-100 cursor-pointer"
-                            )}
-                          >
-                            <X className="w-3 h-3" />
-                            Inválido
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Clique para validar</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
+                  <TooltipProvider delayDuration={300}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedTransferId(transfer.id_transferencia);
+                            setSelectedTransfer(transfer);
+                            setDialogOpen(true);
+                          }}
+                          className={cn(
+                            "inline-flex items-center gap-2 rounded-md text-xs font-medium border transition-colors",
+                            "px-2 py-1 mb-2",
+                            transferValidations[transfer.id_transferencia]
+                              ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                              : "bg-red-50 text-red-700 border-red-200 hover:bg-red-100",
+                            "cursor-pointer"
+                          )}
+                        >
+                          {transferValidations[transfer.id_transferencia] ? (
+                            <>
+                              <CheckCircle className="w-3 h-3" />
+                              Válido
+                            </>
+                          ) : (
+                            <>
+                              <X className="w-3 h-3" />
+                              Inválido
+                            </>
+                          )}
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Realizar conciliação</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   <div className="text-lg font-bold text-gray-900">
                     {formatCurrency(transfer.valor)}
                   </div>
