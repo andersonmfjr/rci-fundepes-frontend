@@ -127,14 +127,6 @@ const ValidateTransfersDialog = ({
     }
   };
 
-  const handleSelectAll = () => {
-    if (selectedTransfers.size === transfers.length) {
-      setSelectedTransfers(new Set());
-    } else {
-      setSelectedTransfers(new Set(transfers.map((t) => t.id_transferencia)));
-    }
-  };
-
   const handleSelectTransfer = (id: number) => {
     const newSelected = new Set(selectedTransfers);
     const method = newSelected.has(id) ? "delete" : "add";
