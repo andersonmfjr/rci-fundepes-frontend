@@ -41,10 +41,10 @@ export const contractsService = {
       params.append("page_size", filters.pageSize.toString());
     }
 
-    console.log(filters);
-
     if (filters?.from) params.append("vigencia_inicio_after", filters?.from);
-    if (filters?.to) params.append("vigencia_inicio_before", filters?.to);
+
+    if (filters?.to) params.append("vigencia_fim_before", filters?.to);
+
     if (filters?.unity) params.append("id_unidade", filters?.unity);
     if (filters?.status) params.append("status", filters?.status);
 

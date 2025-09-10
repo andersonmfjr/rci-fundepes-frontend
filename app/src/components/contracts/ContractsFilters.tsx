@@ -23,18 +23,24 @@ type FilterSchema = {
 
 const ContractsFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const from = searchParams.get("from");
+  const to = searchParams.get("to");
 
-  const { register, handleSubmit, setValue, reset } = useForm<FilterSchema>({
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    defaultValues: {
-      status: "",
-      from: "",
-      to: "",
-      unity: "",
-      search: "",
-    },
-  });
+  const { register, handleSubmit, setValue, reset, watch } =
+    useForm<FilterSchema>({
+      mode: "onSubmit",
+      reValidateMode: "onSubmit",
+      defaultValues: {
+        status: "",
+        from: from ? new Date(from).toISOString().substring(0, 10) : "",
+        to: to ? new Date(to).toISOString().substring(0, 10) : "",
+        unity: "",
+        search: "",
+      },
+    });
+
+  const status = watch("status");
+  const unity = watch("unity");
 
   const handleFilter = (data: FilterSchema) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -49,7 +55,13 @@ const ContractsFilters = () => {
 
   const handleRemoveFilter = () => {
     setSearchParams({});
-    reset();
+    reset({
+      from: "",
+      search: "",
+      status: "",
+      to: "",
+      unity: "",
+    });
   };
 
   return (
@@ -66,7 +78,10 @@ const ContractsFilters = () => {
         <div className="flex gap-4 flex-col lg:flex-row mt-2">
           <div className="space-y-1 w-full">
             <Label htmlFor="status">Status</Label>
-            <Select onValueChange={(value) => setValue("status", value)}>
+            <Select
+              onValueChange={(value) => setValue("status", value)}
+              value={status}
+            >
               <SelectTrigger className="self-end" id="status">
                 <SelectValue placeholder="Filtrar por status" />
               </SelectTrigger>
@@ -80,7 +95,10 @@ const ContractsFilters = () => {
           </div>
           <div className="space-y-1 w-full">
             <Label htmlFor="unity">Unidade</Label>
-            <Select onValueChange={(value) => setValue("unity", value)}>
+            <Select
+              onValueChange={(value) => setValue("unity", value)}
+              value={unity}
+            >
               <SelectTrigger className="self-end" id="unity">
                 <SelectValue placeholder="Filtrar por unidade" />
               </SelectTrigger>
