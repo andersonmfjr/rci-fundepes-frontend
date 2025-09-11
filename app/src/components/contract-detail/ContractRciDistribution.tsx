@@ -65,8 +65,13 @@ const ContractRciDistribution = ({
     0
   );
 
-  const valorTotalContrato = parseFloat(contract.valor_total || "0");
-  const valorTotalRci = valorTotalContrato * (totalPercentual / 100);
+  const valorTotalRci = distributions.reduce(
+    (total, dist) =>
+      total +
+      parseFloat(dist.valor_base_calculo || "0") *
+        (parseFloat(dist.percentual || "0") / 100),
+    0
+  );
 
   return (
     <Card>
