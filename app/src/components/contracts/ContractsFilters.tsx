@@ -142,13 +142,13 @@ const ContractsFilters = () => {
               {...register("search")}
             />
           </div>
-          <Button className="self-end" type="submit">
+          <Button className="lg:self-end" type="submit">
             Filtrar
           </Button>
           <Button
             type="button"
             variant="destructive"
-            className="hidden self-end data-[visible=true]:block"
+            className="hidden lg:self-end data-[visible=true]:block"
             data-visible={searchParams.size > 0}
             onClick={handleRemoveFilter}
           >
