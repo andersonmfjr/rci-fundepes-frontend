@@ -39,7 +39,7 @@ export function ExtractDetailsModal() {
   return (
     <Dialog open={!!searchParams.get("current")} onOpenChange={handleClose}>
       <form>
-        <DialogContent className="sm:max-w-[550px]">
+        <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>Detalhes do extrato</DialogTitle>
             <DialogDescription hidden>
@@ -62,9 +62,7 @@ export function ExtractDetailsModal() {
                 </div>
                 <div className="">
                   <span className="text-xs font-semibold">Conta:</span>
-                  <p>
-                    {extract?.mes_referencia}/{extract?.ano_referencia}
-                  </p>
+                  <p>{extract?.conta_rci_numero}</p>
                 </div>
                 <div className="">
                   <span className="text-xs font-semibold block mb-1">
@@ -81,22 +79,44 @@ export function ExtractDetailsModal() {
               <hr className="my-3" />
 
               <h2 className="font-semibold mb-3">Transferências</h2>
-              <div className="overflow-hidden rounded-md border bg-white">
-                <Table className="min-w-full">
+              <div className="overflow-hidden rounded-md border bg-white max-w-[550px]">
+                <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead className="max-w-10">Data</TableHead>
                       <TableHead className="max-w-10">Valor</TableHead>
                       <TableHead className="max-w-10">Observação</TableHead>
-                      <TableHead className="max-w-10">Conta projeto</TableHead>
                     </TableRow>
                   </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={4} className="text-center">
-                        Nenhuma transferência foi realizada
-                      </TableCell>
-                    </TableRow>
+                  <TableBody className="max-w-[500px]">
+                    {extract?.transferencias &&
+                    extract.transferencias.length > 0 ? (
+                      extract.transferencias.map((transfer) => (
+                        <TableRow
+                          key={transfer.id_transferencia_realizada}
+                          className="overflow-x-auto"
+                        >
+                          <TableCell>
+                            {new Intl.DateTimeFormat("pt-BR", {
+                              dateStyle: "short",
+                            }).format(new Date(transfer.data))}
+                          </TableCell>
+                          <TableCell>
+                            {new Intl.NumberFormat("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            }).format(Number(transfer.valor))}
+                          </TableCell>
+                          <TableCell>{transfer.observacao}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={4} className="text-center">
+                          Nenhuma transferência foi realizada
+                        </TableCell>
+                      </TableRow>
+                    )}
                   </TableBody>
                 </Table>
               </div>

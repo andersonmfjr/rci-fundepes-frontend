@@ -158,6 +158,15 @@ interface BankExtract {
   mes_referencia: string;
   ano_referencia: string;
   processado: boolean;
+  conta_rci_numero: string;
+  transferencias: {
+    data: string;
+    fitid: string;
+    id_conta_projeto: number;
+    id_transferencia_realizada: number;
+    observacao: string;
+    valor: string;
+  }[];
 }
 
 // Business Intelligence Types

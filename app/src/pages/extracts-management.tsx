@@ -120,7 +120,7 @@ export function ExtractsManagement() {
                           {extract.descricao}
                         </TableCell> */}
                         <TableCell className="text-center">
-                          {extract.id_conta_rci}
+                          {extract.conta_rci_numero}
                         </TableCell>
                         <TableCell className="text-center">{`${extract.mes_referencia}/${extract.ano_referencia}`}</TableCell>
                         <TableCell className="text-center">
