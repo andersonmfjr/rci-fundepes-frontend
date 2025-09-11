@@ -16,6 +16,13 @@ import { FilterSchema } from "./schema";
 import { onlyNumbers } from "@/lib/only-numbers";
 import { ExtractsFilterSkeleton } from "@/components/skeletons/extracts-skeleton";
 
+const filterKeys: (keyof FilterSchema)[] = [
+  "account",
+  "month",
+  "status",
+  "year",
+];
+
 export function ExtractsFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: rciAccounts, isLoading } = useQuery({
@@ -30,6 +37,8 @@ export function ExtractsFilter() {
         account: searchParams.get("account") || "",
       },
     });
+
+  const isFiltered = filterKeys.some((key) => searchParams.has(key));
 
   const account = watch("account");
   const status = watch("status");
@@ -136,7 +145,7 @@ export function ExtractsFilter() {
               type="button"
               className="hidden data-[visible=true]:block"
               variant="destructive"
-              data-visible={searchParams.size > 0}
+              data-visible={!!isFiltered}
               onClick={handleRemoveFilter}
             >
               Remover filtro
