@@ -129,26 +129,76 @@ const ContractInfo = ({ contract, formatDate }: ContractInfoProps) => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                  <label className="text-xs font-medium text-gray-600 mb-1 block">
-                    UNIDADE ACADÊMICA
-                  </label>
-                  <div className="flex items-start gap-2">
-                    <Building className="w-4 h-4 text-gray-500" />
-                    <div>
-                      <div className="text-sm font-medium">
-                        {contract.unidade_academica?.[0]?.sigla ||
-                          "Não informado"}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {contract.unidade_academica?.[0]?.nome ||
-                          "Não informado"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(() => {
+                  const instituicao = contract.unidade_academica?.find(
+                    (unidade) => !unidade.parent
+                  );
+                  const unidadeAcademica = contract.unidade_academica?.find(
+                    (unidade) => unidade.parent
+                  );
 
+                  return (
+                    <>
+                      {instituicao && (
+                        <div>
+                          <label className="text-xs font-medium text-gray-600 mb-1 block">
+                            INSTITUIÇÃO
+                          </label>
+                          <div className="flex items-start gap-2">
+                            <Building className="w-4 h-4 text-gray-500" />
+                            <div>
+                              <div className="text-sm font-medium">
+                                {instituicao.sigla || "Não informado"}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {instituicao.nome || "Não informado"}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {unidadeAcademica && (
+                        <div>
+                          <label className="text-xs font-medium text-gray-600 mb-1 block">
+                            UNIDADE ACADÊMICA
+                          </label>
+                          <div className="flex items-start gap-2">
+                            <Building className="w-4 h-4 text-gray-500" />
+                            <div>
+                              <div className="text-sm font-medium">
+                                {unidadeAcademica.sigla || "Não informado"}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {unidadeAcademica.nome || "Não informado"}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {!instituicao && !unidadeAcademica && (
+                        <div>
+                          <label className="text-xs font-medium text-gray-600 mb-1 block">
+                            INSTITUIÇÃO
+                          </label>
+                          <div className="flex items-start gap-2">
+                            <Building className="w-4 h-4 text-gray-500" />
+                            <div>
+                              <div className="text-sm font-medium">
+                                Não informado
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <label className="text-xs font-medium text-gray-600">
