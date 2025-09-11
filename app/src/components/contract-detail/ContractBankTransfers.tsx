@@ -62,7 +62,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
     0
   );
   const valorTotalContrato = parseFloat(contract.valor_total || "0");
-  const valorTotalRci = valorTotalContrato * totalPercentual;
+  const valorTotalRci = valorTotalContrato * (totalPercentual / 100);
 
   const percentualRciDistribuido =
     valorTotalRci > 0 ? (totalTransferencias / valorTotalRci) * 100 : 0;
