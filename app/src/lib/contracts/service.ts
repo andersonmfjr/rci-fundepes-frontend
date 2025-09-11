@@ -45,7 +45,7 @@ export const contractsService = {
 
     if (filters?.to) params.append("vigencia_fim_before", filters?.to);
 
-    if (filters?.unit) params.append("id_unidade", filters?.unit);
+    if (filters?.unit) params.append("unidade", filters?.unit);
     if (filters?.status) params.append("status", filters?.status);
 
     const queryString = params.toString();

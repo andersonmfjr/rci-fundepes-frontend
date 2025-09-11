@@ -27,7 +27,7 @@ const ContractsFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: unities } = useQuery({
     queryKey: ["unitites"],
-    queryFn: () => fetcher<AcademicUnit>("/app/unidades-academicas"),
+    queryFn: () => fetcher<AcademicUnit[]>("/app/unidades-academicas"),
   });
   const from = searchParams.get("from");
   const to = searchParams.get("to");
@@ -110,14 +110,11 @@ const ContractsFilters = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {/* {rciAccounts?.results?.map((account) => (
-              <SelectItem
-              value={String(account.id_conta_rci)}
-              key={account.id_conta_rci}
-              >
-              {account?.numero} - {account?.id_banco?.nome}
-              </SelectItem>
-              ))} */}
+                  {unities?.map((unit) => (
+                    <SelectItem value={String(unit.id)} key={unit.id}>
+                      {unit?.nome}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
