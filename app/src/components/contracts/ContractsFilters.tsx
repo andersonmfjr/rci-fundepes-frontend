@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Building, Calendar, Search, Check } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -75,15 +75,23 @@ const ContractsFilters = () => {
       <legend className="font-bold mb-2 text-lg">Filtros</legend>
       <form onSubmit={handleSubmit(handleFilter)}>
         <div className="space-y-1">
-          <Label htmlFor="from">Vigência (inicial e final)</Label>
+          <Label htmlFor="from" className="flex items-center gap-1">
+            <Calendar className="w-4 h-4" />
+            Vigência (inicial e final)
+          </Label>
+
           <div className="flex gap-2 lg:w-56">
             <Input type="date" id="from" {...register("from")} />
             <Input type="date" id="to" {...register("to")} />
           </div>
         </div>
-        <div className="flex gap-4 flex-col lg:flex-row mt-2">
+        <div className="flex gap-4 flex-col lg:flex-row mt-4">
           <div className="space-y-1 w-full">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="unit" className="flex items-center gap-1">
+              <Check className="w-4 h-4" />
+              Status
+            </Label>
+
             <Select
               onValueChange={(value) => setValue("status", value)}
               value={status}
@@ -100,7 +108,10 @@ const ContractsFilters = () => {
             </Select>
           </div>
           <div className="space-y-1 w-full">
-            <Label htmlFor="unit">Unidade</Label>
+            <Label htmlFor="unit" className="flex items-center gap-1">
+              <Building className="w-4 h-4" />
+              Unidade
+            </Label>
             <Select
               onValueChange={(value) => setValue("unit", value)}
               value={unit}
@@ -120,15 +131,16 @@ const ContractsFilters = () => {
             </Select>
           </div>
           <div className="space-y-1 w-full">
-            <Label>Busca textual</Label>
-            <div className="relative flex-1 self-end">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder="Buscar contratos..."
-                className="pl-10"
-                {...register("search")}
-              />
-            </div>
+            <Label htmlFor="unit" className="flex items-center gap-1">
+              <Search className="w-4 h-4" />
+              Busca textual
+            </Label>
+
+            <Input
+              id="search"
+              placeholder="Buscar contratos..."
+              {...register("search")}
+            />
           </div>
           <Button className="self-end" type="submit">
             Filtrar
