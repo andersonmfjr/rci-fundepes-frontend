@@ -16,13 +16,6 @@ import ContractsPagination from "@/components/contracts/ContractsPagination";
 import { usePageTitle } from "@/hooks/use-page-title";
 import { TableSkeleton, ContractsPageSkeleton } from "@/components/skeletons";
 
-type FilterKey =
-  | "initialDate"
-  | "finalDate"
-  | "status"
-  | "unity"
-  | "description";
-
 const Contracts = () => {
   usePageTitle("Contratos");
   const [searchParams, setSearchParams] = useSearchParams();
@@ -100,7 +93,7 @@ const Contracts = () => {
       from: searchParams.get("from"),
       to: searchParams.get("to"),
       status: searchParams.get("status"),
-      unity: searchParams.get("unity"),
+      unit: searchParams.get("unit"),
       search: searchParams.get("search"),
     };
 

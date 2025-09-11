@@ -12,17 +12,23 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetcher } from "@/lib/fetcher";
 
 type FilterSchema = {
   status: string;
   from: string;
   to: string;
-  unity: string;
+  unit: string;
   search: string;
 };
 
 const ContractsFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data: unities } = useQuery({
+    queryKey: ["unitites"],
+    queryFn: () => fetcher<AcademicUnit>("/app/unidades-academicas"),
+  });
   const from = searchParams.get("from");
   const to = searchParams.get("to");
 
@@ -34,13 +40,13 @@ const ContractsFilters = () => {
         status: "",
         from: from ? new Date(from).toISOString().substring(0, 10) : "",
         to: to ? new Date(to).toISOString().substring(0, 10) : "",
-        unity: "",
+        unit: "",
         search: "",
       },
     });
 
   const status = watch("status");
-  const unity = watch("unity");
+  const unit = watch("unit");
 
   const handleFilter = (data: FilterSchema) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -60,7 +66,7 @@ const ContractsFilters = () => {
       search: "",
       status: "",
       to: "",
-      unity: "",
+      unit: "",
     });
   };
 
@@ -94,12 +100,12 @@ const ContractsFilters = () => {
             </Select>
           </div>
           <div className="space-y-1 w-full">
-            <Label htmlFor="unity">Unidade</Label>
+            <Label htmlFor="unit">Unidade</Label>
             <Select
-              onValueChange={(value) => setValue("unity", value)}
-              value={unity}
+              onValueChange={(value) => setValue("unit", value)}
+              value={unit}
             >
-              <SelectTrigger className="self-end" id="unity">
+              <SelectTrigger className="self-end" id="unit">
                 <SelectValue placeholder="Filtrar por unidade" />
               </SelectTrigger>
               <SelectContent>

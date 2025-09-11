@@ -13,7 +13,7 @@ export interface ContractsFilters {
   status?: string;
   from?: string;
   to?: string;
-  unity?: string;
+  unit?: string;
 }
 
 export const contractsService = {
@@ -45,7 +45,7 @@ export const contractsService = {
 
     if (filters?.to) params.append("vigencia_fim_before", filters?.to);
 
-    if (filters?.unity) params.append("id_unidade", filters?.unity);
+    if (filters?.unit) params.append("id_unidade", filters?.unit);
     if (filters?.status) params.append("status", filters?.status);
 
     const queryString = params.toString();
