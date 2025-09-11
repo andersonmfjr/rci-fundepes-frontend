@@ -9,12 +9,15 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
+import { ExtractsFilterSkeleton } from "@/components/skeletons/extracts-skeleton";
 
 export function ExtractsFilter() {
-  const { data: rciAccounts } = useQuery({
+  const { data: rciAccounts, isLoading } = useQuery({
     queryKey: ["get-rci-accounts"],
     queryFn: async () => fetcher<Pagination<RciAccount>>("/app/contas-rci"),
   });
+
+  if (isLoading) return <ExtractsFilterSkeleton />;
 
   return (
     <fieldset className="border rounded-md pb-5 pt-1 px-4">
