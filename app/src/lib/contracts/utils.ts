@@ -1,10 +1,3 @@
-// Calcula o percentual RCI total de um contrato (soma dos percentuais de todas as unidades)
-export const calculateTotalRciPercentage = (
-  unidades: ContractUnit[] = []
-): number => {
-  return unidades.reduce((total, unidade) => total + unidade.percentual_rci, 0);
-};
-
 // Formata valor em moeda brasileira
 export const formatCurrency = (value: number | string): string => {
   if (typeof value === "string") {

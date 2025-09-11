@@ -10,6 +10,8 @@ type UserType = "P" | "A";
 interface User {
   id: string;
   first_name: string;
+  last_name: string;
+  name: string;
   username: string;
   email: string;
   tipo_usuario: UserType;
@@ -156,6 +158,15 @@ interface BankExtract {
   mes_referencia: string;
   ano_referencia: string;
   processado: boolean;
+  conta_rci_numero: string;
+  transferencias: {
+    data: string;
+    fitid: string;
+    id_conta_projeto: number;
+    id_transferencia_realizada: number;
+    observacao: string;
+    valor: string;
+  }[];
 }
 
 // Business Intelligence Types
@@ -276,7 +287,63 @@ interface RequestInit {
 
 interface Pagination<T> {
   count: number;
-  next: number | null;
-  previous: number | null;
+  next: number | string | null;
+  previous: number | string | null;
   results: T[];
+}
+
+interface BankTransferProjectAccount {
+  banco: {
+    codigo: string;
+    nome: string;
+  };
+  contrato: {
+    nome: string;
+    descricao: string;
+    valor_total: string;
+  };
+  agencia: string;
+  conta: string;
+}
+
+interface BankTransferExtract {
+  descricao: string;
+  link_arquivo: string;
+  mes_referencia: string;
+  ano_referencia: string;
+  processado: boolean;
+  conta_rci: {
+    banco: {
+      codigo: string;
+      nome: string;
+    };
+    unidade: {
+      nome: string;
+      sigla: string;
+    };
+  };
+}
+
+interface BankTransferItem {
+  id_transferencia: number;
+  id_conta_projeto: number;
+  data: string;
+  valor: string;
+  observacao: string;
+  id_extrato_bancario: number;
+  conta_projeto: BankTransferProjectAccount;
+  extrato_bancario: BankTransferExtract;
+}
+
+interface BankTransferFilters {
+  contrato?: number;
+  mes_ano?: string;
+  conta?: number;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+interface ValidateTransfersRequest {
+  transferencias: number[];
 }

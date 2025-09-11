@@ -7,15 +7,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ValidationButton } from "@/components/ui/validation-button";
 import {
   ArrowRight,
   CheckCircle,
   Clock,
   Building,
   CreditCard,
+  X,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/contracts/utils";
+import ValidateTransfersDialog from "./ValidateTransfersDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { cn } from "@/lib/utils";
 
 interface ContractBankTransfersProps {
   contract: ContractDetail;
@@ -26,9 +34,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
     (distribuicao) => distribuicao.transferencias
   );
 
-  const [transferValidations, setTransferValidations] = useState<
-    Record<number, boolean>
-  >(
+  const [transferValidations] = useState<Record<number, boolean>>(
     transfers.reduce(
       (acc, transfer) => ({
         ...acc,
@@ -37,6 +43,14 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
       {}
     )
   );
+
+  const [selectedTransferId, setSelectedTransferId] = useState<number | null>(
+    null
+  );
+  const [selectedTransfer, setSelectedTransfer] = useState<Transfer | null>(
+    null
+  );
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const totalTransferencias = transfers.reduce(
     (sum, transfer) => sum + parseFloat(transfer.valor),
@@ -48,7 +62,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
     0
   );
   const valorTotalContrato = parseFloat(contract.valor_total || "0");
-  const valorTotalRci = valorTotalContrato * totalPercentual;
+  const valorTotalRci = valorTotalContrato * (totalPercentual / 100);
 
   const percentualRciDistribuido =
     valorTotalRci > 0 ? (totalTransferencias / valorTotalRci) * 100 : 0;
@@ -59,10 +73,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
     return new Date(dateString).toLocaleDateString("pt-BR");
   };
 
-  const renderBankAccount = (
-    account: ProjectAccount | RciAccount,
-    label: string
-  ) => (
+  const renderBankAccount = (account: ProjectAccount | RciAccount) => (
     <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md">
       <Building className="w-4 h-4 text-gray-500" />
       <div className="flex-1 min-w-0">
@@ -165,12 +176,43 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
                   </span>
                 </div>
                 <div className="text-right">
-                  <ValidationButton
-                    isValidated={
-                      transferValidations[transfer.id_transferencia] || false
-                    }
-                    className="h-6 px-2 text-xs mb-2"
-                  />
+                  <TooltipProvider delayDuration={300}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedTransferId(transfer.id_transferencia);
+                            setSelectedTransfer(transfer);
+                            setDialogOpen(true);
+                          }}
+                          className={cn(
+                            "inline-flex items-center gap-2 rounded-md text-xs font-medium border transition-colors",
+                            "px-2 py-1 mb-2",
+                            transferValidations[transfer.id_transferencia]
+                              ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                              : "bg-red-50 text-red-700 border-red-200 hover:bg-red-100",
+                            "cursor-pointer"
+                          )}
+                        >
+                          {transferValidations[transfer.id_transferencia] ? (
+                            <>
+                              <CheckCircle className="w-3 h-3" />
+                              Válido
+                            </>
+                          ) : (
+                            <>
+                              <X className="w-3 h-3" />
+                              Inválido
+                            </>
+                          )}
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Realizar conciliação</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   <div className="text-lg font-bold text-gray-900">
                     {formatCurrency(transfer.valor)}
                   </div>
@@ -186,7 +228,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
                   <label className="text-xs font-medium text-gray-600 mb-1 block">
                     CONTA ORIGEM
                   </label>
-                  {renderBankAccount(transfer.id_conta_projeto, "Origem")}
+                  {renderBankAccount(transfer.id_conta_projeto)}
                 </div>
 
                 <div className="flex justify-center items-center">
@@ -197,7 +239,7 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
                   <label className="text-xs font-medium text-gray-600 mb-1 block">
                     CONTA DESTINO
                   </label>
-                  {renderBankAccount(transfer.id_conta_rci, "Destino")}
+                  {renderBankAccount(transfer.id_conta_rci)}
                 </div>
               </div>
 
@@ -235,6 +277,16 @@ const ContractBankTransfers = ({ contract }: ContractBankTransfersProps) => {
           </div>
         )}
       </CardContent>
+
+      {selectedTransferId && (
+        <ValidateTransfersDialog
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          transferId={selectedTransferId}
+          contractId={contract.id_contrato}
+          transfer={selectedTransfer || undefined}
+        />
+      )}
     </Card>
   );
 };

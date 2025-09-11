@@ -91,7 +91,9 @@ export function ExtractPagination({
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+              {...(currentPage != 1 && {
+                onClick: () => onPageChange(Math.max(1, currentPage - 1)),
+              })}
               data-enabled={currentPage != 1}
               className="data=[enabled=false]=pointer-events-none data-[enabled=false]:opacity-50 data-[enabled=true]:cursor-pointer"
             >
@@ -101,9 +103,11 @@ export function ExtractPagination({
           {renderPaginationItems()}
           <PaginationItem>
             <PaginationNext
-              onClick={() =>
-                onPageChange(Math.min(totalPages, currentPage + 1))
-              }
+              {...(currentPage != totalPages &&
+                !!totalPages && {
+                onClick: () =>
+                  onPageChange(Math.min(totalPages, currentPage + 1)),
+              })}
               data-enabled={currentPage != totalPages && !!totalPages}
               className="data=[enabled=false]=pointer-events-none data-[enabled=false]:opacity-50 data-[enabled=true]:cursor-pointer"
             >

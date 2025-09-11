@@ -27,16 +27,37 @@ export function ExtractsManagement() {
   const [open, setOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: extracts, isLoading } = useQuery({
-    queryKey: ["extracts", searchParams.get("page") || "1"],
-    queryFn: ({ queryKey: [_, page] }) =>
-      fetcher<Pagination<BankExtract>>(
-        `/app/extrato-bancario?page=${page}&page_size=10`
-      ),
+    queryKey: ["extracts", searchParams.toString()],
+    queryFn: () => {
+      const queryParams = new URLSearchParams(searchParams);
+      const { month, year, account, status } = Object.fromEntries(
+        queryParams.entries()
+      );
+      queryParams.set("page", queryParams.get("page") || "1");
+      queryParams.set("page_size", "10");
+
+      if (month) queryParams.set("mes_referencia", month);
+      if (year) queryParams.set("ano_referencia", year);
+      if (account) queryParams.set("id_conta_rci", account);
+      if (status) queryParams.set("status", status);
+
+      return fetcher<Pagination<BankExtract>>(
+        `/app/extrato-bancario?${queryParams.toString()}`
+      );
+    },
   });
 
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
+
+  const handleOpenDetails = (id: string) => {
+    const query = new URLSearchParams(searchParams);
+
+    query.set("current", id);
+
+    setSearchParams(query);
+  };
 
   const handlePageChange = (page: number) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -73,7 +94,7 @@ export function ExtractsManagement() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[200px]">Descrição</TableHead>
+                    {/* <TableHead className="min-w-[200px]">Descrição</TableHead> */}
                     <TableHead className="min-w-[120px] text-center">
                       Número da Conta
                     </TableHead>
@@ -95,11 +116,11 @@ export function ExtractsManagement() {
                   {extracts?.results?.length ? (
                     extracts?.results?.map((extract) => (
                       <TableRow key={extract.id_extrato}>
-                        <TableCell className="min-w-[200px]">
+                        {/* <TableCell className="min-w-[200px]">
                           {extract.descricao}
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell className="text-center">
-                          {extract.id_conta_rci}
+                          {extract.conta_rci_numero}
                         </TableCell>
                         <TableCell className="text-center">{`${extract.mes_referencia}/${extract.ano_referencia}`}</TableCell>
                         <TableCell className="text-center">
@@ -125,9 +146,7 @@ export function ExtractsManagement() {
                             variant="ghost"
                             size="sm"
                             onClick={() =>
-                              setSearchParams({
-                                current: String(extract.id_extrato),
-                              })
+                              handleOpenDetails(String(extract.id_extrato))
                             }
                           >
                             <Eye className="w-4 h-4" />

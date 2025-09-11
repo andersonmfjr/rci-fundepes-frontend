@@ -65,8 +65,13 @@ const ContractRciDistribution = ({
     0
   );
 
-  const valorTotalContrato = parseFloat(contract.valor_total || "0");
-  const valorTotalRci = valorTotalContrato * totalPercentual;
+  const valorTotalRci = distributions.reduce(
+    (total, dist) =>
+      total +
+      parseFloat(dist.valor_base_calculo || "0") *
+        (parseFloat(dist.percentual || "0") / 100),
+    0
+  );
 
   return (
     <Card>
@@ -88,9 +93,7 @@ const ContractRciDistribution = ({
           </div>
           <div className="text-sm">
             <span className="text-gray-600">Percentual RCI: </span>
-            <span className="font-semibold">
-              {(totalPercentual * 100).toFixed(0)}%
-            </span>
+            <span className="font-semibold">{totalPercentual.toFixed(2)}%</span>
           </div>
           <div className="text-sm">
             <span className="text-gray-600">RCI Total do Contrato: </span>
@@ -105,9 +108,8 @@ const ContractRciDistribution = ({
         <div className="space-y-4">
           {distributions.map((distribution) => {
             const valorRci =
-              (parseFloat(distribution.valor_base_calculo) *
-                (parseFloat(distribution.percentual) * 100)) /
-              100;
+              parseFloat(distribution.valor_base_calculo) *
+              (parseFloat(distribution.percentual) / 100);
 
             return (
               <div
@@ -161,7 +163,7 @@ const ContractRciDistribution = ({
                       PERCENTUAL RCI
                     </label>
                     <div className="text-lg font-bold text-blue-800">
-                      {(parseFloat(distribution.percentual) * 100).toFixed(2)}%
+                      {parseFloat(distribution.percentual).toFixed(2)}%
                     </div>
                   </div>
 
