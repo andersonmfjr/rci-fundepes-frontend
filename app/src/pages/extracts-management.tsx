@@ -94,7 +94,7 @@ export function ExtractsManagement() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[200px]">Descrição</TableHead>
+                    {/* <TableHead className="min-w-[200px]">Descrição</TableHead> */}
                     <TableHead className="min-w-[120px] text-center">
                       Número da Conta
                     </TableHead>
@@ -116,9 +116,9 @@ export function ExtractsManagement() {
                   {extracts?.results?.length ? (
                     extracts?.results?.map((extract) => (
                       <TableRow key={extract.id_extrato}>
-                        <TableCell className="min-w-[200px]">
+                        {/* <TableCell className="min-w-[200px]">
                           {extract.descricao}
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell className="text-center">
                           {extract.id_conta_rci}
                         </TableCell>
