@@ -97,7 +97,7 @@ const ContractsFilters = () => {
               value={status}
             >
               <SelectTrigger className="self-end" id="status">
-                <SelectValue placeholder="Filtrar por status" />
+                <SelectValue placeholder="Todos os status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -117,7 +117,7 @@ const ContractsFilters = () => {
               value={unit}
             >
               <SelectTrigger className="self-end" id="unit">
-                <SelectValue placeholder="Filtrar por unidade" />
+                <SelectValue placeholder="Todas as unidades" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
