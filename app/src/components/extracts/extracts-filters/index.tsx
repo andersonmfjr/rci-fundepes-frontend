@@ -164,7 +164,7 @@ export function ExtractsFilter() {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex gap-2 flex-col lg:items-end lg:justify-end">
+          <div className="flex gap-2 flex-col lg:flex-row lg:items-end">
             <Button type="submit">Filtrar</Button>
             <Button
               type="button"
