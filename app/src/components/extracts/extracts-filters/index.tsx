@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { FilterSchema } from "./schema";
 import { onlyNumbers } from "@/lib/only-numbers";
 import { ExtractsFilterSkeleton } from "@/components/skeletons/extracts-skeleton";
+import { Label } from "@/components/ui/label";
+import { Calendar, Check, CreditCard } from "lucide-react";
 
 const filterKeys: (keyof FilterSchema)[] = [
   "account",
@@ -77,69 +79,92 @@ export function ExtractsFilter() {
       <legend className="font-bold mb-2 text-lg">Filtros</legend>
       <form onSubmit={handleSubmit(handleFilter)}>
         <div className="flex gap-4 flex-col lg:flex-row">
-          <div className="flex gap-4">
-            <Input
-              {...register("month")}
-              className="lg:w-36"
-              autoComplete="off"
-              placeholder="Mês"
-              maxLength={2}
-              defaultValue={searchParams.get("month")}
-              onChange={(e) => {
-                const onlyNums = onlyNumbers(e.target.value);
-                setValue("month", onlyNums);
-              }}
-            />
-            <Input
-              {...register("year")}
-              className="lg:w-36"
-              autoComplete="off"
-              placeholder="Ano"
-              maxLength={4}
-              defaultValue={searchParams.get("year")}
-              onChange={(e) => {
-                const onlyNums = onlyNumbers(e.target.value);
-                setValue("year", onlyNums);
-              }}
-            />
+          <div className="flex gap-4 w-full">
+            <div className="space-y-1 w-full">
+              <Label htmlFor="month" className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                Mês
+              </Label>
+              <Input
+                id="month"
+                {...register("month")}
+                autoComplete="off"
+                placeholder="Ex. 01 ou 1"
+                maxLength={2}
+                defaultValue={searchParams.get("month")}
+                onChange={(e) => {
+                  const onlyNums = onlyNumbers(e.target.value);
+                  setValue("month", onlyNums);
+                }}
+              />
+            </div>
+
+            <div className="space-y-1 w-full">
+              <Label htmlFor="year" className=" flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                Ano
+              </Label>
+              <Input
+                id="year"
+                {...register("year")}
+                autoComplete="off"
+                placeholder="Ex. 2025"
+                maxLength={4}
+                defaultValue={searchParams.get("year")}
+                onChange={(e) => {
+                  const onlyNums = onlyNumbers(e.target.value);
+                  setValue("year", onlyNums);
+                }}
+              />
+            </div>
           </div>
-
-          <Select
-            onValueChange={(value) => setValue("account", value)}
-            value={account}
-          >
-            <SelectTrigger id="account">
-              <SelectValue placeholder="Conta RCI" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {rciAccounts?.results?.map((account) => (
-                  <SelectItem
-                    value={String(account.id_conta_rci)}
-                    key={account.id_conta_rci}
-                  >
-                    {account?.numero} - {account?.id_banco?.nome}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Select
-            onValueChange={(value) => setValue("status", value)}
-            value={status}
-          >
-            <SelectTrigger id="status">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="true">Processado</SelectItem>
-                <SelectItem value="false">Em processamento</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <div className="flex gap-2">
+          <div className="space-y-1 w-full">
+            <Label htmlFor="account" className=" flex items-center gap-1">
+              <CreditCard className="w-4 h-4" />
+              Conta RCI
+            </Label>
+            <Select
+              onValueChange={(value) => setValue("account", value)}
+              value={account}
+            >
+              <SelectTrigger id="account">
+                <SelectValue placeholder="Todas as contas RCI" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {rciAccounts?.results?.map((account) => (
+                    <SelectItem
+                      value={String(account.id_conta_rci)}
+                      key={account.id_conta_rci}
+                    >
+                      {account?.numero} - {account?.id_banco?.nome}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-1 w-full">
+            <Label htmlFor="status" className="flex items-center gap-1">
+              <Check className="h-4 w-4" />
+              Status
+            </Label>
+            <Select
+              onValueChange={(value) => setValue("status", value)}
+              value={status}
+            >
+              <SelectTrigger id="status">
+                <SelectValue placeholder="Todos os status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="true">Processado</SelectItem>
+                  <SelectItem value="false">Em processamento</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex gap-2 flex-col lg:items-end lg:justify-end">
             <Button type="submit">Filtrar</Button>
             <Button
               type="button"
