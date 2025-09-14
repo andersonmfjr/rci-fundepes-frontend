@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Feedback } from "@/components/feedback";
-import { ChangeEvent, DragEvent } from "react";
+import { ChangeEvent, DragEvent, KeyboardEvent } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const uploadFile = async (data: MutationSchema) => {
@@ -138,6 +138,15 @@ export function UploadExtractModal({
     event.target.value = value;
   };
 
+  const handleKeyDownMonthAndYear = (
+    event: KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (!(event.key == "Backspace")) return;
+    const target = event.target as HTMLInputElement & { value: string };
+
+    if (target.value.length == 3) target.value = target.value.substring(0, 2);
+  };
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[550px]">
@@ -161,6 +170,7 @@ export function UploadExtractModal({
                     autoComplete="off"
                     placeholder="Ex. 01/2025"
                     id="monthAndYear"
+                    onKeyDown={handleKeyDownMonthAndYear}
                     onChange={handleChangeMonthAndYear}
                   />
                   <Feedback message={errors?.monthAndYear?.message} />

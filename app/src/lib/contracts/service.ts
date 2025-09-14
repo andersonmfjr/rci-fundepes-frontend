@@ -10,6 +10,10 @@ export interface ContractsFilters {
   sortDirection?: SortDirection;
   page?: number;
   pageSize?: number;
+  status?: string;
+  from?: string;
+  to?: string;
+  unit?: string;
 }
 
 export const contractsService = {
@@ -36,6 +40,13 @@ export const contractsService = {
     if (filters?.pageSize) {
       params.append("page_size", filters.pageSize.toString());
     }
+
+    if (filters?.from) params.append("vigencia_inicio_after", filters?.from);
+
+    if (filters?.to) params.append("vigencia_fim_before", filters?.to);
+
+    if (filters?.unit) params.append("unidade", filters?.unit);
+    if (filters?.status) params.append("status", filters?.status);
 
     const queryString = params.toString();
     const url = `/app/contratos/${queryString ? `?${queryString}` : ""}`;
